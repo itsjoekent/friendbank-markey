@@ -17,20 +17,6 @@ let db = null;
 app.use(express.json());
 app.use(express.static('public'));
 
-MongoClient.connect(MONGODB_URL, (error, client) => {
-  if (error !== null) {
-    console.log('Failed to connect to MongoDB');
-    console.error(error);
-    process.exit(1);
-  }
-
-  console.log('Connected successfully to Mongo server');
-
-  const db = client.db('markey');
-
-  app.listen(PORT, () => console.log(`Listening on ${PORT}`));
-});
-
 function createApiError(error, status, safeMessage) {
   const target = error instanceof Error ? error : new Error('internal api error');
   console.log({target, error});
@@ -117,7 +103,7 @@ app.get('/api/v1/page/:code', async function(req, res) {
 
     res.json({ page: transformPageResponse(page) });
   } catch (error) {
-    apiErrorHandler(error);
+    apiErrorHandler(res, error);
   }
 });
 
@@ -225,7 +211,7 @@ app.post('/api/v1/page/:code', async function(req, res) {
 
     res.json({ page });
   } catch (error) {
-    apiErrorHandler(error);
+    apiErrorHandler(res, error);
   }
 });
 
@@ -241,3 +227,20 @@ app.get('*', async function (req, res) {
     res.status(500).send('Whoops, looks like something is broken. We\'ll be back momentarily!');
   }
 });
+
+(async function() {
+  try {
+    const client = await MongoClient.connect(MONGODB_URL, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+    });
+
+    db = client.db('markey');
+
+    app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+  } catch (error) {
+    console.log('Failed to connect to MongoDB');
+    console.error(error);
+    process.exit(1);
+  }
+})();

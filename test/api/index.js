@@ -9,7 +9,7 @@ const { API_URL, MONGODB_URL } = process.env;
 const assert = chai.assert;
 
 beforeEach('clear database', function(done) {
-  MongoClient.connect(MONGODB_URL, (error, client) => {
+  MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true }, (error, client) => {
     if (error !== null) {
       console.log('Failed to connect to MongoDB');
       console.error(error);
@@ -28,6 +28,6 @@ beforeEach('clear database', function(done) {
 describe('page api v1', function() {
   it ('should return a 404 for a non existent page', async function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`);
-    assert.equal(response.status(), 404);
+    assert.equal(response.status, 404);
   });
 });
