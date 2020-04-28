@@ -26,6 +26,7 @@ app.use(express.static('public'));
 
 let db = null;
 let doc = null;
+let template = null;
 
 function createApiError(error, status, safeMessage) {
   const target = error instanceof Error ? error : new Error('internal api error');
@@ -59,7 +60,6 @@ function normalizeName(value) {
 async function getPageForCode(code) {
   try {
     const pages = db.collection('pages');
-    const signups = db.collection('signups');
 
     const page = await pages.findOne({ code });
 
@@ -321,12 +321,48 @@ app.post('/api/v1/page/:code/signup', async function(req, res) {
   }
 });
 
+function fillTemplate(config = {
+  data: {},
+  title: 'Ed Markey Organizing Hub',
+  cover: '/assets/em-header-original.jpg',
+}) {
+  return template.replace(/{{REACT_DATA}}/g, JSON.stringify(config.data))
+    .replace(/{{TITLE}}/g, config.title)
+    .replace(/{{COVER}}/g, config.cover);
+}
+
 app.get('*', async function (req, res) {
   try {
+    const { path } = req;
+    const parts = path.split('/');
+
+    res.set('Content-Type', 'text/html');
+
+    if (parts.length > 1) {
+      res.status(404).send(fillTemplate({ title: 'Ed Markey | Page Not Found' }));
+      return;
+    }
+
+    const page = await getPageForCode(normalizedCode(parts[0]));
+
+    if (page instanceof Error) {
+      throw page;
+    }
+
+    if (!page) {
+      res.status(404).send(fillTemplate({ title: 'Ed Markey | Page Not Found' }));
+      return;
+    }
+
+    res.send(fillTemplate({
+      title: page.title,
+      cover: page.background,
+      data: { page },
+    }));
 
   } catch (error) {
     console.error(error);
-    res.status(500).send('Whoops, looks like something is broken. We\'ll be back momentarily!');
+    res.status(500).send(fillTemplate({ title: 'Ed Markey | Server Error' }));
   }
 });
 
@@ -361,6 +397,14 @@ app.get('*', async function (req, res) {
     await doc.loadInfo();
   } catch (error) {
     console.log('Failed to connect to Google Sheets');
+    console.error(error);
+    process.exit(1);
+  }
+
+  try {
+    template = await fs.readFile(path.join(__dirname, 'template.html'), 'utf-8');
+  } catch (error) {
+    console.log('Failed to read HTML template');
     console.error(error);
     process.exit(1);
   }
