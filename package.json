@@ -4,14 +4,15 @@
     "node": "12.x"
   },
   "scripts": {
-    "start:api": "node src/api.js",
+    "start:api": "node src/api",
     "test:api": "mocha ./test/api/*.js"
   },
   "dependencies": {
-    "bad-words": "^3.0.3",
+    "@2toad/profanity": "^1.1.0",
     "express": "^4.17.1",
     "mongodb": "^3.5.6",
-    "phone": "^2.4.10"
+    "phone": "^2.4.10",
+    "xss": "^1.0.6"
   },
   "devDependencies": {
     "chai": "^4.2.0",
