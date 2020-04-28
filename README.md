@@ -5,7 +5,6 @@ Relational organizing tool for Ed Markey's senate race
 TODO:
 
 - test all validations/endpoints
-- make mongodb indexes
 - setup heroku yml
   - https://elements.heroku.com/addons/fastly
   - https://elements.heroku.com/addons/mongolab

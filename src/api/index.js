@@ -3,6 +3,7 @@ const path = require('path');
 
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
+const { GoogleSpreadsheet } = require('google-spreadsheet');
 
 const xss = require('xss');
 const phone = require('phone');
@@ -10,13 +11,21 @@ const profanity = require('@2toad/profanity').profanity;
 
 const setupDb = require('./setup-db');
 
-const { PORT, MONGODB_URL } = process.env;
+const {
+  PORT,
+  MONGODB_URL,
+  SIGNUP_SHEET_ID,
+  GOOGLE_SERVICE_ACCOUNT_EMAIL,
+  GOOGLE_PRIVATE_KEY,
+} = process.env;
 
 const app = express();
-let db = null;
 
 app.use(express.json());
 app.use(express.static('public'));
+
+let db = null;
+let doc = null;
 
 function createApiError(error, status, safeMessage) {
   const target = error instanceof Error ? error : new Error('internal api error');
@@ -85,6 +94,10 @@ function stringFieldValidator(minLength, maxLength = Infinity) {
 function hasInvalidParam(list, validator) {
   return list.findIndex((item) => validator(item)) > -1;
 }
+
+app.get('/api/v1/health', async function(req, res) {
+  res.json({ ok: true });
+});
 
 app.get('/api/v1/page/:code', async function(req, res) {
   try {
@@ -247,11 +260,26 @@ app.get('*', async function (req, res) {
     if (result instanceof Error) {
       throw result;
     }
-
-    app.listen(PORT, () => console.log(`Listening on ${PORT}`));
   } catch (error) {
     console.log('Failed to connect to MongoDB');
     console.error(error);
     process.exit(1);
   }
+
+  try {
+    doc = new GoogleSpreadsheet(SIGNUP_SHEET_ID);
+
+    await doc.useServiceAccountAuth({
+      client_email: GOOGLE_SERVICE_ACCOUNT_EMAIL,
+      private_key: GOOGLE_PRIVATE_KEY.replace(new RegExp('\\\\n', '\g'), '\n'),
+    });
+
+    await doc.loadInfo();
+  } catch (error) {
+    console.log('Failed to connect to Google Sheets');
+    console.error(error);
+    process.exit(1);
+  }
+
+  app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 })();
