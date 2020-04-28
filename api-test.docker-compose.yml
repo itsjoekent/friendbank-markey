@@ -1,0 +1,38 @@
+version: '3.3'
+
+services:
+  tests:
+    build:
+      context: .
+      dockerfile: api-test.dockerfile
+    command: npm run test:api
+    depends_on:
+      - api
+      - mongo
+    links:
+      - mongo
+      - api
+    environment:
+      - API_URL=http://api:5000
+      - MONGODB_URL=mongodb://admin:secret@mongo:27017
+
+  api:
+    build:
+      context: .
+      dockerfile: api-test.dockerfile
+    command: npm run start:api
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    environment:
+      - PORT=5000
+      - MONGODB_URL=mongodb://admin:secret@mongo:27017
+
+  mongo:
+    image: mongo:4
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=secret

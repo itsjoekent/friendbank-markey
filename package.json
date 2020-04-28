@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "engines": {
+    "node": "12.x"
+  },
+  "scripts": {
+    "start:api": "node src/api.js",
+    "test:api": "mocha ./test/api/*.js"
+  },
+  "dependencies": {
+    "bad-words": "^3.0.3",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.6",
+    "phone": "^2.4.10"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.1.2",
+    "node-fetch": "^2.6.0"
+  }
+}
