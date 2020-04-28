@@ -19,7 +19,6 @@ app.use(express.static('public'));
 
 function createApiError(error, status, safeMessage) {
   const target = error instanceof Error ? error : new Error('internal api error');
-  console.log({target, error});
 
   target._status = status;
   target._safeMessage = safeMessage;
