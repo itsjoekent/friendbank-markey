@@ -20,7 +20,7 @@ before('wait for host to be reachable', async function() {
   async function check() {
     try {
       const response = await fetch(`${API_URL}/api/v1/health`);
-      
+
       if (response.status === 200) {
         return true;
       }
@@ -72,10 +72,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -121,10 +121,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed   ',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'Ed   ',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title      ',
         subtitle: '   Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -151,10 +151,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -172,10 +172,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/TEST`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed   ',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'Ed   ',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title      ',
         subtitle: '   Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -194,10 +194,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test!`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -216,10 +216,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test12345678910111213141516171819202122232425262728293031323334353637383934041424344454647484950`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -238,9 +238,9 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -259,10 +259,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'EdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEd',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'EdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEd',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -282,9 +282,9 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'Ed',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -303,10 +303,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed',
-        createdByLastName: 'MarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'Ed',
+        lastName: 'MarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkey',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -326,10 +326,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
       }),
@@ -347,10 +347,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
         title: new Array(251).fill('t').join(''),
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -370,10 +370,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title',
         background: 'em-header-original.jpg',
       }),
@@ -391,10 +391,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title',
         subtitle: new Array(251).fill('t').join(''),
         background: 'em-header-original.jpg',
@@ -414,10 +414,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/fuck`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'first name',
-        createdByLastName: 'last name',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'first name',
+        lastName: 'last name',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -436,10 +436,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'fuck',
-        createdByLastName: 'last name',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'fuck',
+        lastName: 'last name',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -458,10 +458,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'first name',
-        createdByLastName: 'last name',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'first name',
+        lastName: 'last name',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title fuck',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -480,10 +480,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'fuck',
-        createdByLastName: 'last name',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'fuck',
+        lastName: 'last name',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle fuck',
         background: 'em-header-original.jpg',
@@ -503,10 +503,10 @@ describe('page api v1', function() {
       fetch(`${API_URL}/api/v1/page/test1`, {
         method: 'post',
         body: JSON.stringify({
-          createdByFirstName: 'Ed',
-          createdByLastName: 'Markey',
-          createdByPhone: '617 555 0127',
-          createdByZip: '02129',
+          firstName: 'Ed',
+          lastName: 'Markey',
+          phone: '617 555 0127',
+          zip: '02129',
           title: 'Demo page title',
           subtitle: 'Demo page subtitle',
           background: 'em-header-original.jpg',
@@ -516,10 +516,10 @@ describe('page api v1', function() {
       fetch(`${API_URL}/api/v1/page/test2`, {
         method: 'post',
         body: JSON.stringify({
-          createdByFirstName: 'Ed',
-          createdByLastName: 'Markey',
-          createdByPhone: '(617) 555-0127',
-          createdByZip: '02129',
+          firstName: 'Ed',
+          lastName: 'Markey',
+          phone: '(617) 555-0127',
+          zip: '02129',
           title: 'Demo page title',
           subtitle: 'Demo page subtitle',
           background: 'em-header-original.jpg',
@@ -548,10 +548,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed',
-        createdByLastName: 'Markey',
-        createdByPhone: '617 55 127',
-        createdByZip: '02129',
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '617 55 127',
+        zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -570,10 +570,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '021',
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '021',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -592,10 +592,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '0212b',
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '0212b',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
         background: 'em-header-original.jpg',
@@ -614,10 +614,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: 'Ed',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
         background: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Joe_Kennedy_III%2C_official_portrait%2C_116th_Congress.jpg/220px-Joe_Kennedy_III%2C_official_portrait%2C_116th_Congress.jpg',
@@ -636,10 +636,10 @@ describe('page api v1', function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        createdByFirstName: '<script>console.log("Ed")</script>',
-        createdByLastName: 'Markey',
-        createdByPhone: '+16175550127',
-        createdByZip: '02129',
+        firstName: '<script>console.log("Ed")</script>',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
         title: '<script>console.log("Demo page title")</script>',
         subtitle: '<script>console.log("Demo page subtitle")</script>',
         background: 'em-header-original.jpg',
@@ -654,5 +654,225 @@ describe('page api v1', function() {
     assert.equal(page.createdByFirstName, '&lt;script&gt;console.log("Ed")&lt;/script&gt;');
     assert.equal(page.title, '&lt;script&gt;console.log("Demo page title")&lt;/script&gt;');
     assert.equal(page.subtitle, '&lt;script&gt;console.log("Demo page subtitle")&lt;/script&gt;');
+  });
+});
+
+describe('page signup api v1', function() {
+  it ('should make a new signup with valid fields', async function() {
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const db = client.db('markey');
+    const pages = db.collection('pages');
+
+    await pages.insertOne({ code: 'test', totalSignups: 0 });
+
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    assert.equal(response.status, 200);
+
+    const { ok } = await response.json();
+    assert.isTrue(ok);
+
+    const page = await pages.findOne({ code: 'test' });
+    assert.equal(page.totalSignups, 1);
+  });
+
+  it ('should make a new signup with valid fields and uppercase code', async function() {
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const db = client.db('markey');
+    const pages = db.collection('pages');
+
+    await pages.insertOne({ code: 'test', totalSignups: 0 });
+
+    const response = await fetch(`${API_URL}/api/v1/page/TEST/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    assert.equal(response.status, 200);
+
+    const { ok } = await response.json();
+    assert.isTrue(ok);
+
+    const page = await pages.findOne({ code: 'test' });
+    assert.equal(page.totalSignups, 1);
+  });
+
+  it ('should not signup for a non-existent signup page', async function() {
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    assert.equal(response.status, 404);
+
+    const { error } = await response.json();
+    assert.isString(error);
+  });
+
+  it ('should not create a new signup if the first name is missing', async function() {
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const db = client.db('markey');
+    const pages = db.collection('pages');
+
+    await pages.insertOne({ code: 'test', totalSignups: 0 });
+
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '02129',
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { error } = await response.json();
+    assert.isString(error);
+    assert.include(error.toLowerCase(), 'missing');
+  });
+
+  it ('should not create a new signup if the last name is missing', async function() {
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const db = client.db('markey');
+    const pages = db.collection('pages');
+
+    await pages.insertOne({ code: 'test', totalSignups: 0 });
+
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        firstName: 'Ed',
+        phone: '+16175550127',
+        zip: '02129',
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { error } = await response.json();
+    assert.isString(error);
+    assert.include(error.toLowerCase(), 'missing');
+  });
+
+  it ('should not create a new signup if the zip is missing', async function() {
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const db = client.db('markey');
+    const pages = db.collection('pages');
+
+    await pages.insertOne({ code: 'test', totalSignups: 0 });
+
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { error } = await response.json();
+    assert.isString(error);
+    assert.include(error.toLowerCase(), 'missing');
+  });
+
+  it ('should not create a new signup if the zip is incorrectly formatted', async function() {
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const db = client.db('markey');
+    const pages = db.collection('pages');
+
+    await pages.insertOne({ code: 'test', totalSignups: 0 });
+
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '+16175550127',
+        zip: '021',
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { error } = await response.json();
+    assert.isString(error);
+    assert.include(error.toLowerCase(), 'zip');
+  });
+
+  it ('should not create a new signup if the phone is missing', async function() {
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const db = client.db('markey');
+    const pages = db.collection('pages');
+
+    await pages.insertOne({ code: 'test', totalSignups: 0 });
+
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        firstName: 'Ed',
+        lastName: 'Markey',
+        zip: '02129',
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { error } = await response.json();
+    assert.isString(error);
+    assert.include(error.toLowerCase(), 'missing');
+  });
+
+  it ('should not create a new signup if the phone is incorrectly formatted', async function() {
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const db = client.db('markey');
+    const pages = db.collection('pages');
+
+    await pages.insertOne({ code: 'test', totalSignups: 0 });
+
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        firstName: 'Ed',
+        lastName: 'Markey',
+        phone: '617 55 127',
+        zip: '02129',
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { error } = await response.json();
+    assert.isString(error);
+    assert.include(error.toLowerCase(), 'phone');
   });
 });

@@ -6,7 +6,7 @@ const MongoClient = require('mongodb').MongoClient;
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
 const xss = require('xss');
-const phone = require('phone');
+const phoneValidation = require('phone');
 const profanity = require('@2toad/profanity').profanity;
 
 const setupDb = require('./setup-db');
@@ -52,6 +52,10 @@ function normalizePageCode(code) {
   return encodeURIComponent((code || '').trim().toLowerCase());
 }
 
+function normalizeName(value) {
+  return xss(value.trim());
+}
+
 async function getPageForCode(code) {
   try {
     const pages = db.collection('pages');
@@ -83,6 +87,7 @@ function stringFieldValidator(minLength, maxLength = Infinity) {
   function validate(input) {
     return (
       typeof input !== 'string'
+      || input === 'undefined'
       || input.length < minLength
       || input.length > maxLength
     );
@@ -124,23 +129,23 @@ app.post('/api/v1/page/:code', async function(req, res) {
     const { code } = req.params;
 
     const {
-      createdByFirstName,
-      createdByLastName,
-      createdByPhone,
-      createdByZip,
+      firstName,
+      lastName,
+      phone,
+      zip,
       title,
       subtitle,
       background,
     } = req.body;
 
     const requiredStringFields = [
-      createdByFirstName,
-      createdByLastName,
+      firstName,
+      lastName,
       title,
       subtitle,
       background,
-      `${createdByPhone}`,
-      `${createdByZip}`,
+      `${phone}`,
+      `${zip}`,
     ];
 
     if (hasInvalidParam(requiredStringFields, stringFieldValidator(1))) {
@@ -148,7 +153,7 @@ app.post('/api/v1/page/:code', async function(req, res) {
       return;
     }
 
-    if (hasInvalidParam([createdByFirstName, createdByLastName], stringFieldValidator(1, 50))) {
+    if (hasInvalidParam([firstName, lastName], stringFieldValidator(1, 50))) {
       res.status(400).json({ error: 'Invalid first and/or last name field length' });
       return;
     }
@@ -165,7 +170,7 @@ app.post('/api/v1/page/:code', async function(req, res) {
 
     const profanityCheck = [
       code,
-      createdByFirstName,
+      firstName,
       title,
       subtitle,
     ];
@@ -175,12 +180,12 @@ app.post('/api/v1/page/:code', async function(req, res) {
       return;
     }
 
-    if (!phone(createdByPhone, 'USA').length) {
+    if (!phoneValidation(phone, 'USA').length) {
       res.status(400).json({ error: 'Invalid phone number' });
       return;
     }
 
-    if (`${createdByZip}`.length !== 5 || !(/^\d+$/.test(createdByZip))) {
+    if (`${zip}`.length !== 5 || !(/^\d+$/.test(zip))) {
       res.status(400).json({ error: 'Invalid zipcode' });
       return;
     }
@@ -211,10 +216,10 @@ app.post('/api/v1/page/:code', async function(req, res) {
 
     const page = {
       code: normalizedPageCode,
-      createdByFirstName: xss(createdByFirstName.trim()),
-      createdByLastName: createdByLastName.trim(),
-      createdByPhone: phone(createdByPhone, 'USA')[0],
-      createdByZip: `${createdByZip}`,
+      createdByFirstName: normalizeName(firstName),
+      createdByLastName: normalizeName(lastName),
+      createdByPhone: phoneValidation(phone, 'USA')[0],
+      createdByZip: `${zip}`,
       createdAt: Date.now(),
       title: xss(title.trim()),
       subtitle: xss(subtitle.trim()),
@@ -243,7 +248,77 @@ app.post('/api/v1/page/:code', async function(req, res) {
 });
 
 app.post('/api/v1/page/:code/signup', async function(req, res) {
+  try {
+    const { code } = req.params;
+    const normalizedCode = normalizePageCode(code);
 
+    const {
+      firstName,
+      lastName,
+      phone,
+      zip,
+    } = req.body;
+
+    const requiredStringFields = [
+      firstName,
+      lastName,
+      `${phone}`,
+      `${zip}`,
+    ];
+
+    if (hasInvalidParam(requiredStringFields, stringFieldValidator(1))) {
+      res.status(400).json({ error: 'Missing required field' });
+      return;
+    }
+
+    if (hasInvalidParam([firstName, lastName], stringFieldValidator(1, 50))) {
+      res.status(400).json({ error: 'Invalid first and/or last name field length' });
+      return;
+    }
+
+    if (!phoneValidation(phone, 'USA').length) {
+      res.status(400).json({ error: 'Invalid phone number' });
+      return;
+    }
+
+    if (`${zip}`.length !== 5 || !(/^\d+$/.test(zip))) {
+      res.status(400).json({ error: 'Invalid zipcode' });
+      return;
+    }
+
+    const pages = db.collection('pages');
+
+    const pageUpdateResult = await pages.updateOne(
+      { code: normalizedCode },
+      { '$inc': { totalSignups: 1 } },
+      { upsert: false },
+    );
+
+    if (!pageUpdateResult.result.nModified) {
+      res.status(404).json({ error: 'Page not found' });
+      return;
+    }
+
+    if (!pageUpdateResult.result.ok) {
+      // Better to collect the data in the sheet instead of request error termination.
+      console.error(`error updating total page signups, page_code=${normalizedCode}`);
+    }
+
+    const signupSheet = doc.sheetsByIndex[1];
+
+    await signupSheet.addRow([
+      normalizedCode,
+      normalizeName(firstName),
+      normalizeName(lastName),
+      phoneValidation(phone, 'USA')[0],
+      zip,
+      Date.now(),
+    ]);
+
+    res.json({ ok: true });
+  } catch (error) {
+    apiErrorHandler(res, error);
+  }
 });
 
 app.get('*', async function (req, res) {

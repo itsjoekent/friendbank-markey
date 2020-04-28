@@ -13,3 +13,12 @@ TODO:
   - https://dev.to/jandedobbeleer/intercept-http-traffic-exiting-a-docker-container-3g68
 - api documentation
 - api cost estimates
+
+
+----
+
+
+* make api creds
+* make spreadsheet
+* invite creds email to edit spreadsheet
+* create two sheets in order with proper headers
