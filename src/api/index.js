@@ -4,10 +4,11 @@ const path = require('path');
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 
+const xss = require('xss');
 const phone = require('phone');
+const profanity = require('@2toad/profanity').profanity;
 
-const Filter = require('bad-words');
-const wordFilter = new Filter();
+const setupDb = require('./setup-db');
 
 const { PORT, MONGODB_URL } = process.env;
 
@@ -72,10 +73,9 @@ function transformPageResponse(page) {
 function stringFieldValidator(minLength, maxLength = Infinity) {
   function validate(input) {
     return (
-      !!input
-      && typeof input === 'string'
-      && input.length >= minLength
-      && input.length < maxLength
+      typeof input !== 'string'
+      || input.length < minLength
+      || input.length > maxLength
     );
   }
 
@@ -83,7 +83,7 @@ function stringFieldValidator(minLength, maxLength = Infinity) {
 }
 
 function hasInvalidParam(list, validator) {
-  return !!list.find((item) => validator(item));
+  return list.findIndex((item) => validator(item)) > -1;
 }
 
 app.get('/api/v1/page/:code', async function(req, res) {
@@ -130,18 +130,23 @@ app.post('/api/v1/page/:code', async function(req, res) {
       `${createdByZip}`,
     ];
 
-    if (hasInvalidParam(requiredFields, stringFieldValidator(1))) {
+    if (hasInvalidParam(requiredStringFields, stringFieldValidator(1))) {
       res.status(400).json({ error: 'Missing required field' });
       return;
     }
 
     if (hasInvalidParam([createdByFirstName, createdByLastName], stringFieldValidator(1, 50))) {
-      res.status(400).json({ error: 'Invalid first or last name field length' });
+      res.status(400).json({ error: 'Invalid first and/or last name field length' });
       return;
     }
 
-    if (hasInvalidParam([createdByFirstName, createdByLastName], stringFieldValidator(1, 250))) {
-      res.status(400).json({ error: 'Invalid title field length' });
+    if (hasInvalidParam([title, subtitle], stringFieldValidator(1, 250))) {
+      res.status(400).json({ error: 'Invalid title and/or subtitle field length' });
+      return;
+    }
+
+    if (code.length > 50 || !(/^[a-zA-Z0-9-_]+$/.test(code))) {
+      res.status(400).json({ error: 'Invalid share code, must be less than 50 characters and only use letters, numbers, dashes and underscores.' });
       return;
     }
 
@@ -152,7 +157,7 @@ app.post('/api/v1/page/:code', async function(req, res) {
       subtitle,
     ];
 
-    if (hasInvalidParam(profanityCheck, wordFilter.isProfane)) {
+    if (hasInvalidParam(profanityCheck, (field) => profanity.exists(field))) {
       res.status(400).json({ error: 'Profanity is not allowed, sorry!' });
       return;
     }
@@ -162,7 +167,7 @@ app.post('/api/v1/page/:code', async function(req, res) {
       return;
     }
 
-    if (!stringFieldValidator(5)(createdByZip) || !parseInt(createdByZip)) {
+    if (`${createdByZip}`.length !== 5 || !(/^\d+$/.test(createdByZip))) {
       res.status(400).json({ error: 'Invalid zipcode' });
       return;
     }
@@ -193,22 +198,23 @@ app.post('/api/v1/page/:code', async function(req, res) {
 
     const page = {
       code: normalizedPageCode,
-      createdByFirstName: createdByFirstName.trim(),
+      createdByFirstName: xss(createdByFirstName.trim()),
       createdByLastName: createdByLastName.trim(),
       createdByPhone: phone(createdByPhone, 'USA')[0],
-      createdByZip: parseInt(createdByZip),
+      createdByZip: `${createdByZip}`,
       createdAt: Date.now(),
-      title: title.trim(),
-      subtitle: subtitle.trim(),
+      title: xss(title.trim()),
+      subtitle: xss(subtitle.trim()),
       totalSignups: 0,
       background,
     };
 
+    const pages = db.collection('pages');
     await pages.insertOne(page);
 
     // submit new row to google sheet
 
-    res.json({ page });
+    res.json({ page: transformPageResponse(page) });
   } catch (error) {
     apiErrorHandler(res, error);
   }
@@ -235,6 +241,12 @@ app.get('*', async function (req, res) {
     });
 
     db = client.db('markey');
+
+    const result = await setupDb(db);
+
+    if (result instanceof Error) {
+      throw result;
+    }
 
     app.listen(PORT, () => console.log(`Listening on ${PORT}`));
   } catch (error) {
