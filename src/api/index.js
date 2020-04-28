@@ -188,7 +188,7 @@ app.post('/api/v1/page/:code', async function(req, res) {
     let isValidBackground = false;
 
     try {
-      await fs.access(path.join(process.cwd(), '/public', '/assets', background));
+      await fs.access(path.join(process.cwd(), '/public', '/assets', background.toLowerCase()));
       isValidBackground = true;
     } catch (error) {}
 
@@ -219,13 +219,22 @@ app.post('/api/v1/page/:code', async function(req, res) {
       title: xss(title.trim()),
       subtitle: xss(subtitle.trim()),
       totalSignups: 0,
-      background,
+      background: background.toLowerCase(),
     };
 
     const pages = db.collection('pages');
     await pages.insertOne(page);
 
-    // submit new row to google sheet
+    const pageSheet = doc.sheetsByIndex[0];
+
+    await pageSheet.addRow([
+      page.code,
+      page.createdByFirstName,
+      page.createdByLastName,
+      page.createdByPhone,
+      page.createdByZip,
+      page.createdAt,
+    ]);
 
     res.json({ page: transformPageResponse(page) });
   } catch (error) {
