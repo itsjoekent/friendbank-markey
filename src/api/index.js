@@ -3,7 +3,6 @@ const path = require('path');
 
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
-const { GoogleSpreadsheet } = require('google-spreadsheet');
 
 const xss = require('xss');
 const phoneValidation = require('phone');
@@ -15,9 +14,6 @@ const ssr = require('./ssr');
 const {
   PORT,
   MONGODB_URL,
-  SIGNUP_SHEET_ID,
-  GOOGLE_SERVICE_ACCOUNT_EMAIL,
-  GOOGLE_PRIVATE_KEY,
 } = process.env;
 
 const app = express();
@@ -26,7 +22,6 @@ app.use(express.json());
 app.use(express.static('public'));
 
 let db = null;
-let doc = null;
 let template = null;
 
 function createApiError(error, status, safeMessage) {
@@ -231,17 +226,6 @@ app.post('/api/v1/page/:code', async function(req, res) {
     const pages = db.collection('pages');
     await pages.insertOne(page);
 
-    const pageSheet = doc.sheetsByIndex[0];
-
-    await pageSheet.addRow([
-      page.code,
-      page.createdByFirstName,
-      page.createdByLastName,
-      page.createdByPhone,
-      page.createdByZip,
-      page.createdAt,
-    ]);
-
     res.json({ page: transformPageResponse(page) });
   } catch (error) {
     apiErrorHandler(res, error);
@@ -304,17 +288,6 @@ app.post('/api/v1/page/:code/signup', async function(req, res) {
       // Better to collect the data in the sheet instead of request error termination.
       console.error(`error updating total page signups, page_code=${normalizedCode}`);
     }
-
-    const signupSheet = doc.sheetsByIndex[1];
-
-    await signupSheet.addRow([
-      normalizedCode,
-      normalizeName(firstName),
-      normalizeName(lastName),
-      phoneValidation(phone, 'USA')[0],
-      zip,
-      Date.now(),
-    ]);
 
     res.json({ ok: true });
   } catch (error) {
@@ -384,21 +357,6 @@ app.get('*', async function (req, res) {
     }
   } catch (error) {
     console.log('Failed to connect to MongoDB');
-    console.error(error);
-    process.exit(1);
-  }
-
-  try {
-    doc = new GoogleSpreadsheet(SIGNUP_SHEET_ID);
-
-    await doc.useServiceAccountAuth({
-      client_email: GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      private_key: GOOGLE_PRIVATE_KEY.replace(new RegExp('\\\\n', '\g'), '\n'),
-    });
-
-    await doc.loadInfo();
-  } catch (error) {
-    console.log('Failed to connect to Google Sheets');
     console.error(error);
     process.exit(1);
   }

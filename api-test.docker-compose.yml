@@ -25,7 +25,6 @@ services:
       - mongo
     links:
       - mongo
-    env_file: .env
     environment:
       - PORT=5000
       - MONGODB_URL=mongodb://admin:secret@mongo:27017
