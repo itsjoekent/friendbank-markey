@@ -78,7 +78,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -96,7 +96,7 @@ describe('page api v1', function() {
     assert.isUndefined(page.createdByZip);
     assert.equal(page.title, 'Demo page title');
     assert.equal(page.subtitle, 'Demo page subtitle');
-    assert.equal(page.background, 'em-header-original.jpg');
+    assert.equal(page.background, 'default');
     assert.equal(page.totalSignups, 0);
     assert.isNumber(page.createdAt);
 
@@ -112,7 +112,7 @@ describe('page api v1', function() {
     assert.equal(pageItem.createdByZip, '02129');
     assert.equal(pageItem.title, 'Demo page title');
     assert.equal(pageItem.subtitle, 'Demo page subtitle');
-    assert.equal(pageItem.background, 'em-header-original.jpg');
+    assert.equal(pageItem.background, 'default');
     assert.equal(pageItem.totalSignups, 0);
     assert.isNumber(pageItem.createdAt);
   });
@@ -127,7 +127,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title      ',
         subtitle: '   Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -157,7 +157,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -178,7 +178,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title      ',
         subtitle: '   Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -200,7 +200,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -222,7 +222,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -243,7 +243,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -265,7 +265,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -287,7 +287,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -309,7 +309,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -331,7 +331,7 @@ describe('page api v1', function() {
         phone: '+16175550127',
         zip: '02129',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -353,7 +353,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: new Array(251).fill('t').join(''),
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -375,7 +375,7 @@ describe('page api v1', function() {
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -397,7 +397,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title',
         subtitle: new Array(251).fill('t').join(''),
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -420,7 +420,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -442,7 +442,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -464,7 +464,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title fuck',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -486,7 +486,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle fuck',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -509,7 +509,7 @@ describe('page api v1', function() {
           zip: '02129',
           title: 'Demo page title',
           subtitle: 'Demo page subtitle',
-          background: 'em-header-original.jpg',
+          background: 'default',
         }),
         headers: { 'Content-Type': 'application/json' },
       }),
@@ -522,7 +522,7 @@ describe('page api v1', function() {
           zip: '02129',
           title: 'Demo page title',
           subtitle: 'Demo page subtitle',
-          background: 'em-header-original.jpg',
+          background: 'default',
         }),
         headers: { 'Content-Type': 'application/json' },
       }),
@@ -554,7 +554,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -576,7 +576,7 @@ describe('page api v1', function() {
         zip: '021',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -598,7 +598,7 @@ describe('page api v1', function() {
         zip: '0212b',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -610,7 +610,7 @@ describe('page api v1', function() {
     assert.include(error.toLowerCase(), 'zipcode');
   });
 
-  it ('should not create a new page if the background is not in the public folder', async function() {
+  it ('should not create a new page if the background key is invalid', async function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
@@ -642,7 +642,7 @@ describe('page api v1', function() {
         zip: '02129',
         title: '<script>console.log("Demo page title")</script>',
         subtitle: '<script>console.log("Demo page subtitle")</script>',
-        background: 'em-header-original.jpg',
+        background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
     });

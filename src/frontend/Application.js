@@ -1,6 +1,8 @@
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { ApplicationContext } from './ApplicationContext';
+import GlobalStyle from './GlobalStyle';
+import Nav from './components/Nav';
 import ErrorPage from './pages/Error';
 import Homepage from './pages/Homepage';
 import SignupPage from './pages/Signup';
@@ -22,6 +24,8 @@ export default function Application(props) {
     <React.Fragment>
       <ThemeProvider theme={theme}>
         <ApplicationContext.Provider value={contextValue}>
+          <GlobalStyle />
+          <Nav />
           {(!state || !state.pageType || state.pageType === 'error') && <ErrorPage />}
           {(state.pageType === 'notfound') && <ErrorPage is404 />}
           {(state.pageType === 'homepage') && <Homepage />}
