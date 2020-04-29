@@ -22,7 +22,7 @@ const PageContainer = styled.div`
 `;
 
 function reducer(state, action) {
-  return state;
+  return action(state);
 }
 
 export default function Application(props) {

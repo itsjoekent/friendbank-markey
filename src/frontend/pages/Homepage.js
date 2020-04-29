@@ -31,7 +31,7 @@ export default function Homepage() {
         const data = await response.json();
         return data.error || 'Looks like we had an error, try again? If this continues to happen, please contact us https://www.edmarkey.com/contact-us/';
       }
-
+      
       return null;
     } catch (error) {
       console.error(error);

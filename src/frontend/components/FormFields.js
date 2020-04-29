@@ -284,6 +284,7 @@ export function RadioField(props) {
           <RadioElementRow key={option}>
             <RealRadioInput
               id={`${joinedId}-${option}`}
+              type="radio"
               checked={option === value}
               onChange={() => setOptionAsValue(option)}
               onFocus={() => setFocusState((copy) => ({ ...copy, [option]: true }))}
@@ -471,7 +472,7 @@ export const GalleryItemList = styled.div`
 `;
 
 export const GalleryItem = styled.div`
-  width: calc(50% - 16px);
+  width: calc(33.33% - 16px);
   margin-bottom: 16px;
   height: 75px;
 
@@ -541,6 +542,7 @@ export function GalleryPickerField(props) {
           <GalleryItem key={option.name}>
             <RealRadioInput
               id={`${joinedId}-${option.name}`}
+              type="radio"
               checked={option.name === value}
               onChange={() => setOptionAsValue(option)}
               onFocus={() => setFocusState((copy) => ({ ...copy, [option.name]: true }))}
