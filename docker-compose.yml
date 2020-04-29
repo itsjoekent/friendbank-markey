@@ -6,6 +6,7 @@ services:
     command: npm run start:webpack
     volumes:
       - ./src:/usr/src/app/src:cached
+      - ./public/dist:/usr/src/app/public/dist:cached
 
   api:
     build: .
@@ -21,6 +22,7 @@ services:
       - MONGODB_URL=mongodb://admin:secret@mongo:27017
     volumes:
       - ./src:/usr/src/app/src:cached
+      - ./public/dist:/usr/src/app/public/dist:cached
 
   mongo:
     image: mongo:4

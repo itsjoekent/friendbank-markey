@@ -13,7 +13,7 @@ export const BaseButton = styled.button`
   text-align: center;
   text-transform: uppercase;
   text-decoration: none;
-
+  cursor: pointer;
   padding: 8px 16px;
 `;
 

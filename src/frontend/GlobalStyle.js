@@ -5,7 +5,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Museo Sans';
     src: url('/fonts/MuseoSans700.woff2') format('woff2'),
       url('/fonts/MuseoSans700.woff') format('woff');
-    font-weight: normal;
+    font-weight: bold;
     font-style: normal;
   }
 
