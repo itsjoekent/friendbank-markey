@@ -12,8 +12,10 @@ TODO:
 
 - api cost estimates
 
-- move media to S3 bucket
+- move media to S3 bucket // get s3 access
 - list of background options, different media resolutions
 - video support for SplitScreen
 
-- cms
+- "cms"
+
+- favicon, open graph tags
