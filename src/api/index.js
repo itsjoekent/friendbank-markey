@@ -295,20 +295,23 @@ app.post('/api/v1/page/:code/signup', async function(req, res) {
   }
 });
 
-function fillTemplate(config) {
+function fillTemplate(config = {}) {
   const title = config.title || 'Ed Markey Organizing Hub';
   const cover = config.cover || '/assets/em-header-original.jpg';
   const status = config.status || 200;
 
-  const data = {
-    title,
-    cover,
-    status,
-    ...(config.data || {}),
-  };
+  const data = config.data || { pageType: 'notfound' };
+
+  const ssrResult = ssr(data);
+  if (ssrResult instanceof Error) {
+    return 'Yikes, we\'re experiencing some errors. Hang tight!';
+  }
+
+  const { html, styleTags } = ssrResult;
 
   return template.replace(/{{REACT_DATA}}/g, JSON.stringify(data))
-    .replace(/{{HTML}}/g, ssr(data))
+    .replace(/{{HTML}}/g, html)
+    .replace(/{{STYLE_TAGS}}/g, styleTags)
     .replace(/{{TITLE}}/g, title)
     .replace(/{{COVER}}/g, cover);
 }
@@ -320,8 +323,20 @@ app.get('*', async function (req, res) {
 
     res.set('Content-Type', 'text/html');
 
+    if (path === '/') {
+      res.send(fillTemplate({
+        data: { pageType: 'homepage' },
+      }));
+
+      return;
+    }
+
     if (parts.length > 1) {
-      res.status(404).send(fillTemplate({ title: 'Ed Markey | Page Not Found' }));
+      res.status(404).send(fillTemplate({
+        title: 'Ed Markey | Page Not Found',
+        data: { pageType: 'notfound' },
+      }));
+
       return;
     }
 
@@ -332,19 +347,27 @@ app.get('*', async function (req, res) {
     }
 
     if (!page) {
-      res.status(404).send(fillTemplate({ title: 'Ed Markey | Page Not Found' }));
+      res.status(404).send(fillTemplate({
+        title: 'Ed Markey | Page Not Found',
+        data: { pageType: 'notfound' },
+      }));
+
       return;
     }
 
     res.send(fillTemplate({
       title: page.title,
       cover: page.background,
-      data: { page },
+      data: { pageType: 'signup', page },
     }));
 
   } catch (error) {
     console.error(error);
-    res.status(500).send(fillTemplate({ title: 'Ed Markey | Server Error' }));
+
+    res.status(500).send(fillTemplate({
+      title: 'Ed Markey | Server Error',
+      data: { pageType: 'error' },
+    }));
   }
 });
 
