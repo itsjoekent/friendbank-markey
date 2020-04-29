@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@2toad/profanity": "^1.1.0",
+    "@babel/runtime": "^7.9.6",
     "express": "^4.17.1",
     "mongodb": "^3.5.6",
     "phone": "^2.4.10",
@@ -18,10 +19,12 @@
     "react-dom": "^16.13.1",
     "react-helmet": "^6.0.0",
     "styled-components": "^5.1.0",
+    "whatwg-fetch": "^3.0.0",
     "xss": "^1.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-runtime": "^7.9.6",
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-react": "^7.9.4",
     "babel-loader": "^8.1.0",

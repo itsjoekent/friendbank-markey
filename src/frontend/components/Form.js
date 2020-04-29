@@ -5,6 +5,10 @@ import { RedButton } from './Buttons';
 import {
   SingleLineTextInput,
   SINGLE_LINE_TEXT_INPUT,
+  CodeInputField,
+  CODE_INPUT_FIELD,
+  RadioField,
+  RADIO_FIELD,
 } from './FormFields';
 
 const FADE_IN_TIME = 1000;
@@ -48,14 +52,10 @@ const FormTitleContainer = styled.div`
 
 const FormFieldsContainer = styled.form`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
   margin-bottom: 24px;
-
-  @media ${({ theme }) => theme.media.tablet} {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
 `;
 
 const FormSubmitButton = styled(RedButton)`
@@ -63,7 +63,12 @@ const FormSubmitButton = styled(RedButton)`
 `;
 
 export default function Form(props) {
-  const { formId, steps, onCompletion } = props;
+  const {
+    formId,
+    steps,
+    onCompletion,
+    onFormValueChange,
+  } = props;
 
   const [formValues, setFormValues] = React.useState({});
   const [formError, setFormError] = React.useState(null);
@@ -82,6 +87,7 @@ export default function Form(props) {
 
     const timeoutId = setTimeout(() => {
       setActiveStep(targetStep);
+      setHasTouchedSubmit(false);
     }, FADE_OUT_TIME);
 
     return () => clearTimeout(timeoutId);
@@ -89,9 +95,15 @@ export default function Form(props) {
 
   React.useEffect(() => {
     if (activeStep >= steps.length && !!onCompletion) {
-      onCompletion();
+      onCompletion(formValues);
     }
   }, [steps, onCompletion, activeStep]);
+
+  React.useEffect(() => {
+    if (onFormValueChange) {
+      onFormValueChange(formValues, setFormValues);
+    }
+  }, [onFormValueChange, formValues]);
 
   function onSubmit(event) {
     event.preventDefault();
@@ -121,8 +133,14 @@ export default function Form(props) {
     }
 
     if (onStepSubmit) {
-      onStepSubmit(formValues, setFormError)
-        .then(() => setTargetStep(activeStep + 1))
+      onStepSubmit(formValues)
+        .then((newFormError) => {
+          if (newFormError) {
+            setFormError(newFormError);
+          } else {
+            setTargetStep(activeStep + 1);
+          }
+        })
         .catch((error) => {
           console.error(error);
           setFormError('Whoops, looks like we had an error. Try again?');
@@ -175,7 +193,42 @@ export default function Form(props) {
           }
 
           switch (fieldType) {
-            case [SINGLE_LINE_TEXT_INPUT]:
+            case CODE_INPUT_FIELD: {
+              return (
+                <CodeInputField
+                  key={fieldId}
+                  formId={formId}
+                  fieldId={fieldId}
+                  label={label}
+                  help={help}
+                  validationMessage={validationMessage}
+                  hasTouchedSubmit={hasTouchedSubmit}
+                  setFormValues={setFormValues}
+                  suggestedValue={value || ""}
+                />
+              );
+            }
+
+            case RADIO_FIELD: {
+              const { options } = field;
+
+              return (
+                <RadioField
+                  key={fieldId}
+                  formId={formId}
+                  fieldId={fieldId}
+                  label={label}
+                  help={help}
+                  validationMessage={validationMessage}
+                  hasTouchedSubmit={hasTouchedSubmit}
+                  setFormValues={setFormValues}
+                  value={value || ""}
+                  options={options || []}
+                />
+              );
+            }
+
+            case SINGLE_LINE_TEXT_INPUT:
             default: {
               return (
                 <SingleLineTextInput
