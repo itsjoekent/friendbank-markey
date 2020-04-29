@@ -5,7 +5,8 @@
   },
   "scripts": {
     "start:api": "node src/api",
-    "start:webpack": "webpack --mode development",
+    "start:webpack": "webpack --mode development --watch",
+    "build:webpack": "webpack --mode production",
     "test:api": "mocha ./test/api/*.js"
   },
   "dependencies": {
