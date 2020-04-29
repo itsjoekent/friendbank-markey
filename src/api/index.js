@@ -11,6 +11,8 @@ const profanity = require('@2toad/profanity').profanity;
 const setupDb = require('./setup-db');
 const ssr = require('./ssr').default;
 
+const backgrounds = require('../backgrounds');
+
 const {
   PORT,
   MONGODB_URL,
@@ -186,14 +188,7 @@ app.post('/api/v1/page/:code', async function(req, res) {
       return;
     }
 
-    let isValidBackground = false;
-
-    try {
-      await fs.access(path.join(process.cwd(), '/public', '/assets', background.toLowerCase()));
-      isValidBackground = true;
-    } catch (error) {}
-
-    if (!isValidBackground) {
+    if (!backgrounds[background]) {
       res.status(400).json({ error: 'Invalid background' });
       return;
     }
@@ -304,6 +299,7 @@ function fillTemplate(config = {}) {
 
   const ssrResult = ssr(data);
   if (ssrResult instanceof Error) {
+    console.error(ssrResult);
     return 'Yikes, we\'re experiencing some errors. Hang tight!';
   }
 
