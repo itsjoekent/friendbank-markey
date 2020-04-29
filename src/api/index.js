@@ -315,7 +315,6 @@ function fillTemplate(config = {}) {
 app.get('*', async function (req, res) {
   try {
     const { path } = req;
-    const parts = path.split('/');
 
     res.set('Content-Type', 'text/html');
 
@@ -327,16 +326,7 @@ app.get('*', async function (req, res) {
       return;
     }
 
-    if (parts.length > 1) {
-      res.status(404).send(fillTemplate({
-        title: 'Ed Markey | Page Not Found',
-        data: { pageType: 'notfound' },
-      }));
-
-      return;
-    }
-
-    const page = await getPageForCode(normalizedCode(parts[0]));
+    const page = await getPageForCode(normalizePageCode(path.replace('/', '')));
 
     if (page instanceof Error) {
       throw page;

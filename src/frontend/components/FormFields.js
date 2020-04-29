@@ -12,10 +12,6 @@ export const BaseSingleLineTextInput = styled.input`
   font-size: 16px;
   color: ${({ theme }) => theme.colors.black};
 
-  &:focus {
-    border: 2px solid ${({ theme }) => theme.colors.red};
-  }
-
   &::placeholder {
     color: ${({ theme }) => theme.colors.grey};
   }
@@ -120,6 +116,59 @@ export function SingleLineTextInput(props) {
         id={joinedId}
         onFocus={onFocus}
         onBlur={onBlur}
+      />
+    </FormFieldColumn>
+  );
+}
+
+export const MULTI_LINE_TEXT_INPUT = 'MULTI_LINE_TEXT_INPUT';
+
+export const BaseMultiLineTextInput = styled.textarea`
+  width: 100%;
+  padding: 8px;
+  background-color: ${({ theme }) => theme.colors.white};
+  border: 2px solid ${({ theme }) => theme.colors.blue};
+
+  font-family: ${({ theme }) => theme.fonts.mainFamily};
+  font-weight: normal;
+  font-size: 16px;
+  color: ${({ theme }) => theme.colors.black};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.grey};
+  }
+`;
+
+export function MultiLineTextInput(props) {
+  const {
+    formId,
+    fieldId,
+    label,
+    help,
+    validationMessage,
+    hasTouchedSubmit,
+    ...rest
+  } = props;
+
+  const joinedId = `${formId}-${fieldId}`;
+
+  const { onFocus, onBlur, isValidationMessageDisplayed } = useValidationController(hasTouchedSubmit, validationMessage, rest);
+
+  return (
+    <FormFieldColumn>
+      <LabelRow>
+        <Label htmlFor={joinedId}>{label}</Label>
+        {isValidationMessageDisplayed && (
+          <HelpText as="p" isValidation>{validationMessage}</HelpText>
+        )}
+      </LabelRow>
+      {help && <HelpText as="p">{help}</HelpText>}
+      <BaseMultiLineTextInput
+        {...rest}
+        id={joinedId}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        rows={4}
       />
     </FormFieldColumn>
   );
@@ -408,6 +457,111 @@ export function CodeInputField(props) {
           })()}
         </CodeInputVerification>
       )}
+    </FormFieldColumn>
+  );
+}
+
+export const GALLERY_PICKER = 'GALLERY_PICKER';
+
+export const GalleryItemList = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+`;
+
+export const GalleryItem = styled.div`
+  width: calc(50% - 16px);
+  margin-bottom: 16px;
+  height: 75px;
+
+  @media ${({ theme }) => theme.media.tablet} {
+    width: calc(25% - 16px);
+  }
+`;
+
+export const GalleryItemLabel = styled.label`
+  opacity: 0;
+  position: absolute;
+  left: -10000000px;
+`;
+
+export const GalleryItemMedia = styled.div`
+  width: 100%;
+  height: 100%;
+
+  ${({ isChecked }) => isChecked && css`
+    outline: 4px solid ${({ theme }) => theme.colors.blue};
+  `}
+
+  ${({ isFocused }) => isFocused && css`
+    outline: 4px solid ${({ theme }) => theme.colors.red};
+  `}
+`;
+
+export const GalleryItemImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+`;
+
+export function GalleryPickerField(props) {
+  const {
+    formId,
+    fieldId,
+    label,
+    help,
+    validationMessage,
+    hasTouchedSubmit,
+    options,
+    value,
+    setFormValues,
+  } = props;
+
+  const joinedId = `${formId}-${fieldId}`;
+
+  const [focusState, setFocusState] = React.useState({});
+
+  function setOptionAsValue(option) {
+    setFormValues((copy) => ({ ...copy, [fieldId]: option.name }));
+  }
+
+  return (
+    <FormFieldColumn>
+      <LabelRow>
+        <Label as="p">{label}</Label>
+        {hasTouchedSubmit && validationMessage && (
+          <HelpText as="p" isValidation>{validationMessage}</HelpText>
+        )}
+      </LabelRow>
+      {help && <HelpText as="p">{help}</HelpText>}
+      <GalleryItemList>
+        {options.map((option) => (
+          <GalleryItem key={option.name}>
+            <RealRadioInput
+              id={`${joinedId}-${option.name}`}
+              checked={option.name === value}
+              onChange={() => setOptionAsValue(option)}
+              onFocus={() => setFocusState((copy) => ({ ...copy, [option.name]: true }))}
+              onBlur={() => setFocusState((copy) => ({ ...copy, [option.name]: false }))}
+            />
+            <GalleryItemMedia
+              isChecked={option.name === value}
+              isFocused={!!focusState[option.name]}
+              onClick={() => setOptionAsValue(option)}
+            >
+              <GalleryItemImage
+                src={option.src}
+                alt={option.alt}
+              />
+            </GalleryItemMedia>
+            <GalleryItemLabel htmlFor={`${joinedId}-${option.name}`}>
+              {option.alt}
+            </GalleryItemLabel>
+          </GalleryItem>
+        ))}
+      </GalleryItemList>
     </FormFieldColumn>
   );
 }

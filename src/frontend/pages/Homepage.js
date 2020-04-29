@@ -7,7 +7,9 @@ import signupStepOneFields from '../forms/signupStepOneFields';
 import signupStepTwoFields from '../forms/signupStepTwoFields';
 import {
   SINGLE_LINE_TEXT_INPUT,
+  MULTI_LINE_TEXT_INPUT,
   CODE_INPUT_FIELD,
+  GALLERY_PICKER,
 } from '../components/FormFields';
 import {
   validateCode,
@@ -77,15 +79,20 @@ export default function Homepage() {
         },
         {
           fieldId: 'subtitle',
-          fieldType: SINGLE_LINE_TEXT_INPUT,
-          label: 'Subtitle',
+          fieldType: MULTI_LINE_TEXT_INPUT,
+          label: 'Share #WhyImWithEd',
           validator: validateRequired,
         },
         {
           fieldId: 'background',
-          fieldType: SINGLE_LINE_TEXT_INPUT,
+          fieldType: GALLERY_PICKER,
           label: 'Background',
           validator: validateRequired,
+          options: Object.keys(backgrounds).map((key) => ({
+            name: key,
+            src: backgrounds[key].source,
+            alt: backgrounds[key].alt,
+          })),
         },
       ],
     },

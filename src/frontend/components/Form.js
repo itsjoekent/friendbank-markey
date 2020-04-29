@@ -9,6 +9,10 @@ import {
   CODE_INPUT_FIELD,
   RadioField,
   RADIO_FIELD,
+  MultiLineTextInput,
+  MULTI_LINE_TEXT_INPUT,
+  GalleryPickerField,
+  GALLERY_PICKER,
 } from './FormFields';
 
 const FADE_IN_TIME = 1000;
@@ -176,7 +180,6 @@ export default function Form(props) {
             fieldType,
             label = null,
             help = null,
-            isHalfWidth = false,
             validator = () => false,
           } = field;
 
@@ -209,6 +212,41 @@ export default function Form(props) {
               );
             }
 
+            case GALLERY_PICKER: {
+              const { options } = field;
+
+              return (
+                <GalleryPickerField
+                  key={fieldId}
+                  formId={formId}
+                  fieldId={fieldId}
+                  label={label}
+                  help={help}
+                  validationMessage={validationMessage}
+                  hasTouchedSubmit={hasTouchedSubmit}
+                  setFormValues={setFormValues}
+                  value={value || ""}
+                  options={options || []}
+                />
+              );
+            }
+
+            case MULTI_LINE_TEXT_INPUT: {
+              return (
+                <MultiLineTextInput
+                  key={fieldId}
+                  formId={formId}
+                  fieldId={fieldId}
+                  label={label}
+                  help={help}
+                  validationMessage={validationMessage}
+                  hasTouchedSubmit={hasTouchedSubmit}
+                  onChange={onTextInputChange}
+                  value={value || ""}
+                />
+              );
+            }
+
             case RADIO_FIELD: {
               const { options } = field;
 
@@ -230,6 +268,8 @@ export default function Form(props) {
 
             case SINGLE_LINE_TEXT_INPUT:
             default: {
+              const { isHalfWidth = false } = field;
+
               return (
                 <SingleLineTextInput
                   key={fieldId}
