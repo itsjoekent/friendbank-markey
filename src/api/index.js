@@ -10,6 +10,7 @@ const phoneValidation = require('phone');
 const profanity = require('@2toad/profanity').profanity;
 
 const setupDb = require('./setup-db');
+const ssr = require('./ssr');
 
 const {
   PORT,
@@ -327,6 +328,7 @@ function fillTemplate(config = {
   cover: '/assets/em-header-original.jpg',
 }) {
   return template.replace(/{{REACT_DATA}}/g, JSON.stringify(config.data))
+    .replace(/{{HTML}}/g, ssr(config.data))
     .replace(/{{TITLE}}/g, config.title)
     .replace(/{{COVER}}/g, config.cover);
 }
