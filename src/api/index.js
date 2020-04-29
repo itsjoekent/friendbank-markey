@@ -9,7 +9,7 @@ const phoneValidation = require('phone');
 const profanity = require('@2toad/profanity').profanity;
 
 const setupDb = require('./setup-db');
-const ssr = require('./ssr');
+const ssr = require('./ssr').default;
 
 const {
   PORT,
@@ -295,15 +295,22 @@ app.post('/api/v1/page/:code/signup', async function(req, res) {
   }
 });
 
-function fillTemplate(config = {
-  data: {},
-  title: 'Ed Markey Organizing Hub',
-  cover: '/assets/em-header-original.jpg',
-}) {
-  return template.replace(/{{REACT_DATA}}/g, JSON.stringify(config.data))
-    .replace(/{{HTML}}/g, ssr(config.data))
-    .replace(/{{TITLE}}/g, config.title)
-    .replace(/{{COVER}}/g, config.cover);
+function fillTemplate(config) {
+  const title = config.title || 'Ed Markey Organizing Hub';
+  const cover = config.cover || '/assets/em-header-original.jpg';
+  const status = config.status || 200;
+
+  const data = {
+    title,
+    cover,
+    status,
+    ...(config.data || {}),
+  };
+
+  return template.replace(/{{REACT_DATA}}/g, JSON.stringify(data))
+    .replace(/{{HTML}}/g, ssr(data))
+    .replace(/{{TITLE}}/g, title)
+    .replace(/{{COVER}}/g, cover);
 }
 
 app.get('*', async function (req, res) {

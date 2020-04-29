@@ -1,6 +1,7 @@
-import { renderToString } from 'react-dom';
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import Application from './Application';
 
 export default function ssr(data) {
-  return renderToString(<Application {...data} />);
+  return ReactDOMServer.renderToString(<Application {...data} />);
 }
