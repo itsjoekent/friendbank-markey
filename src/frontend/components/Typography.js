@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const BaseTitle = styled.h1`
   font-family: ${({ theme }) => theme.fonts.headerFamily};
