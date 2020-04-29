@@ -1,7 +1,8 @@
+import React from 'react';
 import ReactDOM from 'react-dom';
 import Application from './Application';
 
-const data = window.REACT_DATA;
+const data = window.__REACT_DATA;
 
 ReactDOM.hydrate(
   <Application {...data} />,
