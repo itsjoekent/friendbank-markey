@@ -11,7 +11,6 @@
   "dependencies": {
     "@2toad/profanity": "^1.1.0",
     "express": "^4.17.1",
-    "google-spreadsheet": "^3.0.11",
     "mongodb": "^3.5.6",
     "phone": "^2.4.10",
     "react": "^16.13.1",
