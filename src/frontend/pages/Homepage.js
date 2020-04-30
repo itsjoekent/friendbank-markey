@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import copy from '../../copy';
 import SplitScreen from '../components/SplitScreen';
 import Form from '../components/Form';
 import CommitteeDisclaimer, { DisclaimerWrapper } from '../components/CommitteeDisclaimer';
@@ -30,64 +31,68 @@ export default function Homepage() {
 
       if (response.status !== 200) {
         const data = await response.json();
-        return data.error || 'Looks like we had an error, try again? If this continues to happen, please contact us https://www.edmarkey.com/contact-us/';
+        return data.error || copy.genericError;
       }
 
       return null;
     } catch (error) {
       console.error(error);
-      return 'Looks like we had an error, try again? If this continues to happen, please contact us https://www.edmarkey.com/contact-us/';
+      return copy.genericError;
     }
   }
 
   function onCompletion(formValues) {
-    window.location.href = `/${formValues.code}`;
+    const linkCode = encodeURIComponent((formValues.code || '').trim().toLowerCase());
+
+    sessionStorage.setItem(`${linkCode}-new`, true);
+    window.location.href = `/${linkCode}`;
   }
 
   const steps = [
     {
-      title: 'make your own ed markey support page',
-      subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
-      buttonCopy: 'Next',
+      title: copy.homepage.formTitle,
+      subtitle: copy.homepage.formSubtitle,
+      buttonCopy: copy.homepage.formButtonLabel,
+      showSmsDisclaimer: true,
       fields: [
         ...signupStepOneFields,
         {
           fieldId: 'code',
           fieldType: CODE_INPUT_FIELD,
-          label: 'Share code',
-          help: 'We suggest using a combination of your first + last name.',
+          label: copy.formLabels.shareCode,
+          help: copy.formLabels.shareCodeHelp,
           validator: validateCode,
         },
       ],
     },
     {
-      title: 'Lorem ipsum dolor sit amet',
-      subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
-      buttonCopy: 'Next',
+      title: copy.homepage.formTitle,
+      subtitle: copy.homepage.formSubtitle,
+      buttonCopy: copy.homepage.formButtonLabel,
       fields: [...signupStepTwoFields],
     },
     {
-      title: 'Customize your page',
-      subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
-      buttonCopy: 'Create',
+      title: copy.homepage.customizeTitle,
+      subtitle: copy.homepage.customizeSubtitle,
+      buttonCopy: copy.homepage.customizeButtonLabel,
       onStepSubmit: onFinalStepSubmit,
       fields: [
         {
           fieldId: 'title',
           fieldType: SINGLE_LINE_TEXT_INPUT,
-          label: 'Title',
+          label: copy.formLabels.title,
           validator: validateRequired,
         },
         {
           fieldId: 'subtitle',
           fieldType: MULTI_LINE_TEXT_INPUT,
-          label: 'Share #WhyImWithEd',
+          label: copy.formLabels.subtitle,
           validator: validateRequired,
         },
         {
           fieldId: 'background',
           fieldType: GALLERY_PICKER,
-          label: 'Background',
+          label: copy.formLabels.background,
           validator: validateRequired,
           options: Object.keys(backgrounds).map((key) => ({
             name: key,

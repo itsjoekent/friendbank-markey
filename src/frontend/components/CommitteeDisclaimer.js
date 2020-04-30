@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import copy from '../../copy';
 
 const Disclaimer = styled.span`
   display: block;
@@ -26,7 +27,7 @@ export const DisclaimerWrapper = styled.div`
 export default function CommitteeDisclaimer() {
   return (
     <Disclaimer>
-      PAID FOR BY THE MARKEY COMMITTEE
+      {copy.politicalDiclaimer}
     </Disclaimer>
   );
 }

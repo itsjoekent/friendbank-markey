@@ -1,3 +1,4 @@
+import copy from '../../copy';
 import { SINGLE_LINE_TEXT_INPUT } from '../components/FormFields';
 import {
   validateName,
@@ -10,35 +11,35 @@ const signupStepOneFields = [
   {
     fieldId: 'firstName',
     fieldType: SINGLE_LINE_TEXT_INPUT,
-    label: 'First name',
+    label: copy.formLabels.firstName,
     isHalfWidth: true,
     validator: validateName,
   },
   {
     fieldId: 'lastName',
     fieldType: SINGLE_LINE_TEXT_INPUT,
-    label: 'Last name',
+    label: copy.formLabels.lastName,
     isHalfWidth: true,
     validator: validateName,
   },
   {
     fieldId: 'zip',
     fieldType: SINGLE_LINE_TEXT_INPUT,
-    label: 'Zip',
+    label: copy.formLabels.zip,
     isHalfWidth: true,
     validator: validateZip,
   },
   {
     fieldId: 'phone',
     fieldType: SINGLE_LINE_TEXT_INPUT,
-    label: 'Phone',
+    label: copy.formLabels.phone,
     isHalfWidth: true,
     validator: validatePhone,
   },
   {
     fieldId: 'email',
     fieldType: SINGLE_LINE_TEXT_INPUT,
-    label: 'Email',
+    label: copy.formLabels.email,
     validator: validateEmail,
   },
 ];

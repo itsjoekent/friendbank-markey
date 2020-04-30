@@ -28,3 +28,14 @@ export const RedButton = styled(BaseButton)`
     color: ${({ theme }) => theme.colors.red};
   }
 `;
+
+export const WhiteBlueButton = styled(BaseButton)`
+  border: 2px solid ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.blue};
+
+  &:hover {
+    background-color: transparent;
+    color: ${({ theme }) => theme.colors.white};
+  }
+`;

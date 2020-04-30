@@ -5,6 +5,7 @@ const theme = {
     black: '#111111',
     white: '#FFFFFF',
     blue: '#005196',
+    darkBlue: '#00284a',
     green: '#009645',
     red: '#FF3333',
   },
@@ -24,6 +25,7 @@ const theme = {
   zIndexes: {
     navShadow: 9,
     nav: 10,
+    modal: 20,
   },
 };
 

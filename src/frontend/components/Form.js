@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css, keyframes } from 'styled-components';
+import copy from '../../copy';
 import { DefaultTitle, DefaultParagraph } from './Typography';
 import { RedButton } from './Buttons';
 import {
@@ -70,6 +71,11 @@ const FormFieldsContainer = styled.form`
   margin-bottom: 24px;
 `;
 
+const FormDisclaimer = styled(DefaultParagraph)`
+  margin-top: 24px;
+  font-size: 12px;
+`;
+
 const FormSubmitButton = styled(RedButton)`
   margin-top: 24px;
   position: relative;
@@ -132,7 +138,7 @@ export default function Form(props) {
       setActiveStep(targetStep);
       setHasTouchedSubmit(false);
 
-      if (scrollHelperRef.current) {
+      if (scrollHelperRef.current && window.matchMedia('max-width: 768px').matches) {
         scrollHelperRef.current.scrollIntoView();
       }
     }, FADE_OUT_TIME);
@@ -197,7 +203,7 @@ export default function Form(props) {
       })
       .catch((error) => {
         console.error(error);
-        setFormError('Whoops, looks like we had an error. Try again?');
+        setFormError(copy.genericError);
       });
     } else {
       setTargetStep(activeStep + 1);
@@ -215,6 +221,7 @@ export default function Form(props) {
     subtitle,
     buttonCopy,
     fields,
+    showSmsDisclaimer,
   } = activeStepData;
 
   return (
@@ -344,6 +351,11 @@ export default function Form(props) {
             disabled={isProcessingSubmit}
           >{buttonCopy}</FormSubmitButton>
           {formError && (<FormError>{formError}</FormError>)}
+          {showSmsDisclaimer && (
+            <FormDisclaimer>
+              {copy.smsDisclaimer}
+            </FormDisclaimer>
+          )}
         </div>
       </FormFieldsContainer>
     </FormContainer>

@@ -5,12 +5,11 @@ Relational organizing tool for Ed Markey's senate race
 TODO:
 
 - documentation
+- update unit tests
 
 - move media to S3 bucket // get s3 access
 - list of background options, different media resolutions
 - video support for SplitScreen
-
-- "cms"
 
 - error pages
 
