@@ -111,7 +111,7 @@ export default function Signup() {
           modalTitle={copy.signupPage.modalTitle}
           modalCopy={copy.signupPage.modalCopy.join('\n')}
           modalCloseLabel={copy.signupPage.modalCloseLabel}
-          customShareText={subtitle}
+          customShareText={`${title} ${subtitle}`}
           onClose={() => setIsModalOpen(false)}
         />
       )}
@@ -127,7 +127,7 @@ export default function Signup() {
               </DefaultParagraph>
               <ShareWidget
                 theme={DARK_THEME}
-                customShareText={subtitle}
+                customShareText={`${title} ${subtitle}`}
               />
               <DefaultTitle>
                 {copy.signupPage.postSignupCreateTitle}
