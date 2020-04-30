@@ -105,6 +105,7 @@ export default function Homepage() {
   ];
 
   const [hasPrefilledCode, setHasPrefilledCode] = React.useState(false);
+  const [hasPrefilledTitle, setHasPrefilledTitle] = React.useState(false);
 
   function onFormValueChange(formValues, setFormValues) {
     if (
@@ -121,6 +122,19 @@ export default function Homepage() {
       }));
 
       setHasPrefilledCode(true);
+    }
+
+    if (
+      formValues.firstName
+      && !formValues.title
+      && !hasPrefilledTitle
+    ) {
+      setFormValues((formCopy) => ({
+        ...formCopy,
+        title: copy.homepage.defaultTitle.replace('{{FIRST_NAME}}', formValues.firstName),
+      }));
+
+      setHasPrefilledTitle(true);
     }
   }
 
