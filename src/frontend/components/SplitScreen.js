@@ -9,7 +9,7 @@ const Layout = styled.div`
   width: 100%;
   min-height: 100vh;
 
-  @media ${({ theme }) => theme.media.tablet} {
+  @media ${({ theme }) => theme.media.desktop} {
     flex-direction: row;
     justify-content: flex-start;
   }
@@ -23,7 +23,7 @@ const ContentPanel = styled.main`
   border-top: 4px solid ${({ theme }) => theme.colors.red};
   padding: 24px 16px;
 
-  @media ${({ theme }) => theme.media.tablet} {
+  @media ${({ theme }) => theme.media.desktop} {
     width: 40%;
     height: 100vh;
     overflow-y: scroll;
@@ -36,7 +36,7 @@ const ContentPanelContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  @media ${({ theme }) => theme.media.tablet} {
+  @media ${({ theme }) => theme.media.desktop} {
     width: 100%;
     max-width: 500px;
     margin-top: 100px;
@@ -51,6 +51,10 @@ const MediaPanel = styled.div`
   position: relative;
 
   @media ${({ theme }) => theme.media.tablet} {
+    height: 60vh;
+  }
+
+  @media ${({ theme }) => theme.media.desktop} {
     width: 60%;
     height: 100vh;
   }
