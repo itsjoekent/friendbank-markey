@@ -87,6 +87,7 @@ export default function Homepage() {
           fieldId: 'subtitle',
           fieldType: MULTI_LINE_TEXT_INPUT,
           label: copy.formLabels.subtitle,
+          defaultValue: copy.homepage.defaultSubtitle,
           validator: validateRequired,
         },
         {
