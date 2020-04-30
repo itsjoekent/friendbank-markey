@@ -212,8 +212,13 @@ app.post('/api/v1/page/:code', async function(req, res) {
       return;
     }
 
-    if (hasInvalidParam([title, subtitle], stringFieldValidator(1, 250))) {
-      res.status(400).json({ error: 'Invalid title and/or subtitle field length' });
+    if (hasInvalidParam([title], stringFieldValidator(1, 450))) {
+      res.status(400).json({ error: 'Invalid title field length' });
+      return;
+    }
+
+    if (hasInvalidParam([subtitle], stringFieldValidator(1, 2000))) {
+      res.status(400).json({ error: 'Invalid subtitle field length' });
       return;
     }
 
