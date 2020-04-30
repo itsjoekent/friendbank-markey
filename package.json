@@ -12,7 +12,9 @@
   "dependencies": {
     "@2toad/profanity": "^1.1.0",
     "@babel/runtime": "^7.9.6",
+    "copy-to-clipboard": "^3.3.1",
     "express": "^4.17.1",
+    "marked": "^1.0.0",
     "mongodb": "^3.5.6",
     "phone": "^2.4.10",
     "react": "^16.13.1",

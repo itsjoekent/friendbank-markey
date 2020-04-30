@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import copy from '../../copy';
 import { RedButton } from './Buttons';
 
 const NavContainer = styled.nav`
@@ -87,11 +88,11 @@ export default function Nav(props) {
     <NavContainer>
       <NavInnerContainer>
         <Logo href="/">
-          <img src="/assets/logo.png" alt="Ed Markey For Senate Logo" />
+          <img src="/assets/logo.png" alt={copy.nav.logoAlt} />
         </Logo>
         <NavItemsContainer>
-          <Redirect href="https://www.edmarkey.com/">return to edmarkey.com</Redirect>
-          <DonateButton as="a" href="https://secure.actblue.com/donate/ejm2020">Donate</DonateButton>
+          <Redirect href={copy.nav.returnLink}>{copy.nav.return}</Redirect>
+          <DonateButton as="a" href={copy.nav.donateForm}>{copy.nav.donate}</DonateButton>
         </NavItemsContainer>
       </NavInnerContainer>
     </NavContainer>
