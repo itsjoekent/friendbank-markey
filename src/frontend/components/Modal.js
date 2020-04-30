@@ -24,6 +24,8 @@ const ModalContainer = styled.div`
   flex-direction: column;
   width: 100%;
   max-width: 800px;
+  max-height: 100vh;
+  overflow-y: scroll;
   background-color: ${({ theme }) => theme.colors.blue};
   padding: 24px;
 

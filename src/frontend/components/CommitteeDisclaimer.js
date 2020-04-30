@@ -7,6 +7,7 @@ const Disclaimer = styled.span`
   margin-left: auto;
   margin-right: auto;
   margin-top: 72px;
+  margin-bottom: 12px;
   padding: 8px 16px;
 
   font-family: ${({ theme }) => theme.fonts.mainFamily};
