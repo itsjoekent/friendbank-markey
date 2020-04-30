@@ -64,12 +64,6 @@ const MediaPanelShadow = styled.div`
   left: 0;
   z-index: ${({ theme }) => theme.zIndexes.navShadow};
   background: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0.76) 63.02%, rgba(0, 0, 0, 0) 100%);
-
-  @media ${({ theme }) => theme.media.tablet} {
-    width: 50%;
-    left: auto;
-    right: 0;
-  }
 `;
 
 const MediaImage = styled.img`

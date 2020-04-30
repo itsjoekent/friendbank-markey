@@ -13,6 +13,7 @@ import {
   MULTI_LINE_TEXT_INPUT,
   GalleryPickerField,
   GALLERY_PICKER,
+  HelpText,
 } from './FormFields';
 
 const FADE_IN_TIME = 1000;
@@ -38,7 +39,14 @@ const fadeOutKeyframes = keyframes`
   }
 `;
 
+const spinnerKeyframes = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
 const FormContainer = styled.div`
+  position: relative;
   opacity: 0;
   animation: ${FADE_IN_TIME}ms forwards ${fadeInKeyframes};
 
@@ -64,6 +72,33 @@ const FormFieldsContainer = styled.form`
 
 const FormSubmitButton = styled(RedButton)`
   margin-top: 24px;
+  position: relative;
+  transition: padding-left 0.5s;
+
+  &:disabled {
+    cursor: not-allowed;
+    padding-left: 32px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      width: 20px;
+      height: 20px;
+      margin-top: -10px;
+      margin-left: -10px;
+      border-radius: 50%;
+      border: 2px solid ${({ theme }) => theme.colors.white};
+      border-top-color: ${({ theme }) => theme.colors.red};
+      animation: ${spinnerKeyframes} .6s linear infinite;
+    }
+  }
+`;
+
+const FormError = styled(HelpText)`
+  color: ${({ theme }) => theme.colors.red};
+  margin-top: 12px;
 `;
 
 export default function Form(props) {
@@ -74,11 +109,15 @@ export default function Form(props) {
     onFormValueChange,
   } = props;
 
+  const scrollHelperRef = React.useRef(null);
+
   const [formValues, setFormValues] = React.useState({});
   const [formError, setFormError] = React.useState(null);
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [targetStep, setTargetStep] = React.useState(0);
+
+  const [isProcessingSubmit, setIsProcessingSubmit] = React.useState(false);
 
   const [hasTouchedSubmit, setHasTouchedSubmit] = React.useState(false);
 
@@ -92,10 +131,14 @@ export default function Form(props) {
     const timeoutId = setTimeout(() => {
       setActiveStep(targetStep);
       setHasTouchedSubmit(false);
+
+      if (scrollHelperRef.current) {
+        scrollHelperRef.current.scrollIntoView();
+      }
     }, FADE_OUT_TIME);
 
     return () => clearTimeout(timeoutId);
-  }, [isFading, setActiveStep, targetStep]);
+  }, [isFading, setActiveStep, targetStep, scrollHelperRef.current]);
 
   React.useEffect(() => {
     if (activeStep >= steps.length && !!onCompletion) {
@@ -111,6 +154,10 @@ export default function Form(props) {
 
   function onSubmit(event) {
     event.preventDefault();
+
+    if (formError) {
+      setFormError(null);
+    }
 
     if (!hasTouchedSubmit) {
       setHasTouchedSubmit(true);
@@ -137,18 +184,21 @@ export default function Form(props) {
     }
 
     if (onStepSubmit) {
-      onStepSubmit(formValues)
-        .then((newFormError) => {
-          if (newFormError) {
-            setFormError(newFormError);
-          } else {
-            setTargetStep(activeStep + 1);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          setFormError('Whoops, looks like we had an error. Try again?');
-        });
+      setIsProcessingSubmit(true);
+
+      onStepSubmit(formValues).then((newFormError) => {
+        setIsProcessingSubmit(false);
+
+        if (newFormError) {
+          setFormError(newFormError);
+        } else {
+          setTargetStep(activeStep + 1);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setFormError('Whoops, looks like we had an error. Try again?');
+      });
     } else {
       setTargetStep(activeStep + 1);
     }
@@ -169,6 +219,7 @@ export default function Form(props) {
 
   return (
     <FormContainer isFading={isFading}>
+      <div style={{ position: 'absolute', top: '-32px' }} ref={scrollHelperRef} />
       <FormTitleContainer>
         {title && <DefaultTitle>{title}</DefaultTitle>}
         {subtitle && <DefaultParagraph>{subtitle}</DefaultParagraph>}
@@ -287,7 +338,13 @@ export default function Form(props) {
             }
           }
         })}
-        <FormSubmitButton type="submit">{buttonCopy}</FormSubmitButton>
+        <div>
+          <FormSubmitButton
+            type="submit"
+            disabled={isProcessingSubmit}
+          >{buttonCopy}</FormSubmitButton>
+          {formError && (<FormError>{formError}</FormError>)}
+        </div>
       </FormFieldsContainer>
     </FormContainer>
   );

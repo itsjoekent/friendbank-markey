@@ -20,6 +20,8 @@ services:
     environment:
       - PORT=5000
       - MONGODB_URL=mongodb://admin:secret@mongo:27017
+    env_file:
+      - .env
     volumes:
       - ./src:/usr/src/app/src:cached
       - ./public/dist:/usr/src/app/public/dist:cached
