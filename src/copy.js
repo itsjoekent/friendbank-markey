@@ -49,6 +49,7 @@ const copy = {
     customizeSubtitle: `Fill out the sections below to personalize the title, description, and design of your supporter page to tell your network why you’re #StickingWithEd. Share your story of why you’re a member of this movement -- feel free to get creative!`,
     formButtonLabel: 'next',
     customizeButtonLabel: 'create',
+    defaultTitle: `{{FIRST_NAME}} is #StickingWithEd because...`,
   },
   signupPage: {
     stepOneButtonLabel: 'Next',
