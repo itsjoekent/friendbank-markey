@@ -27,6 +27,7 @@ const ContentPanel = styled.main`
     width: 40%;
     height: 100vh;
     overflow-y: scroll;
+    overflow-x: visible;
     justify-content: center;
     padding: 32px 24px;
   }
@@ -35,11 +36,13 @@ const ContentPanel = styled.main`
 const ContentPanelContainer = styled.div`
   display: flex;
   flex-direction: column;
+  overflow-x: visible;
 
   @media ${({ theme }) => theme.media.desktop} {
     width: 100%;
     max-width: 500px;
-    margin-top: 100px;
+    padding-top: 24px; 
+    margin-top: 70px;
     overflow-y: scroll;
   }
 `;
@@ -68,7 +71,7 @@ const MediaPanelShadow = styled.div`
   top: 0;
   left: 0;
   z-index: ${({ theme }) => theme.zIndexes.navShadow};
-  background: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0.76) 63.02%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
 `;
 
 const MediaImage = styled.img`

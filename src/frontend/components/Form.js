@@ -138,7 +138,7 @@ export default function Form(props) {
       setActiveStep(targetStep);
       setHasTouchedSubmit(false);
 
-      if (scrollHelperRef.current && window.matchMedia('max-width: 768px').matches) {
+      if (scrollHelperRef.current) {
         scrollHelperRef.current.scrollIntoView();
       }
     }, FADE_OUT_TIME);
@@ -225,8 +225,7 @@ export default function Form(props) {
   } = activeStepData;
 
   return (
-    <FormContainer isFading={isFading}>
-      <div style={{ position: 'absolute', top: '-32px' }} ref={scrollHelperRef} />
+    <FormContainer isFading={isFading} ref={scrollHelperRef}>
       <FormTitleContainer>
         {title && <DefaultTitle>{title}</DefaultTitle>}
         {subtitle && <DefaultParagraph>{subtitle}</DefaultParagraph>}
