@@ -420,9 +420,9 @@ app.post('/api/v1/page/:code/signup/:step', async function(req, res) {
 });
 
 function fillTemplate(config = {}) {
-  const title = config.title || 'Support Ed Markey';
-  const description = config.description || 'This is a people-powered movement. We are building the largest, most inclusive, grassroots campaign in Massachusetts, and it starts and ends with you.';
-  const cover = config.cover || '/assets/em-header-original.jpg';
+  const title = config.title || 'Create your own Ed Markey supporter page';
+  const description = config.description || 'Our grassroots campaign is powered by people like you who are connecting with family, friends, and neighbors about this important election.';
+  const cover = config.cover || 'https://ed-markey-supporter-photos.s3.amazonaws.com/Taylor+St.+Germain+-+P2+Markey+(52+of+70).jpg';
   const status = config.status || 200;
 
   const data = config.data || { pageType: 'notfound' };
