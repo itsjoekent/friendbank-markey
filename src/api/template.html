@@ -16,7 +16,34 @@
     <link rel="apple-touch-icon-precomposed" href="https://www.edmarkey.com/wp-content/uploads/cropped-favicon-180x180.jpg">
     <meta name="msapplication-TileImage" content="https://www.edmarkey.com/wp-content/uploads/cropped-favicon-270x270.jpg">
 
+    <style>
+      @font-face {
+        font-family: 'Museo Sans';
+        src: url('/fonts/MuseoSans700.woff2') format('woff2'),
+          url('/fonts/MuseoSans700.woff') format('woff');
+        font-weight: bold;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'Museo Sans';
+        src: url('/fonts/MuseoSans300.woff2') format('woff2'),
+          url('/fonts/MuseoSans300.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'Laca Text';
+        src: url('/fonts/LacaTextBold.woff2') format('woff2'),
+          url('/fonts/LacaTextBold.woff') format('woff');
+        font-weight: bold;
+        font-style: normal;
+      }
+    </style>
+
     {{STYLE_TAGS}}
+    {{HEAP_TAG}}
   </head>
   <body>
     <div id="react-app">{{HTML}}</div>

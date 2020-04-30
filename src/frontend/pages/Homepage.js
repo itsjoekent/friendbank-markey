@@ -107,7 +107,7 @@ export default function Homepage() {
   const [hasPrefilledCode, setHasPrefilledCode] = React.useState(false);
   const [hasPrefilledTitle, setHasPrefilledTitle] = React.useState(false);
 
-  function onFormValueChange(formValues, setFormValues) {
+  function onFormValueChange(formValues, setFormValues, activeStep) {
     if (
       formValues.firstName
       && formValues.lastName
@@ -129,6 +129,7 @@ export default function Homepage() {
       formValues.firstName
       && !formValues.title
       && !hasPrefilledTitle
+      && activeStep === 1
     ) {
       setFormValues((formCopy) => ({
         ...formCopy,

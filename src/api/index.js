@@ -15,6 +15,20 @@ const ssr = require('./ssr').default;
 
 const backgrounds = require('../backgrounds');
 
+const DEV_HEAP = `
+<script type="text/javascript">
+window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.heapanalytics.com/js/heap-"+e+".js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a);for(var n=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","resetIdentity","removeEventProperty","setEventProperties","track","unsetEventProperty"],o=0;o<p.length;o++)heap[p[o]]=n(p[o])};
+heap.load("2521914575");
+</script>
+`;
+
+const PROD_HEAP = `
+<script type="text/javascript">
+  window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.heapanalytics.com/js/heap-"+e+".js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a);for(var n=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","resetIdentity","removeEventProperty","setEventProperties","track","unsetEventProperty"],o=0;o<p.length;o++)heap[p[o]]=n(p[o])};
+  heap.load("1893784860");
+</script>
+`;
+
 const {
   PORT,
   MONGODB_URL,
@@ -25,6 +39,7 @@ const {
   BSD_SIGNUP_VOLUNTEER_ID,
 
   CACHE_PUBLIC_ASSETS,
+  IS_PROD_HEAP,
 } = process.env;
 
 const app = express();
@@ -437,6 +452,7 @@ function fillTemplate(config = {}) {
 
   return template.replace(/{{REACT_DATA}}/g, JSON.stringify(data))
     .replace(/{{HTML}}/g, html)
+    .replace(/{{HEAP_TAG}}/g, IS_PROD_HEAP ? PROD_HEAP : DEV_HEAP)
     .replace(/{{STYLE_TAGS}}/g, styleTags)
     .replace(/{{TITLE}}/g, title)
     .replace(/{{DESCRIPTION}}/g, description)

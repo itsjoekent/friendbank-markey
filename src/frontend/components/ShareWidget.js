@@ -115,7 +115,7 @@ export default function ShareWidget(props) {
   return (
     <ThemeProvider theme={(pre) => ({ ...pre, shareTheme: theme })}>
       <ShareContainer>
-        <ShareButton target="_blank" rel="noopener noreferrer" href={facebookLink}>
+        <ShareButton target="_blank" rel="noopener noreferrer" href={facebookLink} data-track="share-facebook">
           <ShareButtonIcon>
             <i className="fab fa-facebook-square fa-lg" />
           </ShareButtonIcon>
@@ -123,7 +123,7 @@ export default function ShareWidget(props) {
             {copy.share.facebook}
           </ShareButtonCopy>
         </ShareButton>
-        <ShareButton target="_blank" rel="noopener noreferrer" href={twitterLink}>
+        <ShareButton target="_blank" rel="noopener noreferrer" href={twitterLink} data-track="share-twitter">
           <ShareButtonIcon>
             <i className="fab fa-twitter-square fa-lg" />
           </ShareButtonIcon>
@@ -131,7 +131,7 @@ export default function ShareWidget(props) {
             {copy.share.twitter}
           </ShareButtonCopy>
         </ShareButton>
-        <ShareButton target="_blank" rel="noopener noreferrer" href={emailLink}>
+        <ShareButton target="_blank" rel="noopener noreferrer" href={emailLink} data-track="share-email">
           <ShareButtonIcon>
             <i className="fas fa-envelope-square fa-lg" />
           </ShareButtonIcon>
@@ -139,7 +139,7 @@ export default function ShareWidget(props) {
             {copy.share.email}
           </ShareButtonCopy>
         </ShareButton>
-        <ShareButton as="button" onClick={onCopy}>
+        <ShareButton as="button" onClick={onCopy} data-track="share-copy">
           <ShareButtonIcon>
             <i className="fas fa-copy fa-lg" />
           </ShareButtonIcon>

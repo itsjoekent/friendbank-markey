@@ -1,8 +1,10 @@
 import React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import copy from '../../copy';
+import { useApplicationContext } from '../ApplicationContext';
 import { DefaultTitle, DefaultParagraph } from './Typography';
 import { RedButton } from './Buttons';
+import isHeapReady from '../utils/isHeapReady';
 import {
   SingleLineTextInput,
   SINGLE_LINE_TEXT_INPUT,
@@ -115,6 +117,8 @@ export default function Form(props) {
     onFormValueChange,
   } = props;
 
+  const { page } = useApplicationContext();
+
   const scrollHelperRef = React.useRef(null);
 
   const [formValues, setFormValues] = React.useState({});
@@ -147,14 +151,20 @@ export default function Form(props) {
   }, [isFading, setActiveStep, targetStep, scrollHelperRef.current]);
 
   React.useEffect(() => {
-    if (activeStep >= steps.length && !!onCompletion) {
-      onCompletion(formValues);
+    if (activeStep >= steps.length) {
+      if (isHeapReady()) {
+        heap.track('completed form', { formId, code: (page || {}).code });
+      }
+
+      if (!!onCompletion) {
+        onCompletion(formValues);
+      }
     }
   }, [steps, onCompletion, activeStep]);
 
   React.useEffect(() => {
     if (onFormValueChange) {
-      onFormValueChange(formValues, setFormValues);
+      onFormValueChange(formValues, setFormValues, activeStep);
     }
   }, [onFormValueChange, formValues]);
 
@@ -189,6 +199,20 @@ export default function Form(props) {
       return;
     }
 
+    if (isHeapReady()) {
+      heap.addUserProperties(formValues);
+
+      if (formValues.email) {
+        heap.identify(formValues.email);
+      }
+    }
+
+    function submitStepEvent() {
+      if (isHeapReady()) {
+        heap.track('submitted step', { step: activeStep, formId, code: (page || {}).code });
+      }
+    }
+
     if (onStepSubmit) {
       setIsProcessingSubmit(true);
 
@@ -199,6 +223,7 @@ export default function Form(props) {
           setFormError(newFormError);
         } else {
           setTargetStep(activeStep + 1);
+          submitStepEvent();
         }
       })
       .catch((error) => {
@@ -207,6 +232,7 @@ export default function Form(props) {
       });
     } else {
       setTargetStep(activeStep + 1);
+      submitStepEvent();
     }
   }
 
@@ -348,6 +374,7 @@ export default function Form(props) {
           <FormSubmitButton
             type="submit"
             disabled={isProcessingSubmit}
+            data-track="form-submit-button"
           >{buttonCopy}</FormSubmitButton>
           {formError && (<FormError>{formError}</FormError>)}
           {showSmsDisclaimer && (

@@ -135,7 +135,7 @@ export default function Signup() {
               <DefaultParagraph>
                 {copy.signupPage.postSignupCreateSubtitle}
               </DefaultParagraph>
-              <RedButton as="a" href="/">
+              <RedButton as="a" href="/" data-track="create-my-own">
                 {copy.signupPage.postSignupCreateButtonLabel}
               </RedButton>
             </PostSignupContainer>
