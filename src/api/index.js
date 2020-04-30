@@ -37,7 +37,7 @@ app.use(express.static('public', {
     }
 
     if (!path.includes('/dist/')) {
-      res.set('Cache-Control', 'max-age=31104000');
+      res.set('Cache-Control', 'max-age=31104000, public');
     }
   },
 }));
