@@ -4,7 +4,7 @@
     "node": "12.x"
   },
   "scripts": {
-    "start": "node src/api",
+    "start": "node src/api/index.js",
     "build": "npm run build:webpack",
     "start:api": "nodemon src/api",
     "start:webpack": "webpack --mode development --watch",
