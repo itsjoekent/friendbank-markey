@@ -24,7 +24,7 @@ const ContentPanel = styled.main`
   padding: 24px 16px;
 
   @media ${({ theme }) => theme.media.tablet} {
-    width: 50%;
+    width: 40%;
     height: 100vh;
     overflow-y: scroll;
     justify-content: center;
@@ -39,7 +39,8 @@ const ContentPanelContainer = styled.div`
   @media ${({ theme }) => theme.media.tablet} {
     width: 100%;
     max-width: 500px;
-    padding-top: 100px;
+    margin-top: 100px;
+    overflow-y: scroll;
   }
 `;
 
@@ -50,7 +51,7 @@ const MediaPanel = styled.div`
   position: relative;
 
   @media ${({ theme }) => theme.media.tablet} {
-    width: 50%;
+    width: 60%;
     height: 100vh;
   }
 `;

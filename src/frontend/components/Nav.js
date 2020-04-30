@@ -88,7 +88,7 @@ export default function Nav(props) {
     <NavContainer>
       <NavInnerContainer>
         <Logo href="/">
-          <img src="/assets/logo.png" alt={copy.nav.logoAlt} />
+          <img src="https://ed-markey-supporter-photos.s3.amazonaws.com/logo.png" alt={copy.nav.logoAlt} />
         </Logo>
         <NavItemsContainer>
           <Redirect href={copy.nav.returnLink}>{copy.nav.return}</Redirect>
