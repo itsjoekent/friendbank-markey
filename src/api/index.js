@@ -44,6 +44,23 @@ const {
 
 const app = express();
 
+const BSD_VAN_MAP = {
+  support: {
+    'Definitely': '1433903',
+    'Probably': '1433904',
+    'Undecided': '1433905',
+    'Probably not': '1465097',
+    'Definitely not': '1465098',
+    'Too Young/Ineligible to Vote': '1598130',
+  },
+  volunteer: {
+    'Yes': '1411494',
+    'Maybe': '1411495',
+    'Later': '1411496',
+    'No': '1411497',
+  },
+};
+
 app.use(express.json());
 app.use(express.static('public', {
   setHeaders: (res, path, stat) => {
@@ -307,8 +324,8 @@ app.post('/api/v1/page/:code', async function(req, res) {
       phone: page.createdByPhone,
       zip: page.createdByZip,
       [BSD_SIGNUP_CODE_ID]: normalizedPageCode,
-      [BSD_SIGNUP_SUPPORT_ID]: supportLevel,
-      [BSD_SIGNUP_VOLUNTEER_ID]: volunteerLevel,
+      [BSD_SIGNUP_SUPPORT_ID]: BSD_VAN_MAP.support[supportLevel],
+      [BSD_SIGNUP_VOLUNTEER_ID]: BSD_VAN_MAP.volunteer[volunteerLevel],
     });
 
     if (bsdResult instanceof Error) {
@@ -418,8 +435,8 @@ app.post('/api/v1/page/:code/signup/:step', async function(req, res) {
         return;
       }
 
-      bsdForm[BSD_SIGNUP_SUPPORT_ID] = supportLevel;
-      bsdForm[BSD_SIGNUP_VOLUNTEER_ID] = volunteerLevel;
+      bsdForm[BSD_SIGNUP_SUPPORT_ID] = BSD_VAN_MAP.support[supportLevel];
+      bsdForm[BSD_SIGNUP_VOLUNTEER_ID] = BSD_VAN_MAP.volunteer[volunteerLevel];
     }
 
     const bsdResult = await submitBsdForm(bsdForm);

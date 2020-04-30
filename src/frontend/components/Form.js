@@ -151,6 +151,20 @@ export default function Form(props) {
   }, [isFading, setActiveStep, targetStep, scrollHelperRef.current]);
 
   React.useEffect(() => {
+    const activeStepData = steps[activeStep];
+
+    if (!activeStepData) {
+      return;
+    }
+
+    activeStepData.fields.forEach((field) => {
+      if (field.defaultValue) {
+        setFormValues((copy) => ({ ...copy, [field.fieldId]: field.defaultValue }));
+      }
+    });
+  }, [activeStep, steps]);
+
+  React.useEffect(() => {
     if (activeStep >= steps.length) {
       if (isHeapReady()) {
         heap.track('completed form', { formId, code: (page || {}).code });
