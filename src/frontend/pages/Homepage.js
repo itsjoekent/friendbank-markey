@@ -114,7 +114,8 @@ export default function Homepage() {
       && !formValues.code
       && !hasPrefilledCode
     ) {
-      const prefill = `${formValues.firstName}-${formValues.lastName}-${Math.round(Math.random() * 1000)}`;
+      // const prefill = `${formValues.firstName}-${formValues.lastName}-${Math.round(Math.random() * 1000)}`;
+      const prefill = `${formValues.firstName}-${formValues.lastName}`;
 
       setFormValues((copy) => ({
         ...copy,
@@ -139,7 +140,7 @@ export default function Homepage() {
   }
 
   return (
-    <SplitScreen media={backgrounds.default}>
+    <SplitScreen media={backgrounds['ed-climate-march']}>
       <DisclaimerWrapper>
         <Form
           formId="create"
