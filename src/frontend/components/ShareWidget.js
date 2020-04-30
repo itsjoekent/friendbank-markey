@@ -102,9 +102,9 @@ export default function ShareWidget(props) {
     customShareText = '',
   } = props;
 
-  const shareLink = (`${window.location.origin}${window.location.pathname}`).toLowerCase();
+  const shareLink = window.location.href;
 
-  const facebookLink = `https://www.facebook.com/sharer/sharer.php?href=${encodeURIComponent(shareLink)}&quote=${encodeURIComponent(customShareText || '')}`;
+  const facebookLink = `https://www.facebook.com/sharer/sharer.php?u=${shareLink}&quote=${encodeURIComponent(customShareText || '')}`;
   const twitterLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`${customShareText || ''}\n${shareLink}`)}`;
   const emailLink = `mailto:yourfriend@gmail.com?body=${encodeURIComponent(`${customShareText || ''}\n${shareLink}`)}`;
 

@@ -468,6 +468,7 @@ export const GalleryItemList = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  padding-left: 4px;
 `;
 
 export const GalleryItem = styled.div`
