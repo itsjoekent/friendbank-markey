@@ -23,12 +23,24 @@ const {
   BSD_SIGNUP_CODE_ID,
   BSD_SIGNUP_SUPPORT_ID,
   BSD_SIGNUP_VOLUNTEER_ID,
+
+  CACHE_PUBLIC_ASSETS,
 } = process.env;
 
 const app = express();
 
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static('public', {
+  setHeaders: (res, path, stat) => {
+    if (!CACHE_PUBLIC_ASSETS) {
+      return;
+    }
+
+    if (!path.includes('/dist/')) {
+      res.set('Cache-Control', 'max-age=31104000');
+    }
+  },
+}));
 
 let db = null;
 let template = null;
