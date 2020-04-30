@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import SplitScreen from '../components/SplitScreen';
 import Form from '../components/Form';
+import CommitteeDisclaimer, { DisclaimerWrapper } from '../components/CommitteeDisclaimer';
 import backgrounds from '../../backgrounds';
 import signupStepOneFields from '../forms/signupStepOneFields';
 import signupStepTwoFields from '../forms/signupStepTwoFields';
@@ -31,7 +32,7 @@ export default function Homepage() {
         const data = await response.json();
         return data.error || 'Looks like we had an error, try again? If this continues to happen, please contact us https://www.edmarkey.com/contact-us/';
       }
-      
+
       return null;
     } catch (error) {
       console.error(error);
@@ -120,12 +121,15 @@ export default function Homepage() {
 
   return (
     <SplitScreen media={backgrounds.default}>
-      <Form
-        formId="create"
-        steps={steps}
-        onFormValueChange={onFormValueChange}
-        onCompletion={onCompletion}
-      />
+      <DisclaimerWrapper>
+        <Form
+          formId="create"
+          steps={steps}
+          onFormValueChange={onFormValueChange}
+          onCompletion={onCompletion}
+        />
+        <CommitteeDisclaimer />
+      </DisclaimerWrapper>
     </SplitScreen>
   );
 }

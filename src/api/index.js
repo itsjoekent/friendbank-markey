@@ -4,6 +4,8 @@ const path = require('path');
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 
+const fetch = require('node-fetch');
+
 const xss = require('xss');
 const phoneValidation = require('phone');
 const profanity = require('@2toad/profanity').profanity;
@@ -16,6 +18,11 @@ const backgrounds = require('../backgrounds');
 const {
   PORT,
   MONGODB_URL,
+
+  BSD_SIGNUP_FORM_SLUG,
+  BSD_SIGNUP_CODE_ID,
+  BSD_SIGNUP_SUPPORT_ID,
+  BSD_SIGNUP_VOLUNTEER_ID,
 } = process.env;
 
 const app = express();
@@ -55,6 +62,10 @@ function normalizeName(value) {
   return xss(value.trim());
 }
 
+function normalizeEmail(value) {
+  return value.trim().toLowerCase();
+}
+
 async function getPageForCode(code) {
   try {
     const pages = db.collection('pages');
@@ -75,6 +86,7 @@ function transformPageResponse(page) {
   const copy = { ...page };
 
   delete copy.createdByLastName;
+  delete copy.createdByEmail;
   delete copy.createdByPhone;
   delete copy.createdByZip;
 
@@ -96,6 +108,32 @@ function stringFieldValidator(minLength, maxLength = Infinity) {
 
 function hasInvalidParam(list, validator) {
   return list.findIndex((item) => validator(item)) > -1;
+}
+
+async function submitBsdForm(fields) {
+  try {
+    const url = `https://markey.cp.bsd.net/page/sapi/${BSD_SIGNUP_FORM_SLUG}`;
+
+    const body = Object.keys(fields).reduce((acc, key) => {
+      const prepend = acc.length ? '&' : '';
+
+      return `${acc}${prepend}${encodeURIComponent(key)}=${encodeURIComponent(fields[key])}`;
+    }, '');
+
+    const options = {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      },
+      body,
+    };
+
+    const response = await fetch(url, options);
+
+    return response;
+  } catch (error) {
+    return error;
+  }
 }
 
 app.get('/api/v1/health', async function(req, res) {
@@ -129,11 +167,14 @@ app.post('/api/v1/page/:code', async function(req, res) {
     const {
       firstName,
       lastName,
+      email,
       phone,
       zip,
       title,
       subtitle,
       background,
+      supportLevel,
+      volunteerLevel,
     } = req.body;
 
     const requiredStringFields = [
@@ -142,6 +183,9 @@ app.post('/api/v1/page/:code', async function(req, res) {
       title,
       subtitle,
       background,
+      email,
+      supportLevel,
+      volunteerLevel,
       `${phone}`,
       `${zip}`,
     ];
@@ -178,6 +222,11 @@ app.post('/api/v1/page/:code', async function(req, res) {
       return;
     }
 
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      res.status(400).json({ error: 'Invalid email' });
+      return;
+    }
+
     if (!phoneValidation(phone, 'USA').length) {
       res.status(400).json({ error: 'Invalid phone number' });
       return;
@@ -209,6 +258,7 @@ app.post('/api/v1/page/:code', async function(req, res) {
       code: normalizedPageCode,
       createdByFirstName: normalizeName(firstName),
       createdByLastName: normalizeName(lastName),
+      createdByEmail: normalizeEmail(email),
       createdByPhone: phoneValidation(phone, 'USA')[0],
       createdByZip: `${zip}`,
       createdAt: Date.now(),
@@ -217,6 +267,21 @@ app.post('/api/v1/page/:code', async function(req, res) {
       totalSignups: 0,
       background: background.toLowerCase(),
     };
+
+    const bsdResult = await submitBsdForm({
+      email: page.createdByEmail,
+      firstname: page.createdByFirstName,
+      lastname: page.createdByLastName,
+      phone: page.createdByPhone,
+      zip: page.createdByZip,
+      [BSD_SIGNUP_CODE_ID]: normalizedPageCode,
+      [BSD_SIGNUP_SUPPORT_ID]: supportLevel,
+      [BSD_SIGNUP_VOLUNTEER_ID]: volunteerLevel,
+    });
+
+    if (bsdResult instanceof Error) {
+      throw bsdResult;
+    }
 
     const pages = db.collection('pages');
     await pages.insertOne(page);
@@ -227,24 +292,33 @@ app.post('/api/v1/page/:code', async function(req, res) {
   }
 });
 
-app.post('/api/v1/page/:code/signup', async function(req, res) {
+app.post('/api/v1/page/:code/signup/:step', async function(req, res) {
   try {
-    const { code } = req.params;
+    const { code, step } = req.params;
     const normalizedCode = normalizePageCode(code);
 
     const {
       firstName,
       lastName,
+      email,
       phone,
       zip,
+      supportLevel,
+      volunteerLevel,
     } = req.body;
 
     const requiredStringFields = [
       firstName,
       lastName,
+      email,
       `${phone}`,
       `${zip}`,
     ];
+
+    if (step === 2) {
+      requiredStringFields.push(supportLevel);
+      requiredStringFields.push(volunteerLevel);
+    }
 
     if (hasInvalidParam(requiredStringFields, stringFieldValidator(1))) {
       res.status(400).json({ error: 'Missing required field' });
@@ -253,6 +327,11 @@ app.post('/api/v1/page/:code/signup', async function(req, res) {
 
     if (hasInvalidParam([firstName, lastName], stringFieldValidator(1, 50))) {
       res.status(400).json({ error: 'Invalid first and/or last name field length' });
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      res.status(400).json({ error: 'Invalid email' });
       return;
     }
 
@@ -268,20 +347,53 @@ app.post('/api/v1/page/:code/signup', async function(req, res) {
 
     const pages = db.collection('pages');
 
-    const pageUpdateResult = await pages.updateOne(
-      { code: normalizedCode },
-      { '$inc': { totalSignups: 1 } },
-      { upsert: false },
-    );
+    const bsdForm = {
+      email: email,
+      firstname: firstName,
+      lastname: lastName,
+      phone: phone,
+      zip: zip,
+      [BSD_SIGNUP_CODE_ID]: normalizedCode,
+    };
 
-    if (!pageUpdateResult.result.nModified) {
-      res.status(404).json({ error: 'Page not found' });
-      return;
+    if (step === '1') {
+      const pageUpdateResult = await pages.updateOne(
+        { code: normalizedCode },
+        { '$inc': { totalSignups: 1 } },
+        { upsert: false },
+      );
+
+      if (!pageUpdateResult.result.nModified) {
+        res.status(404).json({ error: 'Page not found' });
+        return;
+      }
+
+      if (!pageUpdateResult.result.ok) {
+        // Better to collect the signup data instead of request error termination.
+        console.error(`error updating total page signups, page_code=${normalizedCode}`);
+      }
     }
 
-    if (!pageUpdateResult.result.ok) {
-      // Better to collect the data in the sheet instead of request error termination.
-      console.error(`error updating total page signups, page_code=${normalizedCode}`);
+    if (step === '2') {
+      const page = await getPageForCode(normalizedCode);
+
+      if (page instanceof Error) {
+        throw page;
+      }
+
+      if (!page) {
+        res.status(404).json({ error: 'Page not found' });
+        return;
+      }
+
+      bsdForm[BSD_SIGNUP_SUPPORT_ID] = supportLevel;
+      bsdForm[BSD_SIGNUP_VOLUNTEER_ID] = volunteerLevel;
+    }
+
+    const bsdResult = await submitBsdForm(bsdForm);
+
+    if (bsdResult instanceof Error) {
+      throw bsdResult;
     }
 
     res.json({ ok: true });
@@ -291,7 +403,8 @@ app.post('/api/v1/page/:code/signup', async function(req, res) {
 });
 
 function fillTemplate(config = {}) {
-  const title = config.title || 'Ed Markey Organizing Hub';
+  const title = config.title || 'Support Ed Markey';
+  const description = config.description || 'This is a people-powered movement. We are building the largest, most inclusive, grassroots campaign in Massachusetts, and it starts and ends with you.';
   const cover = config.cover || '/assets/em-header-original.jpg';
   const status = config.status || 200;
 
@@ -309,6 +422,7 @@ function fillTemplate(config = {}) {
     .replace(/{{HTML}}/g, html)
     .replace(/{{STYLE_TAGS}}/g, styleTags)
     .replace(/{{TITLE}}/g, title)
+    .replace(/{{DESCRIPTION}}/g, description)
     .replace(/{{COVER}}/g, cover);
 }
 
@@ -343,6 +457,7 @@ app.get('*', async function (req, res) {
 
     res.send(fillTemplate({
       title: page.title,
+      description: page.subtitle,
       cover: page.background,
       data: { pageType: 'signup', page },
     }));

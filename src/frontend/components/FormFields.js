@@ -467,12 +467,12 @@ export const GALLERY_PICKER = 'GALLERY_PICKER';
 export const GalleryItemList = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   flex-wrap: wrap;
 `;
 
 export const GalleryItem = styled.div`
-  width: calc(33.33% - 16px);
+  width: 33.33%;
+  margin-right: 16px;
   margin-bottom: 16px;
   height: 75px;
 

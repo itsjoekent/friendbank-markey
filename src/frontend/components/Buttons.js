@@ -14,6 +14,7 @@ export const BaseButton = styled.button`
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
+  user-select: none;
   padding: 8px 16px;
 `;
 
