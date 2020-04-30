@@ -471,7 +471,7 @@ export const GalleryItemList = styled.div`
 `;
 
 export const GalleryItem = styled.div`
-  width: 33.33%;
+  width: calc(33.33% - 16px);
   margin-right: 16px;
   margin-bottom: 16px;
   height: 75px;

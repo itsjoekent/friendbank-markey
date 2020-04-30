@@ -72,6 +72,7 @@ const ShareButton = styled.a`
   width: 100%;
   padding: 4px;
   cursor: pointer;
+  margin-bottom: 16px;
 
   &:hover {
     border: 2px solid ${({ theme }) => getShareThemeColor(theme, 'alt')};
@@ -92,7 +93,6 @@ const ShareButton = styled.a`
 
   @media ${({ theme }) => theme.media.tablet} {
     width: calc(50% - 8px);
-    margin-bottom: 16px;
   }
 `;
 
