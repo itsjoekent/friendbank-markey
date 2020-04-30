@@ -479,7 +479,7 @@ app.get('*', async function (req, res) {
       useNewUrlParser: true,
     });
 
-    db = client.db('markey');
+    db = client.db();
 
     const result = await setupDb(db);
 
