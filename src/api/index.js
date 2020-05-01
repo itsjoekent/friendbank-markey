@@ -508,7 +508,7 @@ app.get('*', async function (req, res) {
     res.send(fillTemplate({
       title: page.title,
       description: page.subtitle,
-      cover: backgrounds[page.background],
+      cover: backgrounds[page.background].source,
       data: { pageType: 'signup', page },
     }));
 
