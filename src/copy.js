@@ -48,7 +48,7 @@ const copy = {
     customizeTitle: 'Customize your page',
     customizeSubtitle: `Fill out the sections below to personalize the title, description, and design of your supporter page to tell your network why you’re #StickingWithEd. Share your story of why you’re a member of this movement -- feel free to get creative!`,
     formButtonLabel: 'next',
-    customizeButtonLabel: 'create',
+    createButtonLabel: 'create page',
     defaultSubtitle: 'Ed comes from a working family, and he’s fighting from the heart for the working class. Ed is running a people-powered campaign, and it’s up to us to help make sure he can keep fighting in the Senate for our shared progressive values. Let me know that you are with me, and help me reach my goal!',
     defaultTitle: `{{FIRST_NAME}} is #StickingWithEd because...`,
   },

@@ -31,10 +31,6 @@ const Logo = styled.a`
 
   @media ${({ theme }) => theme.media.tablet} {
     margin-left: 24px;
-
-    img {
-      width: 80px;
-    }
   }
 `;
 
