@@ -2,7 +2,7 @@ import copy from '../../copy';
 import { RADIO_FIELD } from '../components/FormFields';
 import { validateRequired } from '../utils/fieldValidations';
 
-const signupStepTwoFields = [
+const signupIdFields = [
   {
     fieldId: 'supportLevel',
     fieldType: RADIO_FIELD,
@@ -19,4 +19,4 @@ const signupStepTwoFields = [
   },
 ];
 
-export default signupStepTwoFields;
+export default signupIdFields;

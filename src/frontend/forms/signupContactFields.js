@@ -7,7 +7,7 @@ import {
   validateEmail,
 } from '../utils/fieldValidations';
 
-const signupStepOneFields = [
+const signupContactFields = [
   {
     fieldId: 'firstName',
     fieldType: SINGLE_LINE_TEXT_INPUT,
@@ -44,4 +44,4 @@ const signupStepOneFields = [
   },
 ];
 
-export default signupStepOneFields;
+export default signupContactFields;
