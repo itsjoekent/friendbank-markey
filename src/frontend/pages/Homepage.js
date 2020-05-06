@@ -68,8 +68,7 @@ export default function Homepage() {
     {
       title: copy.homepage.customizeTitle,
       subtitle: copy.homepage.customizeSubtitle,
-      buttonCopy: copy.homepage.customizeButtonLabel,
-      onStepSubmit: onFinalStepSubmit,
+      buttonCopy: copy.homepage.formButtonLabel,
       fields: [
         {
           fieldId: 'title',
@@ -100,9 +99,10 @@ export default function Homepage() {
     {
       title: copy.homepage.formTitle,
       subtitle: copy.homepage.formSubtitle,
-      buttonCopy: copy.homepage.formButtonLabel,
+      buttonCopy: copy.homepage.createButtonLabel,
+      onStepSubmit: onFinalStepSubmit,
       fields: [...signupIdFields],
-    },    
+    },
   ];
 
   const [hasPrefilledCode, setHasPrefilledCode] = React.useState(false);

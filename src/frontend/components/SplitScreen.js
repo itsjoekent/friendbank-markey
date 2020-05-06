@@ -21,7 +21,6 @@ const ContentPanel = styled.main`
   width: 100%;
   background-color: ${({ theme }) => theme.colors.white};
   border-top: 4px solid ${({ theme }) => theme.colors.red};
-  padding: 24px 16px;
 
   @media ${({ theme }) => theme.media.desktop} {
     width: 40%;
@@ -29,7 +28,6 @@ const ContentPanel = styled.main`
     overflow-y: scroll;
     overflow-x: visible;
     justify-content: center;
-    padding: 32px 24px;
   }
 `;
 
@@ -37,11 +35,12 @@ const ContentPanelContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow-x: visible;
+  padding: 24px 16px;
 
   @media ${({ theme }) => theme.media.desktop} {
     width: 100%;
     max-width: 500px;
-    padding-top: 24px; 
+    padding: 32px 24px;
     margin-top: 70px;
     overflow-y: scroll;
   }
