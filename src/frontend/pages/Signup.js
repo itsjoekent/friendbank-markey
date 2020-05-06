@@ -10,8 +10,8 @@ import Modal from '../components/Modal';
 import Form from '../components/Form';
 import ShareWidget, { DARK_THEME, ShareContainer } from '../components/ShareWidget';
 import backgrounds from '../../backgrounds';
-import signupStepOneFields from '../forms/signupStepOneFields';
-import signupStepTwoFields from '../forms/signupStepTwoFields';
+import signupContactFields from '../forms/signupContactFields';
+import signupIdFields from '../forms/signupIdFields';
 
 const PostSignupContainer = styled.div`
   display: flex;
@@ -80,7 +80,7 @@ export default function Signup() {
       title: title,
       subtitle: subtitle,
       buttonCopy: copy.signupPage.stepOneButtonLabel,
-      fields: [...signupStepOneFields],
+      fields: [...signupContactFields],
       showSmsDisclaimer: true,
       onStepSubmit: onStepSubmitGenerator(1),
     },
@@ -88,7 +88,7 @@ export default function Signup() {
       title: title,
       subtitle: subtitle,
       buttonCopy: copy.signupPage.stepTwoButtonLabel,
-      fields: [...signupStepTwoFields],
+      fields: [...signupIdFields],
       onStepSubmit: onStepSubmitGenerator(2),
     },
   ];

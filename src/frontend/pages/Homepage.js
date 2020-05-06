@@ -5,8 +5,8 @@ import SplitScreen from '../components/SplitScreen';
 import Form from '../components/Form';
 import CommitteeDisclaimer, { DisclaimerWrapper } from '../components/CommitteeDisclaimer';
 import backgrounds from '../../backgrounds';
-import signupStepOneFields from '../forms/signupStepOneFields';
-import signupStepTwoFields from '../forms/signupStepTwoFields';
+import signupContactFields from '../forms/signupContactFields';
+import signupIdFields from '../forms/signupIdFields';
 import {
   SINGLE_LINE_TEXT_INPUT,
   MULTI_LINE_TEXT_INPUT,
@@ -55,7 +55,7 @@ export default function Homepage() {
       buttonCopy: copy.homepage.formButtonLabel,
       showSmsDisclaimer: true,
       fields: [
-        ...signupStepOneFields,
+        ...signupContactFields,
         {
           fieldId: 'code',
           fieldType: CODE_INPUT_FIELD,
@@ -64,12 +64,6 @@ export default function Homepage() {
           validator: validateCode,
         },
       ],
-    },
-    {
-      title: copy.homepage.formTitle,
-      subtitle: copy.homepage.formSubtitle,
-      buttonCopy: copy.homepage.formButtonLabel,
-      fields: [...signupStepTwoFields],
     },
     {
       title: copy.homepage.customizeTitle,
@@ -103,6 +97,12 @@ export default function Homepage() {
         },
       ],
     },
+    {
+      title: copy.homepage.formTitle,
+      subtitle: copy.homepage.formSubtitle,
+      buttonCopy: copy.homepage.formButtonLabel,
+      fields: [...signupIdFields],
+    },    
   ];
 
   const [hasPrefilledCode, setHasPrefilledCode] = React.useState(false);
