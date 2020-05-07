@@ -13,7 +13,7 @@ const copy = {
   },
   idQuestions: {
     support: {
-      label: 'Will you join me in voting to re-elect Ed Markey to the United States Senate on September 1st?',
+      label: 'Will you vote to re-elect Ed Markey to the United States Senate on September 1st?',
       options: [
         'Definitely',
         'Probably',
