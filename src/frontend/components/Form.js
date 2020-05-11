@@ -242,7 +242,7 @@ export default function Form(props) {
       })
       .catch((error) => {
         console.error(error);
-        setFormError(copy.genericError);
+        setFormError(copy('genericError'));
       });
     } else {
       setTargetStep(activeStep + 1);
@@ -393,7 +393,7 @@ export default function Form(props) {
           {formError && (<FormError>{formError}</FormError>)}
           {showSmsDisclaimer && (
             <FormDisclaimer>
-              {copy.smsDisclaimer}
+              {copy('smsDisclaimer')}
             </FormDisclaimer>
           )}
         </div>

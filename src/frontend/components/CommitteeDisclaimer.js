@@ -28,7 +28,7 @@ export const DisclaimerWrapper = styled.div`
 export default function CommitteeDisclaimer() {
   return (
     <Disclaimer>
-      {copy.politicalDiclaimer}
+      {copy('politicalDiclaimer')}
     </Disclaimer>
   );
 }

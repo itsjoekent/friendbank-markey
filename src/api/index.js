@@ -13,6 +13,7 @@ const profanity = require('@2toad/profanity').profanity;
 const setupDb = require('./setup-db');
 const ssr = require('./ssr').default;
 
+const { SPANISH_PREFIX } = require('../lang');
 const backgrounds = require('../backgrounds');
 
 const DEV_HEAP = `
@@ -451,7 +452,7 @@ app.post('/api/v1/page/:code/signup/:step', async function(req, res) {
   }
 });
 
-function fillTemplate(config = {}) {
+function fillTemplate(req, config = {}) {
   const title = config.title || 'Create your own Ed Markey supporter page';
   const description = config.description || 'Our grassroots campaign is powered by people like you who are connecting with family, friends, and neighbors about this important election.';
   const cover = config.cover || 'https://ed-markey-supporter-photos.s3.amazonaws.com/Taylor+St.+Germain+-+P2+Markey+(52+of+70).jpg';
@@ -459,7 +460,12 @@ function fillTemplate(config = {}) {
 
   const data = config.data || { pageType: 'notfound' };
 
+  global.location = { pathname: req.path };
+
   const ssrResult = ssr(data);
+
+  global.location = undefined;
+
   if (ssrResult instanceof Error) {
     console.error(ssrResult);
     return 'Yikes, we\'re experiencing some errors. Hang tight!';
@@ -482,22 +488,26 @@ app.get('*', async function (req, res) {
 
     res.set('Content-Type', 'text/html');
 
-    if (path === '/') {
-      res.send(fillTemplate({
+    if (path === '/' || path === SPANISH_PREFIX) {
+      res.send(fillTemplate(req, {
         data: { pageType: 'homepage' },
       }));
 
       return;
     }
 
-    const page = await getPageForCode(normalizePageCode(path.replace('/', '')));
+    const purePath = path.startsWith(SPANISH_PREFIX)
+      ? path.replace(SPANISH_PREFIX, '')
+      : path.replace('/', '');
+
+    const page = await getPageForCode(normalizePageCode(purePath));
 
     if (page instanceof Error) {
       throw page;
     }
 
     if (!page) {
-      res.status(404).send(fillTemplate({
+      res.status(404).send(fillTemplate(req, {
         title: 'Ed Markey | Page Not Found',
         data: { pageType: 'notfound' },
       }));
@@ -505,7 +515,7 @@ app.get('*', async function (req, res) {
       return;
     }
 
-    res.send(fillTemplate({
+    res.send(fillTemplate(req, {
       title: page.title,
       description: page.subtitle,
       cover: backgrounds[page.background].source,
@@ -515,7 +525,7 @@ app.get('*', async function (req, res) {
   } catch (error) {
     console.error(error);
 
-    res.status(500).send(fillTemplate({
+    res.status(500).send(fillTemplate(req, {
       title: 'Ed Markey | Server Error',
       data: { pageType: 'error' },
     }));
