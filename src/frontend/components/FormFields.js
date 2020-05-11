@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import copy from '../../copy';
 
 export const BaseSingleLineTextInput = styled.input`
   width: 100%;
@@ -452,9 +453,9 @@ export function CodeInputField(props) {
           isVerificationNotOk={isVerificationNotOk}
         >
           {(() => {
-            if (isVerificationOk) return 'This code is available';
-            if (isVerificationNotOk) return 'This code is not available';
-            return 'Checking if this code is available';
+            if (isVerificationOk) return copy.formLabels.shareCodeAvailable;
+            if (isVerificationNotOk) return copy.formLabels.shareCodeNotAvailable;
+            return copy.formLabels.shareCodePending;
           })()}
         </CodeInputVerification>
       )}

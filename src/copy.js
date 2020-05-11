@@ -2,8 +2,11 @@ const copy = {
   formLabels: {
     shareCode: 'Share code',
     shareCodeHelp: 'We suggest using a combination of your first + last name.',
+    shareCodeAvailable: 'This code is available',
+    shareCodeNotAvailable: 'This code is not available',
+    shareCodePending: 'Checking if this code is available',
     title: 'Title',
-    subtitle: 'Share why your #StickingWithEd',
+    subtitle: 'Share why you\'re #StickingWithEd',
     background: 'Background',
     firstName: 'First name',
     lastName: 'Last name',
