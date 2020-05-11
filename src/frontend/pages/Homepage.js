@@ -115,7 +115,6 @@ export default function Homepage() {
       && !formValues.code
       && !hasPrefilledCode
     ) {
-      // const prefill = `${formValues.firstName}-${formValues.lastName}-${Math.round(Math.random() * 1000)}`;
       const prefill = `${formValues.firstName}-${formValues.lastName}`;
 
       setFormValues((copy) => ({
