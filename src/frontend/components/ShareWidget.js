@@ -120,7 +120,7 @@ export default function ShareWidget(props) {
             <i className="fab fa-facebook-square fa-lg" />
           </ShareButtonIcon>
           <ShareButtonCopy>
-            {copy.share.facebook}
+            {copy('share.facebook')}
           </ShareButtonCopy>
         </ShareButton>
         <ShareButton target="_blank" rel="noopener noreferrer" href={twitterLink} data-track="share-twitter">
@@ -128,7 +128,7 @@ export default function ShareWidget(props) {
             <i className="fab fa-twitter-square fa-lg" />
           </ShareButtonIcon>
           <ShareButtonCopy>
-            {copy.share.twitter}
+            {copy('share.twitter')}
           </ShareButtonCopy>
         </ShareButton>
         <ShareButton target="_blank" rel="noopener noreferrer" href={emailLink} data-track="share-email">
@@ -136,7 +136,7 @@ export default function ShareWidget(props) {
             <i className="fas fa-envelope-square fa-lg" />
           </ShareButtonIcon>
           <ShareButtonCopy>
-            {copy.share.email}
+            {copy('share.email')}
           </ShareButtonCopy>
         </ShareButton>
         <ShareButton as="button" onClick={onCopy} data-track="share-copy">
@@ -144,7 +144,7 @@ export default function ShareWidget(props) {
             <i className="fas fa-copy fa-lg" />
           </ShareButtonIcon>
           <ShareButtonCopy>
-            {copy.share.link}
+            {copy('share.link')}
           </ShareButtonCopy>
         </ShareButton>
       </ShareContainer>

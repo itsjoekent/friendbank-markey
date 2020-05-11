@@ -58,13 +58,13 @@ export default function Signup() {
 
         if (response.status !== 200) {
           const data = await response.json();
-          return data.error || copy.genericError;
+          return data.error || copy('genericError');
         }
 
         return null;
       } catch (error) {
         console.error(error);
-        return copy.genericError;
+        return copy('genericError');
       }
     }
 
@@ -79,7 +79,7 @@ export default function Signup() {
     {
       title: title,
       subtitle: subtitle,
-      buttonCopy: copy.signupPage.stepOneButtonLabel,
+      buttonCopy: copy('signupPage.stepOneButtonLabel'),
       fields: [...signupContactFields],
       showSmsDisclaimer: true,
       onStepSubmit: onStepSubmitGenerator(1),
@@ -87,7 +87,7 @@ export default function Signup() {
     {
       title: title,
       subtitle: subtitle,
-      buttonCopy: copy.signupPage.stepTwoButtonLabel,
+      buttonCopy: copy('signupPage.stepTwoButtonLabel'),
       fields: [...signupIdFields],
       onStepSubmit: onStepSubmitGenerator(2),
     },
@@ -108,9 +108,9 @@ export default function Signup() {
     <React.Fragment>
       {isModalOpen && (
         <Modal
-          modalTitle={copy.signupPage.modalTitle}
-          modalCopy={copy.signupPage.modalCopy.join('\n')}
-          modalCloseLabel={copy.signupPage.modalCloseLabel}
+          modalTitle={copy('signupPage.modalTitle')}
+          modalCopy={copy('signupPage.modalCopy').join('\n')}
+          modalCloseLabel={copy('signupPage.modalCloseLabel')}
           customShareText={`${title} ${subtitle}`}
           onClose={() => setIsModalOpen(false)}
         />
@@ -120,23 +120,23 @@ export default function Signup() {
           {hasReachedEnd && (
             <PostSignupContainer>
               <DefaultTitle>
-                {copy.signupPage.postSignupTitle}
+                {copy('signupPage.postSignupTitle')}
               </DefaultTitle>
               <DefaultParagraph>
-                {copy.signupPage.postSignupSubtitle.replace('{{FIRST_NAME}}', createdByFirstName)}
+                {copy('signupPage.postSignupSubtitle').replace('{{FIRST_NAME}}', createdByFirstName)}
               </DefaultParagraph>
               <ShareWidget
                 theme={DARK_THEME}
                 customShareText={`${title} ${subtitle}`}
               />
               <DefaultTitle>
-                {copy.signupPage.postSignupCreateTitle}
+                {copy('signupPage.postSignupCreateTitle')}
               </DefaultTitle>
               <DefaultParagraph>
-                {copy.signupPage.postSignupCreateSubtitle}
+                {copy('signupPage.postSignupCreateSubtitle')}
               </DefaultParagraph>
               <RedButton as="a" href="/" data-track="create-my-own">
-                {copy.signupPage.postSignupCreateButtonLabel}
+                {copy('signupPage.postSignupCreateButtonLabel')}
               </RedButton>
             </PostSignupContainer>
           )}

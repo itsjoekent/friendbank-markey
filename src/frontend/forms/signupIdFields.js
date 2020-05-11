@@ -6,16 +6,16 @@ const signupIdFields = [
   {
     fieldId: 'supportLevel',
     fieldType: RADIO_FIELD,
-    label: copy.idQuestions.support.label,
+    label: copy('idQuestions.support.label'),
     validator: validateRequired,
-    options: copy.idQuestions.support.options,
+    options: copy('idQuestions.support.options'),
   },
   {
     fieldId: 'volunteerLevel',
     fieldType: RADIO_FIELD,
-    label: copy.idQuestions.volunteer.label,
+    label: copy('idQuestions.volunteer.label'),
     validator: validateRequired,
-    options: copy.idQuestions.volunteer.options,
+    options: copy('idQuestions.volunteer.options'),
   },
 ];
 

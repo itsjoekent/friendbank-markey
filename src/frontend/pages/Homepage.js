@@ -31,13 +31,13 @@ export default function Homepage() {
 
       if (response.status !== 200) {
         const data = await response.json();
-        return data.error || copy.genericError;
+        return data.error || copy('genericError');
       }
 
       return null;
     } catch (error) {
       console.error(error);
-      return copy.genericError;
+      return copy('genericError');
     }
   }
 
@@ -50,43 +50,43 @@ export default function Homepage() {
 
   const steps = [
     {
-      title: copy.homepage.formTitle,
-      subtitle: copy.homepage.formSubtitle,
-      buttonCopy: copy.homepage.formButtonLabel,
+      title: copy('homepage.formTitle'),
+      subtitle: copy('homepage.formSubtitle'),
+      buttonCopy: copy('homepage.formButtonLabel'),
       showSmsDisclaimer: true,
       fields: [
         ...signupContactFields,
         {
           fieldId: 'code',
           fieldType: CODE_INPUT_FIELD,
-          label: copy.formLabels.shareCode,
-          help: copy.formLabels.shareCodeHelp,
+          label: copy('formLabels.shareCode'),
+          help: copy('formLabels.shareCodeHelp'),
           validator: validateCode,
         },
       ],
     },
     {
-      title: copy.homepage.customizeTitle,
-      subtitle: copy.homepage.customizeSubtitle,
-      buttonCopy: copy.homepage.formButtonLabel,
+      title: copy('homepage.customizeTitle'),
+      subtitle: copy('homepage.customizeSubtitle'),
+      buttonCopy: copy('homepage.formButtonLabel'),
       fields: [
         {
           fieldId: 'title',
           fieldType: SINGLE_LINE_TEXT_INPUT,
-          label: copy.formLabels.title,
+          label: copy('formLabels.title'),
           validator: validateRequired,
         },
         {
           fieldId: 'subtitle',
           fieldType: MULTI_LINE_TEXT_INPUT,
-          label: copy.formLabels.subtitle,
-          defaultValue: copy.homepage.defaultSubtitle,
+          label: copy('formLabels.subtitle'),
+          defaultValue: copy('homepage.defaultSubtitle'),
           validator: validateRequired,
         },
         {
           fieldId: 'background',
           fieldType: GALLERY_PICKER,
-          label: copy.formLabels.background,
+          label: copy('formLabels.background'),
           validator: validateRequired,
           options: Object.keys(backgrounds).map((key) => ({
             name: key,
@@ -97,9 +97,9 @@ export default function Homepage() {
       ],
     },
     {
-      title: copy.homepage.formTitle,
-      subtitle: copy.homepage.formSubtitle,
-      buttonCopy: copy.homepage.createButtonLabel,
+      title: copy('homepage.formTitle'),
+      subtitle: copy('homepage.formSubtitle'),
+      buttonCopy: copy('homepage.createButtonLabel'),
       onStepSubmit: onFinalStepSubmit,
       fields: [...signupIdFields],
     },
@@ -133,7 +133,7 @@ export default function Homepage() {
     ) {
       setFormValues((formCopy) => ({
         ...formCopy,
-        title: copy.homepage.defaultTitle.replace('{{FIRST_NAME}}', formValues.firstName),
+        title: copy('homepage.defaultTitle').replace('{{FIRST_NAME}}', formValues.firstName),
       }));
 
       setHasPrefilledTitle(true);

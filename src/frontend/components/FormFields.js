@@ -453,9 +453,9 @@ export function CodeInputField(props) {
           isVerificationNotOk={isVerificationNotOk}
         >
           {(() => {
-            if (isVerificationOk) return copy.formLabels.shareCodeAvailable;
-            if (isVerificationNotOk) return copy.formLabels.shareCodeNotAvailable;
-            return copy.formLabels.shareCodePending;
+            if (isVerificationOk) return copy('formLabels.shareCodeAvailable');
+            if (isVerificationNotOk) return copy('formLabels.shareCodeNotAvailable');
+            return copy('formLabels.shareCodePending');
           })()}
         </CodeInputVerification>
       )}

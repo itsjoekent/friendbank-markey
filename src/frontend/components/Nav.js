@@ -84,11 +84,11 @@ export default function Nav(props) {
     <NavContainer>
       <NavInnerContainer>
         <Logo href="/">
-          <img src="https://ed-markey-supporter-photos.s3.amazonaws.com/logo.png" alt={copy.nav.logoAlt} />
+          <img src="https://ed-markey-supporter-photos.s3.amazonaws.com/logo.png" alt={copy('nav.logoAlt')} />
         </Logo>
         <NavItemsContainer>
-          <Redirect href={copy.nav.returnLink}>{copy.nav.return}</Redirect>
-          <DonateButton as="a" href={copy.nav.donateForm}>{copy.nav.donate}</DonateButton>
+          <Redirect href={copy('nav.returnLink')}>{copy('nav.return')}</Redirect>
+          <DonateButton as="a" href={copy('nav.donateForm')}>{copy('nav.donate')}</DonateButton>
         </NavItemsContainer>
       </NavInnerContainer>
     </NavContainer>
