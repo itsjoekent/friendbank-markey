@@ -7,6 +7,7 @@ import CommitteeDisclaimer, { DisclaimerWrapper } from '../components/CommitteeD
 import backgrounds from '../../backgrounds';
 import signupContactFields from '../forms/signupContactFields';
 import signupIdFields from '../forms/signupIdFields';
+import makeLocaleLink from '../utils/makeLocaleLink';
 import {
   SINGLE_LINE_TEXT_INPUT,
   MULTI_LINE_TEXT_INPUT,
@@ -45,7 +46,7 @@ export default function Homepage() {
     const linkCode = encodeURIComponent((formValues.code || '').trim().toLowerCase());
 
     sessionStorage.setItem(`${linkCode}-new`, true);
-    window.location.href = `/${linkCode}`;
+    window.location.href = makeLocaleLink(`/${linkCode}`);
   }
 
   const steps = [
@@ -55,7 +56,7 @@ export default function Homepage() {
       buttonCopy: copy('homepage.formButtonLabel'),
       showSmsDisclaimer: true,
       fields: [
-        ...signupContactFields,
+        ...signupContactFields(),
         {
           fieldId: 'code',
           fieldType: CODE_INPUT_FIELD,
@@ -101,7 +102,7 @@ export default function Homepage() {
       subtitle: copy('homepage.formSubtitle'),
       buttonCopy: copy('homepage.createButtonLabel'),
       onStepSubmit: onFinalStepSubmit,
-      fields: [...signupIdFields],
+      fields: [...signupIdFields()],
     },
   ];
 

@@ -12,6 +12,7 @@ import ShareWidget, { DARK_THEME, ShareContainer } from '../components/ShareWidg
 import backgrounds from '../../backgrounds';
 import signupContactFields from '../forms/signupContactFields';
 import signupIdFields from '../forms/signupIdFields';
+import makeLocaleLink from '../utils/makeLocaleLink';
 
 const PostSignupContainer = styled.div`
   display: flex;
@@ -80,7 +81,7 @@ export default function Signup() {
       title: title,
       subtitle: subtitle,
       buttonCopy: copy('signupPage.stepOneButtonLabel'),
-      fields: [...signupContactFields],
+      fields: [...signupContactFields()],
       showSmsDisclaimer: true,
       onStepSubmit: onStepSubmitGenerator(1),
     },
@@ -88,7 +89,7 @@ export default function Signup() {
       title: title,
       subtitle: subtitle,
       buttonCopy: copy('signupPage.stepTwoButtonLabel'),
-      fields: [...signupIdFields],
+      fields: [...signupIdFields()],
       onStepSubmit: onStepSubmitGenerator(2),
     },
   ];
@@ -135,7 +136,7 @@ export default function Signup() {
               <DefaultParagraph>
                 {copy('signupPage.postSignupCreateSubtitle')}
               </DefaultParagraph>
-              <RedButton as="a" href="/" data-track="create-my-own">
+              <RedButton as="a" href={makeLocaleLink("/")} data-track="create-my-own">
                 {copy('signupPage.postSignupCreateButtonLabel')}
               </RedButton>
             </PostSignupContainer>
