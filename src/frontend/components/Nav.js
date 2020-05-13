@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import copy from '../../copy';
 import { RedButton } from './Buttons';
+import makeLocaleLink from '../utils/makeLocaleLink';
 
 const NavContainer = styled.nav`
   position: absolute;
@@ -83,7 +84,7 @@ export default function Nav(props) {
   return (
     <NavContainer>
       <NavInnerContainer>
-        <Logo href="/">
+        <Logo href={makeLocaleLink("/")}>
           <img src="https://ed-markey-supporter-photos.s3.amazonaws.com/logo.png" alt={copy('nav.logoAlt')} />
         </Logo>
         <NavItemsContainer>

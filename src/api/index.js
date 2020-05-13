@@ -53,11 +53,23 @@ const BSD_VAN_MAP = {
     'Probably not': '1465097',
     'Definitely not': '1465098',
     'Too Young/Ineligible to Vote': '1598130',
+
+    'Definitivamente': '1433903',
+    'Probablemente': '1433904',
+    'Indeciso': '1433905',
+    'Probablemente no': '1465097',
+    'Definitivamente no': '1465098',
+    'Demasiado joven/Inelegible para votar': '1598130',
   },
   volunteer: {
     'Yes': '1411494',
     'Maybe': '1411495',
     'Later': '1411496',
+    'No': '1411497',
+
+    'Sí': '1411494',
+    'Tal vez': '1411495',
+    'Más tarde': '1411496',
     'No': '1411497',
   },
 };
@@ -277,7 +289,7 @@ app.post('/api/v1/page/:code', async function(req, res) {
       return;
     }
 
-    if (!phoneValidation(phone, 'USA').length) {
+    if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(phone)) {
       res.status(400).json({ error: 'Invalid phone number' });
       return;
     }
@@ -488,7 +500,7 @@ app.get('*', async function (req, res) {
 
     res.set('Content-Type', 'text/html');
 
-    if (path === '/' || path === SPANISH_PREFIX) {
+    if (path === '/' || path.replace(/\/$/, '') === SPANISH_PREFIX) {
       res.send(fillTemplate(req, {
         data: { pageType: 'homepage' },
       }));
@@ -496,11 +508,11 @@ app.get('*', async function (req, res) {
       return;
     }
 
-    const purePath = path.startsWith(SPANISH_PREFIX)
-      ? path.replace(SPANISH_PREFIX, '')
+    const slug = path.startsWith(SPANISH_PREFIX)
+      ? path.replace(SPANISH_PREFIX, '').replace('/', '')
       : path.replace('/', '');
 
-    const page = await getPageForCode(normalizePageCode(purePath));
+    const page = await getPageForCode(normalizePageCode(slug));
 
     if (page instanceof Error) {
       throw page;
