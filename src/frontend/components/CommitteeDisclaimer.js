@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import copy from '../../copy';
+import getCopy from '../utils/getCopy';
 
 const Disclaimer = styled.span`
   display: block;
@@ -28,7 +28,7 @@ export const DisclaimerWrapper = styled.div`
 export default function CommitteeDisclaimer() {
   return (
     <Disclaimer>
-      {copy('politicalDiclaimer')}
+      {getCopy('politicalDiclaimer')}
     </Disclaimer>
   );
 }
