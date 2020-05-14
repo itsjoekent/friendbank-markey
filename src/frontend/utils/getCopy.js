@@ -1,4 +1,4 @@
-import { ENGLISH, SPANISH, SPANISH_PREFIX } from './lang';
+import { ENGLISH, SPANISH, SPANISH_PREFIX } from '../../shared/lang';
 
 const copy = {
   formLabels: {
@@ -107,7 +107,7 @@ const copy = {
       [SPANISH]: '*Requerido',
     },
     nameLength: {
-      [ENGLISH]: 'Must be less than 50 chars.',
+      [ENGLISH]: 'Must be less than 50 characters.',
       [SPANISH]: 'Debe ser menos de 50 caracteres.',
     },
     zipFormat: {
@@ -123,12 +123,21 @@ const copy = {
       [SPANISH]: 'Correo electrónico inválido',
     },
     codeLength: {
-      [ENGLISH]: 'Must be less than 50 chars.',
+      [ENGLISH]: 'Must be less than 50 characters.',
       [SPANISH]: 'Debe ser menos de 50 caracteres.',
     },
     codeFormat: {
       [ENGLISH]: 'Can only contain letters, numbers, dashes & underscores.',
       [SPANISH]: 'Sólo puede contener letras, números, guiones y guiones bajos.',
+    },
+    profanity: {
+      [ENGLISH]: 'Profanity is not allowed, sorry!',
+    },
+    titleLength: {
+      [ENGLISH]: 'Must be less than 450 characters',
+    },
+    subtitleLength: {
+      [ENGLISH]: 'Must be less than 2000 characters',
     },
   },
   homepage: {

@@ -1,46 +1,46 @@
-import copy from '../../copy';
+import getCopy from '../utils/getCopy';
 import { SINGLE_LINE_TEXT_INPUT } from '../components/FormFields';
 import {
   validateName,
   validateZip,
   validatePhone,
   validateEmail,
-} from '../utils/fieldValidations';
+} from '../../shared/fieldValidations';
 
 export default function signupContactFields() {
   return [
     {
       fieldId: 'firstName',
       fieldType: SINGLE_LINE_TEXT_INPUT,
-      label: copy('formLabels.firstName'),
+      label: getCopy('formLabels.firstName'),
       isHalfWidth: true,
       validator: validateName,
     },
     {
       fieldId: 'lastName',
       fieldType: SINGLE_LINE_TEXT_INPUT,
-      label: copy('formLabels.lastName'),
+      label: getCopy('formLabels.lastName'),
       isHalfWidth: true,
       validator: validateName,
     },
     {
       fieldId: 'zip',
       fieldType: SINGLE_LINE_TEXT_INPUT,
-      label: copy('formLabels.zip'),
+      label: getCopy('formLabels.zip'),
       isHalfWidth: true,
       validator: validateZip,
     },
     {
       fieldId: 'phone',
       fieldType: SINGLE_LINE_TEXT_INPUT,
-      label: copy('formLabels.phone'),
+      label: getCopy('formLabels.phone'),
       isHalfWidth: true,
       validator: validatePhone,
     },
     {
       fieldId: 'email',
       fieldType: SINGLE_LINE_TEXT_INPUT,
-      label: copy('formLabels.email'),
+      label: getCopy('formLabels.email'),
       validator: validateEmail,
     },
   ]

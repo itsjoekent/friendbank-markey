@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css, keyframes } from 'styled-components';
-import copy from '../../copy';
+import getCopy from '../utils/getCopy';
 import { useApplicationContext } from '../ApplicationContext';
 import { DefaultTitle, DefaultParagraph } from './Typography';
 import { RedButton } from './Buttons';
@@ -242,7 +242,7 @@ export default function Form(props) {
       })
       .catch((error) => {
         console.error(error);
-        setFormError(copy('genericError'));
+        setFormError(getCopy('genericError'));
       });
     } else {
       setTargetStep(activeStep + 1);
@@ -281,7 +281,8 @@ export default function Form(props) {
           } = field;
 
           const value = formValues[fieldId];
-          const validationMessage = validator(value);
+          const validationKey = validator(value);
+          const validationMessage = validationKey && getCopy(validationKey);
 
           function onTextInputChange(event) {
             const update = event.target.value;
@@ -393,7 +394,7 @@ export default function Form(props) {
           {formError && (<FormError>{formError}</FormError>)}
           {showSmsDisclaimer && (
             <FormDisclaimer>
-              {copy('smsDisclaimer')}
+              {getCopy('smsDisclaimer')}
             </FormDisclaimer>
           )}
         </div>
