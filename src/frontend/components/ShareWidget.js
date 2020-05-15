@@ -108,7 +108,7 @@ export default function ShareWidget(props) {
   const twitterLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`${customShareText || ''}\n${shareLink}`)}`;
   const emailLink = `mailto:yourfriend@gmail.com?body=${encodeURIComponent(`${customShareText || ''}\n${shareLink}`)}`;
 
-  function ongetCopy() {
+  function onCopy() {
     copyToClipboard(shareLink);
   }
 
