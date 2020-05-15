@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import copyToClipboard from 'copy-to-clipboard';
-import copy from '../../copy';
+import getCopy from '../utils/getCopy';
 
 export const DARK_THEME = 'DARK_THEME';
 export const LIGHT_THEME = 'LIGHT_THEME';
@@ -120,7 +120,7 @@ export default function ShareWidget(props) {
             <i className="fab fa-facebook-square fa-lg" />
           </ShareButtonIcon>
           <ShareButtonCopy>
-            {copy('share.facebook')}
+            {getCopy('share.facebook')}
           </ShareButtonCopy>
         </ShareButton>
         <ShareButton target="_blank" rel="noopener noreferrer" href={twitterLink} data-track="share-twitter">
@@ -128,7 +128,7 @@ export default function ShareWidget(props) {
             <i className="fab fa-twitter-square fa-lg" />
           </ShareButtonIcon>
           <ShareButtonCopy>
-            {copy('share.twitter')}
+            {getCopy('share.twitter')}
           </ShareButtonCopy>
         </ShareButton>
         <ShareButton target="_blank" rel="noopener noreferrer" href={emailLink} data-track="share-email">
@@ -136,7 +136,7 @@ export default function ShareWidget(props) {
             <i className="fas fa-envelope-square fa-lg" />
           </ShareButtonIcon>
           <ShareButtonCopy>
-            {copy('share.email')}
+            {getCopy('share.email')}
           </ShareButtonCopy>
         </ShareButton>
         <ShareButton as="button" onClick={onCopy} data-track="share-copy">
@@ -144,7 +144,7 @@ export default function ShareWidget(props) {
             <i className="fas fa-copy fa-lg" />
           </ShareButtonIcon>
           <ShareButtonCopy>
-            {copy('share.link')}
+            {getCopy('share.link')}
           </ShareButtonCopy>
         </ShareButton>
       </ShareContainer>

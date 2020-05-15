@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import copy from '../../copy';
+import getCopy from '../utils/getCopy';
 import { useApplicationContext } from '../ApplicationContext';
 import { RedButton } from '../components/Buttons';
 import { DefaultTitle, DefaultParagraph } from '../components/Typography';
@@ -9,10 +9,11 @@ import SplitScreen from '../components/SplitScreen';
 import Modal from '../components/Modal';
 import Form from '../components/Form';
 import ShareWidget, { DARK_THEME, ShareContainer } from '../components/ShareWidget';
-import backgrounds from '../../backgrounds';
+import backgrounds from '../../shared/backgrounds';
 import signupContactFields from '../forms/signupContactFields';
 import signupIdFields from '../forms/signupIdFields';
 import makeLocaleLink from '../utils/makeLocaleLink';
+import makeFormApiRequest from '../utils/makeFormApiRequest';
 
 const PostSignupContainer = styled.div`
   display: flex;
@@ -50,23 +51,7 @@ export default function Signup() {
 
   function onStepSubmitGenerator(index) {
     async function onStepSubmit(formValues) {
-      try {
-        const response = await fetch(`/api/v1/page/${code.toLowerCase()}/signup/${index}`, {
-          method: 'post',
-          body: JSON.stringify(formValues),
-          headers: { 'Content-Type': 'application/json' },
-        });
-
-        if (response.status !== 200) {
-          const data = await response.json();
-          return data.error || copy('genericError');
-        }
-
-        return null;
-      } catch (error) {
-        console.error(error);
-        return copy('genericError');
-      }
+      return await makeFormApiRequest(`/api/v1/page/${code.toLowerCase()}/signup/${index}`, formValues);
     }
 
     return onStepSubmit;
@@ -80,7 +65,7 @@ export default function Signup() {
     {
       title: title,
       subtitle: subtitle,
-      buttonCopy: copy('signupPage.stepOneButtonLabel'),
+      buttonCopy: getCopy('signupPage.stepOneButtonLabel'),
       fields: [...signupContactFields()],
       showSmsDisclaimer: true,
       onStepSubmit: onStepSubmitGenerator(1),
@@ -88,7 +73,7 @@ export default function Signup() {
     {
       title: title,
       subtitle: subtitle,
-      buttonCopy: copy('signupPage.stepTwoButtonLabel'),
+      buttonCopy: getCopy('signupPage.stepTwoButtonLabel'),
       fields: [...signupIdFields()],
       onStepSubmit: onStepSubmitGenerator(2),
     },
@@ -109,9 +94,9 @@ export default function Signup() {
     <React.Fragment>
       {isModalOpen && (
         <Modal
-          modalTitle={copy('signupPage.modalTitle')}
-          modalCopy={copy('signupPage.modalCopy').join('\n')}
-          modalCloseLabel={copy('signupPage.modalCloseLabel')}
+          modalTitle={getCopy('signupPage.modalTitle')}
+          modalCopy={getCopy('signupPage.modalCopy').join('\n')}
+          modalCloseLabel={getCopy('signupPage.modalCloseLabel')}
           customShareText={`${title} ${subtitle}`}
           onClose={() => setIsModalOpen(false)}
         />
@@ -121,23 +106,23 @@ export default function Signup() {
           {hasReachedEnd && (
             <PostSignupContainer>
               <DefaultTitle>
-                {copy('signupPage.postSignupTitle')}
+                {getCopy('signupPage.postSignupTitle')}
               </DefaultTitle>
               <DefaultParagraph>
-                {copy('signupPage.postSignupSubtitle').replace('{{FIRST_NAME}}', createdByFirstName)}
+                {getCopy('signupPage.postSignupSubtitle').replace('{{FIRST_NAME}}', createdByFirstName)}
               </DefaultParagraph>
               <ShareWidget
                 theme={DARK_THEME}
                 customShareText={`${title} ${subtitle}`}
               />
               <DefaultTitle>
-                {copy('signupPage.postSignupCreateTitle')}
+                {getCopy('signupPage.postSignupCreateTitle')}
               </DefaultTitle>
               <DefaultParagraph>
-                {copy('signupPage.postSignupCreateSubtitle')}
+                {getCopy('signupPage.postSignupCreateSubtitle')}
               </DefaultParagraph>
               <RedButton as="a" href={makeLocaleLink("/")} data-track="create-my-own">
-                {copy('signupPage.postSignupCreateButtonLabel')}
+                {getCopy('signupPage.postSignupCreateButtonLabel')}
               </RedButton>
             </PostSignupContainer>
           )}
