@@ -9,13 +9,18 @@ export default async function makeFormApiRequest(path, data) {
     });
 
     if (response.status !== 200) {
-      const data = await response.json();
-      return getCopy(data.error, true, null) || getCopy('genericError');
+      const { field, error } = await response.json();
+      console.log(field, error);
+
+      return [
+        getCopy(error, true, null) || getCopy('genericError'),
+        getCopy(`formLabels.${field}`, true, null) || null,
+      ];
     }
 
     return null;
   } catch (error) {
     console.error(error);
-    return getCopy('genericError');
+    return [getCopy('genericError'), null];
   }
 }

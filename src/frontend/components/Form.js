@@ -79,7 +79,6 @@ const FormDisclaimer = styled(DefaultParagraph)`
 `;
 
 const FormSubmitButton = styled(RedButton)`
-  margin-top: 24px;
   position: relative;
   transition: padding-left 0.5s;
 
@@ -102,6 +101,35 @@ const FormSubmitButton = styled(RedButton)`
       animation: ${spinnerKeyframes} .6s linear infinite;
     }
   }
+`;
+
+const FormBackButton = styled.button`
+  display: block;
+  border: none;
+  background: none;
+  padding: 0;
+  margin-right: 24px;
+  font-family: ${({ theme }) => theme.fonts.headerFamily};
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 1;
+  text-transform: uppercase;
+  text-decoration: underline;
+  color: ${({ theme }) => theme.colors.grey};
+  cursor: pointer;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.black};
+  }
+`;
+
+const FormNavigationRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 12px;
 `;
 
 const FormError = styled(HelpText)`
@@ -230,11 +258,12 @@ export default function Form(props) {
     if (onStepSubmit) {
       setIsProcessingSubmit(true);
 
-      onStepSubmit(formValues).then((newFormError) => {
+      onStepSubmit(formValues).then((serverValidationError) => {
         setIsProcessingSubmit(false);
 
-        if (newFormError) {
-          setFormError(newFormError);
+        if (serverValidationError) {
+          const [message, field] = serverValidationError;
+          setFormError({ message, field });
         } else {
           setTargetStep(activeStep + 1);
           submitStepEvent();
@@ -242,7 +271,7 @@ export default function Form(props) {
       })
       .catch((error) => {
         console.error(error);
-        setFormError(getCopy('genericError'));
+        setFormError({ message: getCopy('genericError'), field: null });
       });
     } else {
       setTargetStep(activeStep + 1);
@@ -263,6 +292,10 @@ export default function Form(props) {
     fields,
     showSmsDisclaimer,
   } = activeStepData;
+
+  const joinedFormError = formError && (formError.field
+    ? `${formError.field}: ${formError.message}`
+    : formError.message);
 
   return (
     <FormContainer isFading={isFading} ref={scrollHelperRef}>
@@ -385,19 +418,24 @@ export default function Form(props) {
             }
           }
         })}
-        <div>
+        <FormNavigationRow split={activeStep > 0}>
+          {activeStep > 0 && (
+            <FormBackButton type="button" onClick={() => setTargetStep(activeStep - 1)}>
+              {getCopy('formLabels.backButton')}
+            </FormBackButton>
+          )}
           <FormSubmitButton
             type="submit"
             disabled={isProcessingSubmit}
             data-track="form-submit-button"
           >{buttonCopy}</FormSubmitButton>
-          {formError && (<FormError>{formError}</FormError>)}
-          {showSmsDisclaimer && (
-            <FormDisclaimer>
-              {getCopy('smsDisclaimer')}
-            </FormDisclaimer>
-          )}
-        </div>
+        </FormNavigationRow>
+        {formError && (<FormError>{joinedFormError}</FormError>)}
+        {showSmsDisclaimer && (
+          <FormDisclaimer>
+            {getCopy('smsDisclaimer')}
+          </FormDisclaimer>
+        )}
       </FormFieldsContainer>
     </FormContainer>
   );

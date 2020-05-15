@@ -2,6 +2,14 @@ import { ENGLISH, SPANISH, SPANISH_PREFIX } from '../../shared/lang';
 
 const copy = {
   formLabels: {
+    backButton: {
+      [ENGLISH]: 'Go back',
+      [SPANISH]: 'Volver',
+    },
+    code: {
+      [ENGLISH]: 'Share code',
+      [SPANISH]: 'Comparte el código',
+    },
     shareCode: {
       [ENGLISH]: 'Share code',
       [SPANISH]: 'Comparte el código',
@@ -132,12 +140,15 @@ const copy = {
     },
     profanity: {
       [ENGLISH]: 'Profanity is not allowed, sorry!',
+      [SPANISH]: 'No se permiten groserías, ¡lo sentimos!',
     },
     titleLength: {
       [ENGLISH]: 'Must be less than 450 characters',
+      [SPANISH]: 'Debe tener menos de 450 caracteres',
     },
     subtitleLength: {
       [ENGLISH]: 'Must be less than 2000 characters',
+      [SPANISH]: 'Debe tener menos de 2000 caracteres',
     },
   },
   homepage: {
