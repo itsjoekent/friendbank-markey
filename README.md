@@ -1,9 +1,9 @@
 # ed-markey-relational-organizing
 
 Ship 1:
-- [ ] Back button
-- [ ] Missing Spanish translations
-- [ ] Update FE logic for new validation error
+- [x] Back button
+- [x] Missing Spanish translations
+- [x] Update FE logic for new validation error
 
 -----
 
