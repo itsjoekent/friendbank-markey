@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import copy from '../../copy';
+import getCopy from '../utils/getCopy';
 import { RedButton } from './Buttons';
 import makeLocaleLink from '../utils/makeLocaleLink';
 
@@ -85,11 +85,11 @@ export default function Nav(props) {
     <NavContainer>
       <NavInnerContainer>
         <Logo href={makeLocaleLink("/")}>
-          <img src="https://ed-markey-supporter-photos.s3.amazonaws.com/logo.png" alt={copy('nav.logoAlt')} />
+          <img src="https://ed-markey-supporter-photos.s3.amazonaws.com/logo.png" alt={getCopy('nav.logoAlt')} />
         </Logo>
         <NavItemsContainer>
-          <Redirect href={copy('nav.returnLink')}>{copy('nav.return')}</Redirect>
-          <DonateButton as="a" href={copy('nav.donateForm')}>{copy('nav.donate')}</DonateButton>
+          <Redirect href={getCopy('nav.returnLink')}>{getCopy('nav.return')}</Redirect>
+          <DonateButton as="a" href={getCopy('nav.donateForm')}>{getCopy('nav.donate')}</DonateButton>
         </NavItemsContainer>
       </NavInnerContainer>
     </NavContainer>

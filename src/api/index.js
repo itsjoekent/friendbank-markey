@@ -13,8 +13,9 @@ const profanity = require('@2toad/profanity').profanity;
 const setupDb = require('./setup-db');
 const ssr = require('./ssr').default;
 
-const { SPANISH_PREFIX } = require('../lang');
-const backgrounds = require('../backgrounds');
+const { SPANISH_PREFIX } = require('../shared/lang');
+const backgrounds = require('../shared/backgrounds');
+const fieldValidations = require('../shared/fieldValidations');
 
 const DEV_HEAP = `
 <script type="text/javascript">
@@ -34,6 +35,7 @@ const {
   PORT,
   MONGODB_URL,
 
+  BSD_API_BASE_URL,
   BSD_SIGNUP_FORM_SLUG,
   BSD_SIGNUP_CODE_ID,
   BSD_SIGNUP_SUPPORT_ID,
@@ -111,6 +113,10 @@ function apiErrorHandler(res, error) {
   res.status(500).json({ error: DEFAULT_API_ERROR_MESSAGE });
 }
 
+function profanityCheck(value) {
+  return profanity.exists(value) ? 'validations.profanity' : false;
+}
+
 function normalizePageCode(code) {
   return encodeURIComponent((code || '').trim().toLowerCase());
 }
@@ -121,6 +127,90 @@ function normalizeName(value) {
 
 function normalizeEmail(value) {
   return value.trim().toLowerCase();
+}
+
+function normalizePhone(value) {
+  return phoneValidation(value, '', true)[0];
+}
+
+function normalizeBackground(value) {
+  return value.toLowerCase();
+}
+
+function validateAndNormalizeApiRequestFields(fields) {
+  const validations = {
+    firstName: [
+      fieldValidations.validateName,
+      profanityCheck,
+    ],
+    lastName: [
+      fieldValidations.validateName,
+    ],
+    zip: [
+      fieldValidations.validateZip,
+    ],
+    email: [
+      fieldValidations.validateEmail,
+    ],
+    phone: [
+      fieldValidations.validatePhone,
+    ],
+    code: [
+      fieldValidations.validateCode,
+      profanityCheck,
+    ],
+    title: [
+      fieldValidations.validateTitle,
+      profanityCheck,
+    ],
+    subtitle: [
+      fieldValidations.validateSubtitle,
+      profanityCheck,
+    ],
+    supportLevel: [
+      fieldValidations.validateRequired,
+    ],
+    volunteerLevel: [
+      fieldValidations.validateRequired,
+    ],
+    background: [
+      fieldValidations.validateBackground,
+    ],
+  };
+
+  const normalizations = {
+    code: normalizePageCode,
+    firstName: normalizeName,
+    lastName: normalizeName,
+    email: normalizeEmail,
+    phone: normalizePhone,
+    title: normalizeName,
+    subtitle: normalizeName,
+    background: normalizeBackground,
+  };
+
+  return Object.keys(fields).reduce((acc, key) => {
+    if (Array.isArray(acc)) {
+      return acc;
+    }
+
+    const value = `${fields[key] || ''}`;
+
+    const validationMessage = validations[key]
+      ? validations[key]
+        .map((validator) => validator((value)))
+        .find(validation => !!validation)
+      : false;
+
+    if (validationMessage) {
+      return [key, validationMessage];
+    }
+
+    return {
+      ...acc,
+      [key]: normalizations[key] ? normalizations[key](value) : value,
+    }
+  }, {});
 }
 
 async function getPageForCode(code) {
@@ -150,26 +240,9 @@ function transformPageResponse(page) {
   return copy;
 }
 
-function stringFieldValidator(minLength, maxLength = Infinity) {
-  function validate(input) {
-    return (
-      typeof input !== 'string'
-      || input === 'undefined'
-      || input.length < minLength
-      || input.length > maxLength
-    );
-  }
-
-  return validate;
-}
-
-function hasInvalidParam(list, validator) {
-  return list.findIndex((item) => validator(item)) > -1;
-}
-
 async function submitBsdForm(fields) {
   try {
-    const url = `https://markey.cp.bsd.net/page/sapi/${BSD_SIGNUP_FORM_SLUG}`;
+    const url = `${BSD_API_BASE_URL}/page/sapi/${BSD_SIGNUP_FORM_SLUG}`;
 
     const body = Object.keys(fields).reduce((acc, key) => {
       const prepend = acc.length ? '&' : '';
@@ -234,78 +307,30 @@ app.post('/api/v1/page/:code', async function(req, res) {
       volunteerLevel,
     } = req.body;
 
-    const requiredStringFields = [
+    const validationResult = validateAndNormalizeApiRequestFields({
       firstName,
       lastName,
+      email,
+      phone,
+      zip,
       title,
       subtitle,
       background,
-      email,
       supportLevel,
       volunteerLevel,
-      `${phone}`,
-      `${zip}`,
-    ];
-
-    if (hasInvalidParam(requiredStringFields, stringFieldValidator(1))) {
-      res.status(400).json({ error: 'Missing required field' });
-      return;
-    }
-
-    if (hasInvalidParam([firstName, lastName], stringFieldValidator(1, 50))) {
-      res.status(400).json({ error: 'Invalid first and/or last name field length' });
-      return;
-    }
-
-    if (hasInvalidParam([title], stringFieldValidator(1, 450))) {
-      res.status(400).json({ error: 'Invalid title field length' });
-      return;
-    }
-
-    if (hasInvalidParam([subtitle], stringFieldValidator(1, 2000))) {
-      res.status(400).json({ error: 'Invalid subtitle field length' });
-      return;
-    }
-
-    if (code.length > 50 || !(/^[a-zA-Z0-9-_]+$/.test(code))) {
-      res.status(400).json({ error: 'Invalid share code, must be less than 50 characters and only use letters, numbers, dashes and underscores.' });
-      return;
-    }
-
-    const profanityCheck = [
       code,
-      firstName,
-      title,
-      subtitle,
-    ];
+    });
 
-    if (hasInvalidParam(profanityCheck, (field) => profanity.exists(field))) {
-      res.status(400).json({ error: 'Profanity is not allowed, sorry!' });
+    if (Array.isArray(validationResult)) {
+      res.status(400).json({
+        field: validationResult[0],
+        error: validationResult[1],
+      });
+
       return;
     }
 
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      res.status(400).json({ error: 'Invalid email' });
-      return;
-    }
-
-    if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(phone)) {
-      res.status(400).json({ error: 'Invalid phone number' });
-      return;
-    }
-
-    if (`${zip}`.length !== 5 || !(/^\d+$/.test(zip))) {
-      res.status(400).json({ error: 'Invalid zipcode' });
-      return;
-    }
-
-    if (!backgrounds[background]) {
-      res.status(400).json({ error: 'Invalid background' });
-      return;
-    }
-
-    const normalizedPageCode = normalizePageCode(code);
-    const existingPage = await getPageForCode(normalizedPageCode);
+    const existingPage = await getPageForCode(validationResult.code);
 
     if (existingPage instanceof Error) {
       throw existingPage;
@@ -317,17 +342,17 @@ app.post('/api/v1/page/:code', async function(req, res) {
     }
 
     const page = {
-      code: normalizedPageCode,
-      createdByFirstName: normalizeName(firstName),
-      createdByLastName: normalizeName(lastName),
-      createdByEmail: normalizeEmail(email),
-      createdByPhone: phoneValidation(phone, 'USA')[0],
-      createdByZip: `${zip}`,
+      code: validationResult.code,
+      createdByFirstName: validationResult.firstName,
+      createdByLastName: validationResult.lastName,
+      createdByEmail: validationResult.email,
+      createdByPhone: validationResult.phone,
+      createdByZip: validationResult.zip,
       createdAt: Date.now(),
-      title: xss(title.trim()),
-      subtitle: xss(subtitle.trim()),
+      title: validationResult.title,
+      subtitle: validationResult.subtitle,
       totalSignups: 0,
-      background: background.toLowerCase(),
+      background: validationResult.background,
     };
 
     const bsdResult = await submitBsdForm({
@@ -336,7 +361,7 @@ app.post('/api/v1/page/:code', async function(req, res) {
       lastname: page.createdByLastName,
       phone: page.createdByPhone,
       zip: page.createdByZip,
-      [BSD_SIGNUP_CODE_ID]: normalizedPageCode,
+      [BSD_SIGNUP_CODE_ID]: page.code,
       [BSD_SIGNUP_SUPPORT_ID]: BSD_VAN_MAP.support[supportLevel],
       [BSD_SIGNUP_VOLUNTEER_ID]: BSD_VAN_MAP.volunteer[volunteerLevel],
     });
@@ -369,52 +394,38 @@ app.post('/api/v1/page/:code/signup/:step', async function(req, res) {
       volunteerLevel,
     } = req.body;
 
-    const requiredStringFields = [
+    const validationRequirements = {
       firstName,
       lastName,
       email,
-      `${phone}`,
-      `${zip}`,
-    ];
+      phone,
+      zip,
+    };
 
     if (step === 2) {
-      requiredStringFields.push(supportLevel);
-      requiredStringFields.push(volunteerLevel);
+      validationRequirements.supportLevel = supportLevel;
+      validationRequirements.volunteerLevel = volunteerLevel;
     }
 
-    if (hasInvalidParam(requiredStringFields, stringFieldValidator(1))) {
-      res.status(400).json({ error: 'Missing required field' });
-      return;
-    }
+    const validationResult = validateAndNormalizeApiRequestFields(validationRequirements);
 
-    if (hasInvalidParam([firstName, lastName], stringFieldValidator(1, 50))) {
-      res.status(400).json({ error: 'Invalid first and/or last name field length' });
-      return;
-    }
+    if (Array.isArray(validationResult)) {
+      res.status(400).json({
+        field: validationResult[0],
+        error: validationResult[1],
+      });
 
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      res.status(400).json({ error: 'Invalid email' });
-      return;
-    }
-
-    if (!phoneValidation(phone, 'USA').length) {
-      res.status(400).json({ error: 'Invalid phone number' });
-      return;
-    }
-
-    if (`${zip}`.length !== 5 || !(/^\d+$/.test(zip))) {
-      res.status(400).json({ error: 'Invalid zipcode' });
       return;
     }
 
     const pages = db.collection('pages');
 
     const bsdForm = {
-      email: email,
-      firstname: firstName,
-      lastname: lastName,
-      phone: phone,
-      zip: zip,
+      email: validationResult.email,
+      firstname: validationResult.firstName,
+      lastname: validationResult.lastName,
+      phone: validationResult.phone,
+      zip: validationResult.zip,
       [BSD_SIGNUP_CODE_ID]: normalizedCode,
     };
 

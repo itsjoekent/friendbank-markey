@@ -36,7 +36,7 @@ before('wait for host to be reachable', async function() {
 
 beforeEach('clear database', async function() {
   const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
-  const db = client.db('markey');
+  const db = client.db();
 
   await db.dropDatabase();
   await setupDb(db);
@@ -55,7 +55,7 @@ describe('page api v1', function() {
 
   it ('should return 200 for an existing page', async function() {
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
-    const db = client.db('markey');
+    const db = client.db();
     const pages = db.collection('pages');
 
     await pages.insertOne({ code: 'test' });
@@ -74,10 +74,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -92,6 +95,7 @@ describe('page api v1', function() {
     assert.equal(page.code, 'test');
     assert.equal(page.createdByFirstName, 'Ed');
     assert.isUndefined(page.createdByLastName);
+    assert.isUndefined(page.createdByEmail);
     assert.isUndefined(page.createdByPhone);
     assert.isUndefined(page.createdByZip);
     assert.equal(page.title, 'Demo page title');
@@ -101,13 +105,14 @@ describe('page api v1', function() {
     assert.isNumber(page.createdAt);
 
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
-    const db = client.db('markey');
+    const db = client.db();
     const pages = db.collection('pages');
     const pageItem = await pages.findOne({ code: 'test' });
 
     assert.equal(pageItem.code, 'test');
     assert.equal(pageItem.createdByFirstName, 'Ed');
     assert.equal(pageItem.createdByLastName, 'Markey');
+    assert.equal(pageItem.createdByEmail, 'ed@edmarkey.com');
     assert.equal(pageItem.createdByPhone, '+16175550127');
     assert.equal(pageItem.createdByZip, '02129');
     assert.equal(pageItem.title, 'Demo page title');
@@ -123,10 +128,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'Ed   ',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title      ',
         subtitle: '   Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -143,7 +151,7 @@ describe('page api v1', function() {
 
   it ('should not create a new page if the code is already in use', async function() {
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
-    const db = client.db('markey');
+    const db = client.db();
     const pages = db.collection('pages');
 
     await pages.insertOne({ code: 'test' });
@@ -153,10 +161,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -174,10 +185,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'Ed   ',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title      ',
         subtitle: '   Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -196,10 +210,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -207,9 +224,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'code');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.codeFormat');
+    assert.equal(field, 'code');
   });
 
   it ('should not create a new page if the code is longer than 50 characters', async function() {
@@ -218,10 +235,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -229,9 +249,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'code');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.codeLength');
+    assert.equal(field, 'code');
   });
 
   it ('should not create a new page if the first name is missing', async function() {
@@ -239,10 +259,13 @@ describe('page api v1', function() {
       method: 'post',
       body: JSON.stringify({
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -250,9 +273,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'missing');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.required');
+    assert.equal(field, 'firstName');
   });
 
   it ('should not create a new page if the first name is greater than 50 characters', async function() {
@@ -261,10 +284,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'EdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEdEd',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -272,10 +298,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'first');
-    assert.include(error.toLowerCase(), 'field length');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.nameLength');
+    assert.equal(field, 'firstName');
   });
 
   it ('should not create a new page if the last name is missing', async function() {
@@ -283,10 +308,13 @@ describe('page api v1', function() {
       method: 'post',
       body: JSON.stringify({
         firstName: 'Ed',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -294,9 +322,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'missing');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.required');
+    assert.equal(field, 'lastName');
   });
 
   it ('should not create a new page if the last name is greater than 50 characters', async function() {
@@ -305,10 +333,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'MarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkeyMarkey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -316,10 +347,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'last');
-    assert.include(error.toLowerCase(), 'field length');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.nameLength');
+    assert.equal(field, 'lastName');
   });
 
   it ('should not create a new page if the title is missing', async function() {
@@ -328,9 +358,12 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -338,21 +371,24 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'missing');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.required');
+    assert.equal(field, 'title');
   });
 
-  it ('should not create a new page if the title is greater than 250 characters', async function() {
+  it ('should not create a new page if the title is greater than 450 characters', async function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
-        title: new Array(251).fill('t').join(''),
+        title: new Array(451).fill('t').join(''),
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -360,10 +396,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'title');
-    assert.include(error.toLowerCase(), 'field length');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.titleLength');
+    assert.equal(field, 'title');
   });
 
   it ('should not create a new page if the subtitle is missing', async function() {
@@ -372,9 +407,12 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -382,21 +420,24 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'missing');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.required');
+    assert.equal(field, 'subtitle');
   });
 
-  it ('should not create a new page if the subtitle is greater than 250 characters', async function() {
+  it ('should not create a new page if the subtitle is greater than 2000 characters', async function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
-        subtitle: new Array(251).fill('t').join(''),
+        subtitle: new Array(2001).fill('t').join(''),
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -404,10 +445,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'subtitle');
-    assert.include(error.toLowerCase(), 'field length');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.subtitleLength');
+    assert.equal(field, 'subtitle');
   });
 
   it ('should not create a new page if the code has profanity', async function() {
@@ -416,10 +456,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'first name',
         lastName: 'last name',
+        email: 'test@example.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -427,9 +470,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'profanity');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.profanity');
+    assert.equal(field, 'code');
   });
 
   it ('should not create a new page if the first name has profanity', async function() {
@@ -438,10 +481,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'fuck',
         lastName: 'last name',
+        email: 'test@example.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -449,9 +495,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'profanity');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.profanity');
+    assert.equal(field, 'firstName');
   });
 
   it ('should not create a new page if the title has profanity', async function() {
@@ -460,10 +506,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'first name',
         lastName: 'last name',
+        email: 'test@example.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title fuck',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -471,21 +520,24 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'profanity');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.profanity');
+    assert.equal(field, 'title');
   });
 
   it ('should not create a new page if the subtitle has profanity', async function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        firstName: 'fuck',
+        firstName: 'first name',
         lastName: 'last name',
+        email: 'test@example.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle fuck',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -493,9 +545,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'profanity');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.profanity');
+    assert.equal(field, 'subtitle');
   });
 
   it ('should properly format phone numbers', async function() {
@@ -505,10 +557,13 @@ describe('page api v1', function() {
         body: JSON.stringify({
           firstName: 'Ed',
           lastName: 'Markey',
+          email: 'ed@edmarkey.com',
           phone: '617 555 0127',
           zip: '02129',
           title: 'Demo page title',
           subtitle: 'Demo page subtitle',
+          supportLevel: 'Definitely',
+          volunteerLevel: 'Yes',
           background: 'default',
         }),
         headers: { 'Content-Type': 'application/json' },
@@ -518,21 +573,26 @@ describe('page api v1', function() {
         body: JSON.stringify({
           firstName: 'Ed',
           lastName: 'Markey',
+          email: 'ed@edmarkey.com',
           phone: '(617) 555-0127',
           zip: '02129',
           title: 'Demo page title',
           subtitle: 'Demo page subtitle',
+          supportLevel: 'Definitely',
+          volunteerLevel: 'Yes',
           background: 'default',
         }),
         headers: { 'Content-Type': 'application/json' },
       }),
     ]);
 
+    const { error } = await responses[0].json();
+
     assert.equal(responses[0].status, 200);
     assert.equal(responses[1].status, 200);
 
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
-    const db = client.db('markey');
+    const db = client.db();
     const pages = db.collection('pages');
 
     const items = await Promise.all([
@@ -550,10 +610,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '617 55 127',
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -561,9 +624,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'phone');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.phoneFormat');
+    assert.equal(field, 'phone');
   });
 
   it ('should not create a new page if the zip is the wrong length', async function() {
@@ -572,10 +635,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '021',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -583,9 +649,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'zipcode');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.zipFormat');
+    assert.equal(field, 'zip');
   });
 
   it ('should not create a new page if the zip is not a number', async function() {
@@ -594,10 +660,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '0212b',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -605,9 +674,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'zipcode');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.zipFormat');
+    assert.equal(field, 'zip');
   });
 
   it ('should not create a new page if the background key is invalid', async function() {
@@ -616,10 +685,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
         subtitle: 'Demo page subtitle',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Joe_Kennedy_III%2C_official_portrait%2C_116th_Congress.jpg/220px-Joe_Kennedy_III%2C_official_portrait%2C_116th_Congress.jpg',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -627,9 +699,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'background');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.required');
+    assert.equal(field, 'background');
   });
 
   it ('should cut out script tags', async function () {
@@ -638,10 +710,13 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: '<script>console.log("Ed")</script>',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
         title: '<script>console.log("Demo page title")</script>',
         subtitle: '<script>console.log("Demo page subtitle")</script>',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
         background: 'default',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -660,16 +735,17 @@ describe('page api v1', function() {
 describe('page signup api v1', function() {
   it ('should make a new signup with valid fields', async function() {
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
-    const db = client.db('markey');
+    const db = client.db();
     const pages = db.collection('pages');
 
     await pages.insertOne({ code: 'test', totalSignups: 0 });
 
-    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup/1`, {
       method: 'post',
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
       }),
@@ -687,16 +763,17 @@ describe('page signup api v1', function() {
 
   it ('should make a new signup with valid fields and uppercase code', async function() {
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
-    const db = client.db('markey');
+    const db = client.db();
     const pages = db.collection('pages');
 
     await pages.insertOne({ code: 'test', totalSignups: 0 });
 
-    const response = await fetch(`${API_URL}/api/v1/page/TEST/signup`, {
+    const response = await fetch(`${API_URL}/api/v1/page/TEST/signup/1`, {
       method: 'post',
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
       }),
@@ -713,11 +790,12 @@ describe('page signup api v1', function() {
   });
 
   it ('should not signup for a non-existent signup page', async function() {
-    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup/1`, {
       method: 'post',
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
       }),
@@ -732,15 +810,16 @@ describe('page signup api v1', function() {
 
   it ('should not create a new signup if the first name is missing', async function() {
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
-    const db = client.db('markey');
+    const db = client.db();
     const pages = db.collection('pages');
 
     await pages.insertOne({ code: 'test', totalSignups: 0 });
 
-    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup/1`, {
       method: 'post',
       body: JSON.stringify({
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
       }),
@@ -749,22 +828,23 @@ describe('page signup api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'missing');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.required');
+    assert.equal(field, 'firstName');
   });
 
   it ('should not create a new signup if the last name is missing', async function() {
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
-    const db = client.db('markey');
+    const db = client.db();
     const pages = db.collection('pages');
 
     await pages.insertOne({ code: 'test', totalSignups: 0 });
 
-    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup/1`, {
       method: 'post',
       body: JSON.stringify({
         firstName: 'Ed',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '02129',
       }),
@@ -773,23 +853,24 @@ describe('page signup api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'missing');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.required');
+    assert.equal(field, 'lastName');
   });
 
   it ('should not create a new signup if the zip is missing', async function() {
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
-    const db = client.db('markey');
+    const db = client.db();
     const pages = db.collection('pages');
 
     await pages.insertOne({ code: 'test', totalSignups: 0 });
 
-    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup/1`, {
       method: 'post',
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -797,23 +878,24 @@ describe('page signup api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'missing');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.required');
+    assert.equal(field, 'zip');
   });
 
   it ('should not create a new signup if the zip is incorrectly formatted', async function() {
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
-    const db = client.db('markey');
+    const db = client.db();
     const pages = db.collection('pages');
 
     await pages.insertOne({ code: 'test', totalSignups: 0 });
 
-    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup/1`, {
       method: 'post',
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '+16175550127',
         zip: '021',
       }),
@@ -822,23 +904,24 @@ describe('page signup api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'zip');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.zipFormat');
+    assert.equal(field, 'zip');
   });
 
   it ('should not create a new signup if the phone is missing', async function() {
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
-    const db = client.db('markey');
+    const db = client.db();
     const pages = db.collection('pages');
 
     await pages.insertOne({ code: 'test', totalSignups: 0 });
 
-    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup/1`, {
       method: 'post',
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         zip: '02129',
       }),
       headers: { 'Content-Type': 'application/json' },
@@ -846,23 +929,24 @@ describe('page signup api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'missing');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.required');
+    assert.equal(field, 'phone');
   });
 
   it ('should not create a new signup if the phone is incorrectly formatted', async function() {
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
-    const db = client.db('markey');
+    const db = client.db();
     const pages = db.collection('pages');
 
     await pages.insertOne({ code: 'test', totalSignups: 0 });
 
-    const response = await fetch(`${API_URL}/api/v1/page/test/signup`, {
+    const response = await fetch(`${API_URL}/api/v1/page/test/signup/1`, {
       method: 'post',
       body: JSON.stringify({
         firstName: 'Ed',
         lastName: 'Markey',
+        email: 'ed@edmarkey.com',
         phone: '617 55 127',
         zip: '02129',
       }),
@@ -871,8 +955,8 @@ describe('page signup api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
-    assert.isString(error);
-    assert.include(error.toLowerCase(), 'phone');
+    const { error, field } = await response.json();
+    assert.equal(error, 'validations.phoneFormat');
+    assert.equal(field, 'phone');
   });
 });

@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import copy from '../../copy';
+import getCopy from '../utils/getCopy';
 import SplitScreen from '../components/SplitScreen';
 import Form from '../components/Form';
 import CommitteeDisclaimer, { DisclaimerWrapper } from '../components/CommitteeDisclaimer';
-import backgrounds from '../../backgrounds';
+import backgrounds from '../../shared/backgrounds';
 import signupContactFields from '../forms/signupContactFields';
 import signupIdFields from '../forms/signupIdFields';
 import makeLocaleLink from '../utils/makeLocaleLink';
+import makeFormApiRequest from '../utils/makeFormApiRequest';
 import {
   SINGLE_LINE_TEXT_INPUT,
   MULTI_LINE_TEXT_INPUT,
@@ -17,29 +18,13 @@ import {
 import {
   validateCode,
   validateRequired,
-} from '../utils/fieldValidations';
+} from '../../shared/fieldValidations';
 
 export default function Homepage() {
   async function onFinalStepSubmit(formValues) {
     const { code, ...rest } = formValues;
 
-    try {
-      const response = await fetch(`/api/v1/page/${code.toLowerCase()}`, {
-        method: 'post',
-        body: JSON.stringify(rest),
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (response.status !== 200) {
-        const data = await response.json();
-        return data.error || copy('genericError');
-      }
-
-      return null;
-    } catch (error) {
-      console.error(error);
-      return copy('genericError');
-    }
+    return await makeFormApiRequest(`/api/v1/page/${code.toLowerCase()}`, rest);
   }
 
   function onCompletion(formValues) {
@@ -51,43 +36,43 @@ export default function Homepage() {
 
   const steps = [
     {
-      title: copy('homepage.formTitle'),
-      subtitle: copy('homepage.formSubtitle'),
-      buttonCopy: copy('homepage.formButtonLabel'),
+      title: getCopy('homepage.formTitle'),
+      subtitle: getCopy('homepage.formSubtitle'),
+      buttonCopy: getCopy('homepage.formButtonLabel'),
       showSmsDisclaimer: true,
       fields: [
         ...signupContactFields(),
         {
           fieldId: 'code',
           fieldType: CODE_INPUT_FIELD,
-          label: copy('formLabels.shareCode'),
-          help: copy('formLabels.shareCodeHelp'),
+          label: getCopy('formLabels.shareCode'),
+          help: getCopy('formLabels.shareCodeHelp'),
           validator: validateCode,
         },
       ],
     },
     {
-      title: copy('homepage.customizeTitle'),
-      subtitle: copy('homepage.customizeSubtitle'),
-      buttonCopy: copy('homepage.formButtonLabel'),
+      title: getCopy('homepage.customizeTitle'),
+      subtitle: getCopy('homepage.customizeSubtitle'),
+      buttonCopy: getCopy('homepage.formButtonLabel'),
       fields: [
         {
           fieldId: 'title',
           fieldType: SINGLE_LINE_TEXT_INPUT,
-          label: copy('formLabels.title'),
+          label: getCopy('formLabels.title'),
           validator: validateRequired,
         },
         {
           fieldId: 'subtitle',
           fieldType: MULTI_LINE_TEXT_INPUT,
-          label: copy('formLabels.subtitle'),
-          defaultValue: copy('homepage.defaultSubtitle'),
+          label: getCopy('formLabels.subtitle'),
+          defaultValue: getCopy('homepage.defaultSubtitle'),
           validator: validateRequired,
         },
         {
           fieldId: 'background',
           fieldType: GALLERY_PICKER,
-          label: copy('formLabels.background'),
+          label: getCopy('formLabels.background'),
           validator: validateRequired,
           options: Object.keys(backgrounds).map((key) => ({
             name: key,
@@ -98,9 +83,9 @@ export default function Homepage() {
       ],
     },
     {
-      title: copy('homepage.formTitle'),
-      subtitle: copy('homepage.formSubtitle'),
-      buttonCopy: copy('homepage.createButtonLabel'),
+      title: getCopy('homepage.formTitle'),
+      subtitle: getCopy('homepage.formSubtitle'),
+      buttonCopy: getCopy('homepage.createButtonLabel'),
       onStepSubmit: onFinalStepSubmit,
       fields: [...signupIdFields()],
     },
@@ -134,7 +119,7 @@ export default function Homepage() {
     ) {
       setFormValues((formCopy) => ({
         ...formCopy,
-        title: copy('homepage.defaultTitle').replace('{{FIRST_NAME}}', formValues.firstName),
+        title: getCopy('homepage.defaultTitle').replace('{{FIRST_NAME}}', formValues.firstName),
       }));
 
       setHasPrefilledTitle(true);

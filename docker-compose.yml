@@ -20,6 +20,7 @@ services:
     environment:
       - PORT=5000
       - MONGODB_URL=mongodb://admin:secret@mongo:27017
+      - BSD_API_BASE_URL=https://markey.cp.bsd.net
     env_file:
       - .env
     volumes:
