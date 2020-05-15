@@ -35,6 +35,7 @@ const {
   PORT,
   MONGODB_URL,
 
+  BSD_API_BASE_URL,
   BSD_SIGNUP_FORM_SLUG,
   BSD_SIGNUP_CODE_ID,
   BSD_SIGNUP_SUPPORT_ID,
@@ -113,7 +114,7 @@ function apiErrorHandler(res, error) {
 }
 
 function profanityCheck(value) {
-  return profanity.exists(field) ? 'validations.profanity' : false;
+  return profanity.exists(value) ? 'validations.profanity' : false;
 }
 
 function normalizePageCode(code) {
@@ -129,7 +130,7 @@ function normalizeEmail(value) {
 }
 
 function normalizePhone(value) {
-  return phoneValidation(phone, '', true)[0];
+  return phoneValidation(value, '', true)[0];
 }
 
 function normalizeBackground(value) {
@@ -151,8 +152,8 @@ function validateAndNormalizeApiRequestFields(fields) {
     email: [
       fieldValidations.validateEmail,
     ],
-    zip: [
-      fieldValidations.validateZip,
+    phone: [
+      fieldValidations.validatePhone,
     ],
     code: [
       fieldValidations.validateCode,
@@ -189,24 +190,26 @@ function validateAndNormalizeApiRequestFields(fields) {
   };
 
   return Object.keys(fields).reduce((acc, key) => {
-    if (typeof acc === 'string') {
+    if (Array.isArray(acc)) {
       return acc;
     }
 
-    const value = `${fields[key]}`;
+    const value = `${fields[key] || ''}`;
 
     const validationMessage = validations[key]
-      ? validations[key].find((validator) => validator((value)))
+      ? validations[key]
+        .map((validator) => validator((value)))
+        .find(validation => !!validation)
       : false;
 
     if (validationMessage) {
-      return validationMessage;
+      return [key, validationMessage];
     }
 
-    return ({
+    return {
       ...acc,
       [key]: normalizations[key] ? normalizations[key](value) : value,
-    });
+    }
   }, {});
 }
 
@@ -239,7 +242,7 @@ function transformPageResponse(page) {
 
 async function submitBsdForm(fields) {
   try {
-    const url = `https://markey.cp.bsd.net/page/sapi/${BSD_SIGNUP_FORM_SLUG}`;
+    const url = `${BSD_API_BASE_URL}/page/sapi/${BSD_SIGNUP_FORM_SLUG}`;
 
     const body = Object.keys(fields).reduce((acc, key) => {
       const prepend = acc.length ? '&' : '';
@@ -318,8 +321,12 @@ app.post('/api/v1/page/:code', async function(req, res) {
       code,
     });
 
-    if (typeof validationResult === 'string') {
-      res.status(400).json({ error: validationResult });
+    if (Array.isArray(validationResult)) {
+      res.status(400).json({
+        field: validationResult[0],
+        error: validationResult[1],
+      });
+
       return;
     }
 
@@ -402,8 +409,12 @@ app.post('/api/v1/page/:code/signup/:step', async function(req, res) {
 
     const validationResult = validateAndNormalizeApiRequestFields(validationRequirements);
 
-    if (typeof validationResult === 'string') {
-      res.status(400).json({ error: validationResult });
+    if (Array.isArray(validationResult)) {
+      res.status(400).json({
+        field: validationResult[0],
+        error: validationResult[1],
+      });
+
       return;
     }
 

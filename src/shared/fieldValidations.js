@@ -21,6 +21,10 @@ function validateZip(value) {
     return 'validations.zipFormat';
   }
 
+  if (!/^\d+$/.test(value)) {
+    return 'validations.zipFormat';
+  }
+
   return false;
 }
 
