@@ -224,8 +224,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.codeFormat');
+    assert.equal(field, 'code');
   });
 
   it ('should not create a new page if the code is longer than 50 characters', async function() {
@@ -248,8 +249,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.codeLength');
+    assert.equal(field, 'code');
   });
 
   it ('should not create a new page if the first name is missing', async function() {
@@ -271,8 +273,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.required');
+    assert.equal(field, 'firstName');
   });
 
   it ('should not create a new page if the first name is greater than 50 characters', async function() {
@@ -295,8 +298,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.nameLength');
+    assert.equal(field, 'firstName');
   });
 
   it ('should not create a new page if the last name is missing', async function() {
@@ -318,8 +322,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.required');
+    assert.equal(field, 'lastName');
   });
 
   it ('should not create a new page if the last name is greater than 50 characters', async function() {
@@ -342,8 +347,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.nameLength');
+    assert.equal(field, 'lastName');
   });
 
   it ('should not create a new page if the title is missing', async function() {
@@ -365,8 +371,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.required');
+    assert.equal(field, 'title');
   });
 
   it ('should not create a new page if the title is greater than 450 characters', async function() {
@@ -389,8 +396,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.titleLength');
+    assert.equal(field, 'title');
   });
 
   it ('should not create a new page if the subtitle is missing', async function() {
@@ -412,8 +420,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.required');
+    assert.equal(field, 'subtitle');
   });
 
   it ('should not create a new page if the subtitle is greater than 2000 characters', async function() {
@@ -436,8 +445,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.subtitleLength');
+    assert.equal(field, 'subtitle');
   });
 
   it ('should not create a new page if the code has profanity', async function() {
@@ -446,7 +456,7 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'first name',
         lastName: 'last name',
-        email: 'ed@edmarkey.com',
+        email: 'test@example.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
@@ -460,8 +470,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.profanity');
+    assert.equal(field, 'code');
   });
 
   it ('should not create a new page if the first name has profanity', async function() {
@@ -470,7 +481,7 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'fuck',
         lastName: 'last name',
-        email: 'ed@edmarkey.com',
+        email: 'test@example.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
@@ -484,8 +495,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.profanity');
+    assert.equal(field, 'firstName');
   });
 
   it ('should not create a new page if the title has profanity', async function() {
@@ -494,7 +506,7 @@ describe('page api v1', function() {
       body: JSON.stringify({
         firstName: 'first name',
         lastName: 'last name',
-        email: 'ed@edmarkey.com',
+        email: 'test@example.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title fuck',
@@ -508,17 +520,18 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.profanity');
+    assert.equal(field, 'title');
   });
 
   it ('should not create a new page if the subtitle has profanity', async function() {
     const response = await fetch(`${API_URL}/api/v1/page/test`, {
       method: 'post',
       body: JSON.stringify({
-        firstName: 'fuck',
+        firstName: 'first name',
         lastName: 'last name',
-        email: 'ed@edmarkey.com',
+        email: 'test@example.com',
         phone: '+16175550127',
         zip: '02129',
         title: 'Demo page title',
@@ -532,8 +545,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.profanity');
+    assert.equal(field, 'subtitle');
   });
 
   it ('should properly format phone numbers', async function() {
@@ -610,8 +624,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.phoneFormat');
+    assert.equal(field, 'phone');
   });
 
   it ('should not create a new page if the zip is the wrong length', async function() {
@@ -634,8 +649,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.zipFormat');
+    assert.equal(field, 'zip');
   });
 
   it ('should not create a new page if the zip is not a number', async function() {
@@ -658,8 +674,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.zipFormat');
+    assert.equal(field, 'zip');
   });
 
   it ('should not create a new page if the background key is invalid', async function() {
@@ -682,8 +699,9 @@ describe('page api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.required');
+    assert.equal(field, 'background');
   });
 
   it ('should cut out script tags', async function () {
@@ -810,8 +828,9 @@ describe('page signup api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.required');
+    assert.equal(field, 'firstName');
   });
 
   it ('should not create a new signup if the last name is missing', async function() {
@@ -834,8 +853,9 @@ describe('page signup api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.required');
+    assert.equal(field, 'lastName');
   });
 
   it ('should not create a new signup if the zip is missing', async function() {
@@ -858,8 +878,9 @@ describe('page signup api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.required');
+    assert.equal(field, 'zip');
   });
 
   it ('should not create a new signup if the zip is incorrectly formatted', async function() {
@@ -883,8 +904,9 @@ describe('page signup api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.zipFormat');
+    assert.equal(field, 'zip');
   });
 
   it ('should not create a new signup if the phone is missing', async function() {
@@ -907,8 +929,9 @@ describe('page signup api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.required');
+    assert.equal(field, 'phone');
   });
 
   it ('should not create a new signup if the phone is incorrectly formatted', async function() {
@@ -932,7 +955,8 @@ describe('page signup api v1', function() {
 
     assert.equal(response.status, 400);
 
-    const { error } = await response.json();
+    const { error, field } = await response.json();
     assert.equal(error, 'validations.phoneFormat');
+    assert.equal(field, 'phone');
   });
 });
