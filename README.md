@@ -1,12 +1,5 @@
 # ed-markey-relational-organizing
 
-Ship 1:
-- [x] Back button
-- [x] Missing Spanish translations
-- [x] Update FE logic for new validation error
-
------
-
 Relational organizing tool for Ed Markey's senate race
 
 - [ ] Convert to a signup endpoint + create page endpoint
