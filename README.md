@@ -1,55 +1,47 @@
 # ed-markey-relational-organizing
 
-Relational organizing tool for Ed Markey's senate race
+New translations required
+- [ ] validations.existingUser
+- [ ] validations.passwordLength
+- [ ] validations.failedLogin
 
-- [ ] Convert to a signup endpoint + create page endpoint
-  - [ ] Reuse same validation functions
-- [ ] Creating page just requires email, first name...
- - [ ] New field for email frequency
- - [ ] Generate a unique auth code per page
-- [ ] Signup endpoint creates a signup record
- - [ ] Filling out multiple times updates the signup record
- - [ ] Total signups per page is a count
-- [ ] Create an edit page route (/:slug/edit/:code)
-  - [ ] Validates the auth code is real
-  - [ ] Presents Homepage step 2 fields
-  - [ ] Requires API route (/api/v1/:slug/edit/:code) that does code validation
-- [ ] Create recurring job to email all page owners based on email frequency setting
- - [ ] Add edit link to email
- - [ ] Add all signups sorted by date
-- [ ] Migrate existing data
- - [ ] Import signups
- - [ ] Email all existing page owners
+Should also go back and refactor in (english only):
+- [ ] validations.notAuthorized
+- [ ] validations.wrongCampaign
 
-```js
-// page
-{
-  _id: ObjectId, // index
-  code: String, // index
-  title: String,
-  subtitle: String,
-  background: String,
-  authorization: String,
-  frequency: String<"weekly","bi-daily","none">,
-  createdByEmail: String,
-  createdByFirstName: String,
-  createdByZip: String,
-  createdAt: Date,
-}
+* Intercept outgoing network traffic from Container
+* Communicate via FS
+* Two modes
+ * Proxy --> Request & Response written to file
+ * Mock --> Set a mock response to a request, track if the endpoint is hit
+* NodeJS library for easy usage
+* Unless test is specified, defaults to proxy with no IO operations
 
-// signup
-{
-  _id: ObjectId,
-  signupCode: String, // index
-  email: String, // index
-  phone: String,
-  firstName: String,
-  lastName: String,
-  phone: String,
-  zip: String,
-  supportLevel: String,
-  volunteerLevel: String,
-  createdAt: Date,
-  lastUpdatedAt: Date,
-}
-```
+# Milestone 1
+
+- Allow Ed Markey supporters to update their pages
+- Email supporters their signups
+- Automated export data process for admins
+
+### Backend Work
+- [ ] Forgot password endpoint
+- [ ] Emails
+ - [ ] Transactional email
+ - [ ] Weekly email
+- [ ] Indexes
+
+### Frontend Work
+- [ ] Refactor routing / initial props to be in the NextJS style
+- [ ] New navigation bar
+- [ ] Use new endpoints
+- [ ] Build versioned static site
+
+### Transition Work
+
+
+# Milestone 2
+
+- Allow any campaign to pay for the service
+- Marketing/Landing page
+- Stripe integration for handling payment
+- Admin Configuration UI

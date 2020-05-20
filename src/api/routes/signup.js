@@ -1,0 +1,116 @@
+const getPageForCode = require('../db/getPageForCode');
+const submitBsdForm = require('../services/submitBsdForm');
+const apiErrorHandler = require('../utils/apiErrorHandler');
+const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
+
+const BSD_VAN_MAP = require('../utils/markeyVanFields');
+
+const {
+  BSD_SIGNUP_CODE_ID,
+  BSD_SIGNUP_SUPPORT_ID,
+  BSD_SIGNUP_VOLUNTEER_ID,
+} = process.env;
+
+module.exports = ({ db }) => {
+  async function signup(req, res) {
+    try {
+      const {
+        campaign,
+        body: {
+          code,
+          firstName,
+          lastName,
+          email,
+          phone,
+          zip,
+          supportLevel,
+          volunteerLevel,
+        },
+      } = req;
+
+      const inputs = {
+        code,
+        firstName,
+        lastName,
+        phone,
+        zip,
+        supportLevel,
+        volunteerLevel,
+      };
+
+      const validationRequirements = {
+        email,
+      };
+
+      Object.keys(inputs)
+        .filter((key) => typeof inputs[key] !== 'undefined')
+        .forEach((key) => validationRequirements[key] = inputs[key]);
+
+      const validationResult = validateAndNormalizeApiRequestFields(validationRequirements);
+
+      if (Array.isArray(validationResult)) {
+        res.status(400).json({
+          field: validationResult[0],
+          error: validationResult[1],
+        });
+
+        return;
+      }
+
+      if (validationResult.code) {
+        const pageMatch = await getPageForCode(
+          db,
+          campaign._id.toString(),
+          validationResult.code,
+        );
+
+        if (pageMatch instanceof Error) {
+          throw pageMatch;
+        }
+
+        if (!pageMatch) {
+          res.status(400).json({ error: 'Signup specified code that does not exist' });
+          return;
+        }
+      }
+
+      const signup = {
+        ...validationResult,
+        lastUpdatedAt: Date.now(),
+      };
+
+      const bsdResult = await submitBsdForm({
+        email: signup.email,
+        firstname: signup.firstName,
+        lastname: signup.lastName,
+        phone: signup.phone,
+        zip: signup.zip,
+        [BSD_SIGNUP_CODE_ID]: signup.code,
+        [BSD_SIGNUP_SUPPORT_ID]: BSD_VAN_MAP.support[signup.supportLevel],
+        [BSD_SIGNUP_VOLUNTEER_ID]: BSD_VAN_MAP.volunteer[signup.volunteerLevel],
+      });
+
+      if (bsdResult instanceof Error) {
+        throw bsdResult;
+      }
+
+      const signups = db.collection('signups');
+
+      await signups.updateOne(
+        {
+          email: signup.email,
+          code: signup.code,
+          campaign: campaign._id.toString(),
+        },
+        { '$set': signup },
+        { upsert: true },
+      );
+
+      res.json({ ok: true });
+    } catch (error) {
+      apiErrorHandler(res, error);
+    }
+  }
+
+  return signup;
+}
