@@ -1,4 +1,5 @@
 const backgrounds = require('./backgrounds');
+const emailFrequency = require('./emailFrequency');
 
 function validateName(value) {
   if (!value) {
@@ -112,6 +113,30 @@ function validateBackground(value) {
   return false;
 }
 
+function validateEmailFrequency(value) {
+  if (!value) {
+    return 'validations.required';
+  }
+
+  if (!emailFrequency[value]) {
+    return 'validations.required';
+  }
+
+  return false;
+}
+
+function validatePassword(value) {
+  if (!value) {
+    return 'validations.required';
+  }
+
+  if (value.length < 6) {
+    return 'validations.passwordLength';
+  }
+
+  return false;
+}
+
 module.exports = {
   validateName,
   validateZip,
@@ -122,4 +147,6 @@ module.exports = {
   validateTitle,
   validateSubtitle,
   validateBackground,
+  validateEmailFrequency,
+  validatePassword,
 }

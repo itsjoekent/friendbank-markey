@@ -1,0 +1,358 @@
+const fetch = require('node-fetch');
+const chai = require('chai');
+const { MongoClient } = require('mongodb');
+
+const { API_URL, MONGODB_URL } = process.env;
+
+// Reference: https://www.chaijs.com/api/assert/
+const assert = chai.assert;
+
+require('./_setup');
+const {
+  standardTestSetup,
+  fakeCampaign,
+} = require('./_faker');
+
+describe('signup api route v1', function() {
+  it('should create a signup not associated with a page', async function() {
+    const standard = await standardTestSetup();
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        email: 'supporter@gmail.com',
+        firstName: 'First',
+        lastName: 'Last',
+        phone: '000 000 0000',
+        zip: '00000',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 200);
+
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const signups = client.db().collection('signups');
+
+    const record = await signups.findOne({
+      campaign: standard.campaign._id.toString(),
+      email: 'supporter@gmail.com',
+    });
+
+    assert.isObject(record);
+    assert.equal(record.campaign, standard.campaign._id.toString());
+    assert.equal(record.email, 'supporter@gmail.com');
+    assert.isNull(record.code);
+    assert.equal(record.firstName, 'First');
+    assert.equal(record.lastName, 'Last');
+    assert.equal(record.phone, '+10000000000');
+    assert.equal(record.zip, '00000');
+    assert.equal(record.supportLevel, 'Definitely');
+    assert.equal(record.volunteerLevel, 'Yes');
+  });
+
+  it('should create a signup associated with a page', async function() {
+    const standard = await standardTestSetup();
+
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const pages = client.db().collection('pages');
+    const signups = client.db().collection('signups');
+
+    await pages.insertOne({
+      code: 'test',
+      campaign: standard.campaign._id.toString(),
+    });
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        code: 'test',
+        email: 'supporter@gmail.com',
+        firstName: 'First',
+        lastName: 'Last',
+        phone: '000 000 0000',
+        zip: '00000',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 200);
+
+    const record = await signups.findOne({
+      campaign: standard.campaign._id.toString(),
+      email: 'supporter@gmail.com',
+    });
+
+    assert.isObject(record);
+    assert.equal(record.campaign, standard.campaign._id.toString());
+    assert.equal(record.email, 'supporter@gmail.com');
+    assert.equal(record.code, 'test');
+    assert.equal(record.firstName, 'First');
+    assert.equal(record.lastName, 'Last');
+    assert.equal(record.phone, '+10000000000');
+    assert.equal(record.zip, '00000');
+    assert.equal(record.supportLevel, 'Definitely');
+    assert.equal(record.volunteerLevel, 'Yes');
+  });
+
+  it('should create a signup without all fields', async function() {
+    const standard = await standardTestSetup();
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        email: 'supporter@gmail.com',
+        firstName: 'First',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 200);
+
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const signups = client.db().collection('signups');
+
+    const record = await signups.findOne({
+      campaign: standard.campaign._id.toString(),
+      email: 'supporter@gmail.com',
+    });
+
+    assert.isObject(record);
+    assert.equal(record.campaign, standard.campaign._id.toString());
+    assert.equal(record.email, 'supporter@gmail.com');
+    assert.equal(record.firstName, 'First');
+  });
+
+  it('should update a signup with new fields and preserve existing', async function() {
+    const standard = await standardTestSetup();
+
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const signups = client.db().collection('signups');
+
+    await signups.insertOne({
+      email: 'supporter@gmail.com',
+      campaign: standard.campaign._id.toString(),
+      firstName: 'First',
+    });
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        email: 'supporter@gmail.com',
+        lastName: 'Last',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 200);
+
+    const record = await signups.findOne({
+      campaign: standard.campaign._id.toString(),
+      email: 'supporter@gmail.com',
+    });
+
+    assert.isObject(record);
+    assert.equal(record.campaign, standard.campaign._id.toString());
+    assert.equal(record.email, 'supporter@gmail.com');
+    assert.equal(record.firstName, 'First');
+    assert.equal(record.lastName, 'Last');
+  });
+
+  it('should not create a signup if the code does not match a real page', async function() {
+    const standard = await standardTestSetup();
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        code: 'test',
+        email: 'supporter@gmail.com',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { error } = await response.json();
+    assert.isString(error);
+  });
+
+  it('should not create a signup if the email field is missing', async function() {
+    const standard = await standardTestSetup();
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        firstName: 'First',
+        lastName: 'Last',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { field, error } = await response.json();
+    assert.equal(field, 'email');
+    assert.equal(error, 'validations.required');
+  });
+
+  it('should not create a signup if the firstName field fails validation', async function() {
+    const standard = await standardTestSetup();
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        email: 'supporter@gmail.com',
+        firstName: null,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { field, error } = await response.json();
+    assert.equal(field, 'firstName');
+    assert.equal(error, 'validations.required');
+  });
+
+  it('should not create a signup if the lastName field fails validation', async function() {
+    const standard = await standardTestSetup();
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        email: 'supporter@gmail.com',
+        lastName: null,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { field, error } = await response.json();
+    assert.equal(field, 'lastName');
+    assert.equal(error, 'validations.required');
+  });
+
+  it('should not create a signup if the phone field fails validation', async function() {
+    const standard = await standardTestSetup();
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        email: 'supporter@gmail.com',
+        phone: null,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { field, error } = await response.json();
+    assert.equal(field, 'phone');
+    assert.equal(error, 'validations.required');
+  });
+
+  it('should not create a signup if the zip field fails validation', async function() {
+    const standard = await standardTestSetup();
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        email: 'supporter@gmail.com',
+        zip: null,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { field, error } = await response.json();
+    assert.equal(field, 'zip');
+    assert.equal(error, 'validations.required');
+  });
+
+  it('should not create a signup if the supportLevel field fails validation', async function() {
+    const standard = await standardTestSetup();
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        email: 'supporter@gmail.com',
+        supportLevel: null,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { field, error } = await response.json();
+    assert.equal(field, 'supportLevel');
+    assert.equal(error, 'validations.required');
+  });
+
+  it('should not create a signup if the volunteerLevel field fails validation', async function() {
+    const standard = await standardTestSetup();
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        email: 'supporter@gmail.com',
+        volunteerLevel: null,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { field, error } = await response.json();
+    assert.equal(field, 'volunteerLevel');
+    assert.equal(error, 'validations.required');
+  });
+
+  it ('should return an error if domain is not configured', async function() {
+    const campaign = await fakeCampaign({ domains: [] });
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        email: 'supporter@gmail.com',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 403);
+
+    const { error } = await response.json();
+    assert.isString(error);
+  });
+});

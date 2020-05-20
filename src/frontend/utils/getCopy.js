@@ -150,6 +150,9 @@ const copy = {
       [ENGLISH]: 'Must be less than 2000 characters',
       [SPANISH]: 'Debe tener menos de 2000 caracteres',
     },
+    failedLogin: {
+      [ENGLISH]: 'Invalid email or password',
+    },
   },
   homepage: {
     formTitle: {
