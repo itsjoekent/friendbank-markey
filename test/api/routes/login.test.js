@@ -13,7 +13,7 @@ const { standardTestSetup } = require('./_faker');
 
 describe('login api route v1', function() {
   it('should login and provide an authentication token', async function() {
-    await standardTestSetup();
+    const standard = await standardTestSetup();
 
     const response = await fetch(`${API_URL}/api/v1/login`, {
       method: 'post',
@@ -32,6 +32,12 @@ describe('login api route v1', function() {
 
     assert.isString(token);
     assert.lengthOf(token, 128);
+
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const tokens = client.db().collection('tokens');
+
+    const dbToken = await tokens.findOne({ _id: token });
+    assert.equal(dbToken.user, standard.user._id.toString());
   });
 
   it('should not login if the email is incorrect', async function() {
@@ -96,7 +102,7 @@ describe('login api route v1', function() {
 
   it('should not login if the password field fails validation', async function() {
     await standardTestSetup();
-    
+
     const response = await fetch(`${API_URL}/api/v1/login`, {
       method: 'post',
       body: JSON.stringify({

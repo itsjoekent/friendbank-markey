@@ -6,6 +6,11 @@ async function _readServiceOutput(name) {
     { encoding: 'utf8' },
   );
 
+  await fs.writeFile(
+    `/usr/src/app/src/api/services/__test/${name}.test.json`,
+    JSON.stringify({}),
+  );
+
   return JSON.parse(data);
 }
 
