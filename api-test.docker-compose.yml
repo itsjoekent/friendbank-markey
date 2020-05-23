@@ -15,30 +15,33 @@ services:
     environment:
       - API_URL=http://api:5000
       - MONGODB_URL=mongodb://admin:secret@mongo:27017
+    volumes:
+      - type: volume
+        source: servicesTest
+        target: /usr/src/app/src/api/services/__test
+        volume:
+          nocopy: true
 
   api:
     build:
       context: .
       dockerfile: api-test.dockerfile
-    command: npm run start:api
     depends_on:
       - mongo
-      - proxy
     links:
       - mongo
-      - proxy
+    env_file:
+      - .env
     environment:
       - PORT=5000
       - MONGODB_URL=mongodb://admin:secret@mongo:27017
-      - BSD_API_BASE_URL=http://proxy:5001
-
-  proxy:
-    build:
-      context: .
-      dockerfile: api-test.dockerfile
-    command: npm run start:test-proxy
-    environment:
-      - PORT=5001
+      - DISABLE_BSD=true
+    volumes:
+      - type: volume
+        source: servicesTest
+        target: /usr/src/app/src/api/services/__test
+        volume:
+          nocopy: true
 
   mongo:
     image: mongo:4
@@ -49,3 +52,6 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=secret
     logging:
         driver: none
+
+volumes:
+  servicesTest:

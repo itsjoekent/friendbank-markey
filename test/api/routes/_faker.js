@@ -53,6 +53,7 @@ async function fakeToken({
 
 async function fakeCampaign({
   domains = ['api:5000'],
+  name = 'Team Markey',
 }) {
   const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
   const db = client.db();
@@ -60,6 +61,7 @@ async function fakeCampaign({
 
   const result = await campaigns.insertOne({
     domains,
+    name,
   });
 
   return result.ops[0];

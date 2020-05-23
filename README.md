@@ -9,14 +9,6 @@ Should also go back and refactor in (english only):
 - [ ] validations.notAuthorized
 - [ ] validations.wrongCampaign
 
-* Intercept outgoing network traffic from Container
-* Communicate via FS
-* Two modes
- * Proxy --> Request & Response written to file
- * Mock --> Set a mock response to a request, track if the endpoint is hit
-* NodeJS library for easy usage
-* Unless test is specified, defaults to proxy with no IO operations
-
 # Milestone 1
 
 - Allow Ed Markey supporters to update their pages
@@ -24,17 +16,18 @@ Should also go back and refactor in (english only):
 - Automated export data process for admins
 
 ### Backend Work
-- [ ] Forgot password endpoint
 - [ ] Emails
- - [ ] Transactional email
  - [ ] Weekly email
+ - [ ] Administrative export
 - [ ] Indexes
+- [ ] Get page signups endpoint
+- [ ] Get user pages endpoint
+- [ ] Maybe make the user account work across domains?
+- [ ] Remove BSD submission
 
 ### Frontend Work
-- [ ] Refactor routing / initial props to be in the NextJS style
 - [ ] New navigation bar
 - [ ] Use new endpoints
-- [ ] Build versioned static site
 
 ### Transition Work
 
@@ -45,3 +38,5 @@ Should also go back and refactor in (english only):
 - Marketing/Landing page
 - Stripe integration for handling payment
 - Admin Configuration UI
+- Versioned static site
+- Refactor routing / initial props to be in the NextJS style

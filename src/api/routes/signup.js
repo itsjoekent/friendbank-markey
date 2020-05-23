@@ -1,8 +1,11 @@
+const { ObjectId } = require('mongodb');
 const getPageForCode = require('../db/getPageForCode');
+const sendMail = require('../services/sendMail');
 const submitBsdForm = require('../services/submitBsdForm');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 
+const EMAIL_FREQUENCY = require('../../shared/emailFrequency');
 const BSD_VAN_MAP = require('../utils/markeyVanFields');
 
 const {
@@ -57,6 +60,11 @@ module.exports = ({ db }) => {
         return;
       }
 
+      const signup = {
+        ...validationResult,
+        lastUpdatedAt: Date.now(),
+      };
+
       if (validationResult.code) {
         const pageMatch = await getPageForCode(
           db,
@@ -72,12 +80,27 @@ module.exports = ({ db }) => {
           res.status(400).json({ error: 'Signup specified code that does not exist' });
           return;
         }
-      }
 
-      const signup = {
-        ...validationResult,
-        lastUpdatedAt: Date.now(),
-      };
+        const pageAuthor = await db.collection('users')
+          .findOne({ _id: ObjectId(pageMatch.createdBy) });
+
+        if (pageAuthor && pageAuthor.emailFrequency === EMAIL_FREQUENCY.TRANSACTIONAL_EMAIL) {
+          const mailResult = await sendMail(
+            pageAuthor.email,
+            process.env.SENDGRID_TEMPLATE_TRANSACTIONAL_SIGNUP,
+            {
+              signupFirstName: signup.firstName,
+              signupLastName: signup.lastName,
+              campaignName: campaign.name,
+              domain: campaign.domains.pop(),
+            },
+          );
+
+          if (mailResult instanceof Error) {
+            throw mailResult;
+          }
+        }
+      }
 
       const bsdResult = await submitBsdForm({
         email: signup.email,

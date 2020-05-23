@@ -1,11 +1,16 @@
 const fetch = require('node-fetch');
 
 const {
+  DISABLE_BSD,
   BSD_API_BASE_URL,
   BSD_SIGNUP_FORM_SLUG,
 } = process.env;
 
 module.exports = async function submitBsdForm(fields) {
+  if (DISABLE_BSD) {
+    return true;
+  }
+  
   try {
     const url = `${BSD_API_BASE_URL}/page/sapi/${BSD_SIGNUP_FORM_SLUG}`;
 

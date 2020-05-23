@@ -7,6 +7,4 @@ RUN npm ci
 
 COPY . .
 
-# RUN npm run build:webpack
-
-CMD ["npm", "run", "start:api"]
+CMD ["npm", "start"]

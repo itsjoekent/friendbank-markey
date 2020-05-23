@@ -10,11 +10,12 @@
     "start:test-proxy": "node test/proxy/index.js",
     "start:webpack": "webpack --mode development --watch",
     "build:webpack": "webpack --mode production",
-    "test:api": "mocha ./test/api/**/*.js"
+    "test:api": "mocha --exit ./test/api/**/*.js"
   },
   "dependencies": {
     "@2toad/profanity": "^1.1.0",
     "@babel/runtime": "^7.9.6",
+    "@sendgrid/mail": "^7.1.1",
     "bcrypt": "^4.0.1",
     "copy-to-clipboard": "^3.3.1",
     "express": "^4.17.1",
