@@ -11,7 +11,10 @@ require('./_setup');
 const {
   standardTestSetup,
   fakeCampaign,
+  fakeUser,
 } = require('./_faker');
+
+const _readServiceOutput = require('../__services/_readServiceOutput');
 
 describe('signup api route v1', function() {
   it('should create a signup not associated with a page', async function() {
@@ -101,6 +104,61 @@ describe('signup api route v1', function() {
     assert.equal(record.zip, '00000');
     assert.equal(record.supportLevel, 'Definitely');
     assert.equal(record.volunteerLevel, 'Yes');
+  });
+
+  it('should create a signup associated with a page that triggers an email', async function() {
+    const standard = await standardTestSetup();
+
+    const author = await fakeUser({
+      campaign: standard.campaign._id.toString(),
+      email: 'emma@edmarkey.com',
+      password: 'password',
+      firstName: 'Emma',
+      zip: '00000',
+      emailFrequency: 'TRANSACTIONAL_EMAIL',
+    });
+
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const pages = client.db().collection('pages');
+    const signups = client.db().collection('signups');
+    const campaigns = client.db().collection('campaigns');
+
+    await campaigns.updateOne(
+      { _id: standard.campaign._id },
+      { '$set': { domains: ['api:5000', 'support.edmarkey.com'] } },
+    );
+
+    await pages.insertOne({
+      code: 'test',
+      createdBy: author._id.toString(),
+      campaign: standard.campaign._id.toString(),
+    });
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        code: 'test',
+        email: 'supporter@gmail.com',
+        firstName: 'First',
+        lastName: 'Last',
+        phone: '000 000 0000',
+        zip: '00000',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 200);
+
+    const message = await _readServiceOutput('mail');
+    assert.equal(message.to, author.email);
+    assert.equal(message.dynamic_template_data.signupFirstName, 'First');
+    assert.equal(message.dynamic_template_data.signupLastName, 'Last');
+    assert.equal(message.dynamic_template_data.campaignName, standard.campaign.name);
+    assert.equal(message.dynamic_template_data.domain, 'support.edmarkey.com');
   });
 
   it('should create a signup without all fields', async function() {
