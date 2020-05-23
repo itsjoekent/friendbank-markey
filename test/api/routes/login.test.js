@@ -8,15 +8,12 @@ const { API_URL, MONGODB_URL } = process.env;
 const assert = chai.assert;
 
 require('./_setup');
-const {
-  standardTestSetup,
-  fakeCampaign,
-  fakeUser,
-} = require('./_faker');
+
+const { standardTestSetup } = require('./_faker');
 
 describe('login api route v1', function() {
   it('should login and provide an authentication token', async function() {
-    const standard = await standardTestSetup();
+    await standardTestSetup();
 
     const response = await fetch(`${API_URL}/api/v1/login`, {
       method: 'post',
@@ -38,7 +35,7 @@ describe('login api route v1', function() {
   });
 
   it('should not login if the email is incorrect', async function() {
-    const standard = await standardTestSetup();
+    await standardTestSetup();
 
     const response = await fetch(`${API_URL}/api/v1/login`, {
       method: 'post',
@@ -58,7 +55,7 @@ describe('login api route v1', function() {
   });
 
   it('should not login if the password is incorrect', async function() {
-    const standard = await standardTestSetup();
+    await standardTestSetup();
 
     const response = await fetch(`${API_URL}/api/v1/login`, {
       method: 'post',
@@ -78,7 +75,7 @@ describe('login api route v1', function() {
   });
 
   it('should not login if the email field fails validation', async function() {
-    const standard = await standardTestSetup();
+    await standardTestSetup();
 
     const response = await fetch(`${API_URL}/api/v1/login`, {
       method: 'post',
@@ -98,8 +95,8 @@ describe('login api route v1', function() {
   });
 
   it('should not login if the password field fails validation', async function() {
-    const standard = await standardTestSetup();
-
+    await standardTestSetup();
+    
     const response = await fetch(`${API_URL}/api/v1/login`, {
       method: 'post',
       body: JSON.stringify({
@@ -115,59 +112,5 @@ describe('login api route v1', function() {
     const { field, error } = await response.json();
     assert.equal(field, 'password');
     assert.equal(error, 'validations.required');
-  });
-
-  it ('should return an error if domain is not configured', async function() {
-    const campaign = await fakeCampaign({ domains: [] });
-
-    const user = await fakeUser({
-      campaign: campaign._id.toString(),
-      email: 'ed@edmarkey.com',
-      password: 'password',
-    });
-
-    const response = await fetch(`${API_URL}/api/v1/login`, {
-      method: 'post',
-      body: JSON.stringify({
-        email: 'ed@edmarkey.com',
-        password: 'password',
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    assert.equal(response.status, 403);
-
-    const { error } = await response.json();
-    assert.isString(error);
-  });
-
-  it ('should not allow cross domain authentication', async function() {
-    const mainCampaign = await fakeCampaign({ domains: [] });
-
-    const user = await fakeUser({
-      campaign: mainCampaign._id.toString(),
-      email: 'ed@edmarkey.com',
-      password: 'password',
-    });
-
-    const testCampaign = await fakeCampaign({ domains: ['api:5000'] });
-
-    const response = await fetch(`${API_URL}/api/v1/login`, {
-      method: 'post',
-      body: JSON.stringify({
-        email: 'ed@edmarkey.com',
-        password: 'password',
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    assert.equal(response.status, 401);
-
-    const { error } = await response.json();
-    assert.isString(error);
   });
 });

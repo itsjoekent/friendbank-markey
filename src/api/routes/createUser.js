@@ -1,5 +1,5 @@
 const makeToken = require('../db/makeToken');
-const getCampaignUser = require('../db/getCampaignUser');
+const getUser = require('../db/getUser');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 const { passwordHash } = require('../utils/auth');
@@ -8,7 +8,6 @@ module.exports = ({ db }) => {
   async function createUser(req, res) {
     try {
       const {
-        campaign,
         body: {
           email,
           password,
@@ -35,7 +34,7 @@ module.exports = ({ db }) => {
         return;
       }
 
-      const existingUser = await getCampaignUser(db, campaign, email);
+      const existingUser = await getUser(db, email);
 
       if (existingUser instanceof Error) {
         throw existingUser;
@@ -53,7 +52,6 @@ module.exports = ({ db }) => {
       }
 
       const userData = {
-        campaign: campaign._id.toString(),
         email: validationResult.email,
         password: hashedPassword,
         firstName: validationResult.firstName,

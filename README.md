@@ -22,7 +22,7 @@ Should also go back and refactor in (english only):
 - [ ] Indexes
 - [ ] Get page signups endpoint
 - [ ] Get user pages endpoint
-- [ ] Maybe make the user account work across domains?
+- [ ] Edit user endpoint
 - [ ] Remove BSD submission
 
 ### Frontend Work
