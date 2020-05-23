@@ -13,7 +13,7 @@ module.exports = ({ db }) => {
         },
       } = req;
 
-      const user = await getUser(db, campaign, email);
+      const user = await getUser(db, email);
 
       if (user instanceof Error) {
         throw user;
