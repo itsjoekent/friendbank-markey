@@ -120,9 +120,6 @@ app.post(
 
 app.post(
   '/api/v1/user',
-  async function(req, res, next) {
-    await loadCampaign({ db })(req, res, next);
-  },
   async function(req, res) {
     await createUser({ db })(req, res);
   },
@@ -130,9 +127,6 @@ app.post(
 
 app.post(
   '/api/v1/login',
-  async function(req, res, next) {
-    await loadCampaign({ db })(req, res, next);
-  },
   async function(req, res) {
     await login({ db })(req, res);
   },
@@ -150,9 +144,6 @@ app.post(
 
 app.post(
   '/api/v1/forgot-password',
-  async function(req, res, next) {
-    await loadCampaign({ db })(req, res, next);
-  },
   async function(req, res) {
     await forgotPassword({ db })(req, res);
   },

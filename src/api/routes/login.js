@@ -1,5 +1,5 @@
 const makeToken = require('../db/makeToken');
-const getCampaignUser = require('../db/getCampaignUser');
+const getUser = require('../db/getUser');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 const { passwordCompare } = require('../utils/auth');
@@ -8,7 +8,6 @@ module.exports = ({ db }) => {
   async function login(req, res) {
     try {
       const {
-        campaign,
         body: {
           email,
           password,
@@ -29,7 +28,7 @@ module.exports = ({ db }) => {
         return;
       }
 
-      const user = await getCampaignUser(db, campaign, email);
+      const user = await getUser(db, email);
 
       if (user instanceof Error) {
         throw user;

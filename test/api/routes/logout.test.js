@@ -8,9 +8,8 @@ const { API_URL, MONGODB_URL } = process.env;
 const assert = chai.assert;
 
 require('./_setup');
-const {
-  standardTestSetup,
-} = require('./_faker');
+
+const { standardTestSetup } = require('./_faker');
 
 describe('logout api route v1', function() {
   it('should logout when presented a valid token', async function() {
@@ -36,8 +35,6 @@ describe('logout api route v1', function() {
   });
 
   it('should return an error if logging out an invalid token', async function() {
-    const standard = await standardTestSetup();
-
     const response = await fetch(`${API_URL}/api/v1/logout`, {
       method: 'post',
       headers: {

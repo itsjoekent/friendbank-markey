@@ -8,6 +8,7 @@ const { API_URL, MONGODB_URL } = process.env;
 const assert = chai.assert;
 
 require('./_setup');
+
 const {
   standardTestSetup,
   fakeCampaign,

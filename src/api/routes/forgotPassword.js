@@ -1,20 +1,19 @@
 const ms = require('ms');
 const sendMail = require('../services/sendMail');
 const makeToken = require('../db/makeToken');
-const getCampaignUser = require('../db/getCampaignUser');
+const getUser = require('../db/getUser');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 
 module.exports = ({ db }) => {
   async function forgotPassword(req, res) {
     try {
       const {
-        campaign,
         body: {
           email,
         },
       } = req;
 
-      const user = await getCampaignUser(db, campaign, email);
+      const user = await getUser(db, campaign, email);
 
       if (user instanceof Error) {
         throw user;
