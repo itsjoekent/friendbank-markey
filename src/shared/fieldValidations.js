@@ -130,7 +130,7 @@ function validatePassword(value) {
     return 'validations.required';
   }
 
-  if (value.length < 6) {
+  if (value.length < 8) {
     return 'validations.passwordLength';
   }
 

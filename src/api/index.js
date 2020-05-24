@@ -12,6 +12,7 @@ const getPage = require('./routes/getPage');
 const editPage = require('./routes/editPage');
 const signup = require('./routes/signup');
 const createUser = require('./routes/createUser');
+const editUser = require('./routes/editUser');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
 const forgotPassword = require('./routes/forgotPassword');
@@ -122,6 +123,16 @@ app.post(
   '/api/v1/user',
   async function(req, res) {
     await createUser({ db })(req, res);
+  },
+);
+
+app.put(
+  '/api/v1/user',
+  async function(req, res, next) {
+    await loadToken({ db })(req, res, next);
+  },
+  async function(req, res) {
+    await editUser({ db })(req, res);
   },
 );
 

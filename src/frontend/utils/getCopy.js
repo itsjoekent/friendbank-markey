@@ -153,6 +153,9 @@ const copy = {
     failedLogin: {
       [ENGLISH]: 'Invalid email or password',
     },
+    passwordLength: {
+      [ENGLISH]: 'Must be at least 8 characters',
+    },
   },
   homepage: {
     formTitle: {

@@ -34,7 +34,7 @@ module.exports = ({ db }) => {
         return;
       }
 
-      const existingUser = await getUser(db, email);
+      const existingUser = await getUser(db, validationResult.email);
 
       if (existingUser instanceof Error) {
         throw existingUser;
