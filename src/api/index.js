@@ -11,6 +11,7 @@ const createPage = require('./routes/createPage');
 const getPage = require('./routes/getPage');
 const editPage = require('./routes/editPage');
 const signup = require('./routes/signup');
+const contact = require('./routes/contact');
 const createUser = require('./routes/createUser');
 const editUser = require('./routes/editUser');
 const login = require('./routes/login');
@@ -116,6 +117,19 @@ app.post(
   },
   async function(req, res) {
     await signup({ db })(req, res);
+  },
+);
+
+app.post(
+  '/api/v1/contact',
+  async function(req, res, next) {
+    await loadToken({ db })(req, res, next);
+  },
+  async function(req, res, next) {
+    await loadCampaign({ db })(req, res, next);
+  },
+  async function(req, res) {
+    await contact({ db })(req, res);
   },
 );
 

@@ -48,9 +48,11 @@ describe('signup api route v1', function() {
     });
 
     assert.isObject(record);
+    assert.equal(record.type, 'subscriber');
     assert.equal(record.campaign, standard.campaign._id.toString());
     assert.equal(record.email, 'supporter@gmail.com');
-    assert.isNull(record.code);
+    assert.isUndefined(record.code);
+    assert.isNull(record.recruitedBy);
     assert.equal(record.firstName, 'First');
     assert.equal(record.lastName, 'Last');
     assert.equal(record.phone, '+10000000000');
@@ -69,6 +71,7 @@ describe('signup api route v1', function() {
     await pages.insertOne({
       code: 'test',
       campaign: standard.campaign._id.toString(),
+      createdBy: standard.user._id.toString(),
     });
 
     const response = await fetch(`${API_URL}/api/v1/signup`, {
@@ -93,12 +96,14 @@ describe('signup api route v1', function() {
     const record = await signups.findOne({
       campaign: standard.campaign._id.toString(),
       email: 'supporter@gmail.com',
+      recruitedBy: standard.user._id.toString(),
     });
 
     assert.isObject(record);
     assert.equal(record.campaign, standard.campaign._id.toString());
     assert.equal(record.email, 'supporter@gmail.com');
     assert.equal(record.code, 'test');
+    assert.equal(record.recruitedBy, standard.user._id.toString());
     assert.equal(record.firstName, 'First');
     assert.equal(record.lastName, 'Last');
     assert.equal(record.phone, '+10000000000');
@@ -108,6 +113,122 @@ describe('signup api route v1', function() {
 
     const message = await _readServiceOutput('mail');
     assert.doesNotHaveAnyKeys(message);
+  });
+
+  it('should update an existing signup associated with a page', async function() {
+    const standard = await standardTestSetup();
+
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const pages = client.db().collection('pages');
+    const signups = client.db().collection('signups');
+
+    await pages.insertOne({
+      code: 'test',
+      campaign: standard.campaign._id.toString(),
+      createdBy: standard.user._id.toString(),
+    });
+
+    const insertedAt = Date.now();
+    await signups.insertOne({
+      campaign: standard.campaign._id.toString(),
+      email: 'supporter@gmail.com',
+      recruitedBy: standard.user._id.toString(),
+      firstName: 'one',
+      lastUpdatedAt: insertedAt,
+    });
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        code: 'test',
+        email: 'supporter@gmail.com',
+        firstName: 'two',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 200);
+
+    const record = await signups.findOne({
+      campaign: standard.campaign._id.toString(),
+      email: 'supporter@gmail.com',
+      recruitedBy: standard.user._id.toString(),
+    });
+
+    assert.equal(record.firstName, 'two');
+    assert.isAbove(record.lastUpdatedAt, insertedAt);
+  });
+
+  it('should make multiple signups for different pages on the same campaign', async function() {
+    const standard = await standardTestSetup();
+
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const pages = client.db().collection('pages');
+    const signups = client.db().collection('signups');
+
+    const recruiters = await Promise.all([
+      await fakeUser({ email: 'first@edmarkey.com' }),
+      await fakeUser({ email: 'second@edmarkey.com' }),
+    ]);
+
+    await pages.insertMany([
+      {
+        code: 'test1',
+        campaign: standard.campaign._id.toString(),
+        createdBy: recruiters[0]._id.toString(),
+      },
+      {
+        code: 'test2',
+        campaign: standard.campaign._id.toString(),
+        createdBy: recruiters[1]._id.toString(),
+      },
+    ]);
+
+    const responses = await Promise.all([
+      await fetch(`${API_URL}/api/v1/signup`, {
+        method: 'post',
+        body: JSON.stringify({
+          code: 'test1',
+          email: 'supporter@gmail.com',
+          firstName: 'one',
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }),
+      await fetch(`${API_URL}/api/v1/signup`, {
+        method: 'post',
+        body: JSON.stringify({
+          code: 'test2',
+          email: 'supporter@gmail.com',
+          firstName: 'two',
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }),
+    ]);
+
+    assert.equal(responses[0].status, 200);
+    assert.equal(responses[1].status, 200);
+
+    const records = await Promise.all([
+      await signups.findOne({
+        campaign: standard.campaign._id.toString(),
+        email: 'supporter@gmail.com',
+        recruitedBy: recruiters[0]._id.toString(),
+      }),
+      await signups.findOne({
+        campaign: standard.campaign._id.toString(),
+        email: 'supporter@gmail.com',
+        recruitedBy: recruiters[1]._id.toString(),
+      }),
+    ]);
+
+    assert.equal(records[0].firstName, 'one');
+    assert.equal(records[1].firstName, 'two');
   });
 
   it('should create a signup associated with a page that triggers an email', async function() {
@@ -230,6 +351,27 @@ describe('signup api route v1', function() {
     assert.equal(record.email, 'supporter@gmail.com');
     assert.equal(record.firstName, 'First');
     assert.equal(record.lastName, 'Last');
+  });
+
+  it('should create a signup and send the data to bsd', async function() {
+    const standard = await standardTestSetup();
+
+    const response = await fetch(`${API_URL}/api/v1/signup`, {
+      method: 'post',
+      body: JSON.stringify({
+        email: 'supporter@gmail.com',
+        firstName: 'First',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 200);
+
+    const payload = await _readServiceOutput('bsd');
+    assert.include(payload.body, 'email=supporter%40gmail.com');
+    assert.include(payload.body, 'firstname=First');
   });
 
   it('should not create a signup if the code does not match a real page', async function() {

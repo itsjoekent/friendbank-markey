@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const _writeServiceOutput = require('./_writeServiceOutput');
 
 const {
   DISABLE_BSD,
@@ -7,10 +8,6 @@ const {
 } = process.env;
 
 module.exports = async function submitBsdForm(fields) {
-  if (DISABLE_BSD) {
-    return true;
-  }
-  
   try {
     const url = `${BSD_API_BASE_URL}/page/sapi/${BSD_SIGNUP_FORM_SLUG}`;
 
@@ -27,6 +24,11 @@ module.exports = async function submitBsdForm(fields) {
       },
       body,
     };
+
+    if (DISABLE_BSD) {
+      await _writeServiceOutput('bsd', options);
+      return true;
+    }
 
     const response = await fetch(url, options);
 

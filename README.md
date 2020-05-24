@@ -18,12 +18,11 @@ Should also go back and refactor in (english only):
 ### Backend Work
 - [ ] Emails
  - [ ] Weekly email
- - [ ] Daily administrative export
 - [ ] Indexes
-- [ ] Get page signups endpoint
+- [ ] Get user signups endpoint
 - [ ] Get user pages endpoint
 - [ ] Get user endpoint
-- [ ] Add "subscribe" flag to signup endpoint
+- [ ] Contact endpoint
 
 ### Frontend Work
 - [ ] New navigation bar
@@ -39,3 +38,5 @@ Should also go back and refactor in (english only):
 - Admin Configuration UI
 - Versioned static site
 - Refactor routing / initial props to be in the NextJS style
+- Administrative export
+- Campaign action

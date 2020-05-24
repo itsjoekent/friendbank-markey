@@ -62,6 +62,8 @@ module.exports = ({ db }) => {
 
       const signup = {
         ...validationResult,
+        recruitedBy: null,
+        type: 'subscriber',
         lastUpdatedAt: Date.now(),
       };
 
@@ -80,6 +82,8 @@ module.exports = ({ db }) => {
           res.status(400).json({ error: 'Signup specified code that does not exist' });
           return;
         }
+
+        signup.recruitedBy = pageMatch.createdBy;
 
         const pageAuthor = await db.collection('users')
           .findOne({ _id: ObjectId(pageMatch.createdBy) });
@@ -122,7 +126,7 @@ module.exports = ({ db }) => {
       await signups.updateOne(
         {
           email: signup.email,
-          code: signup.code,
+          recruitedBy: signup.recruitedBy,
           campaign: campaign._id.toString(),
         },
         { '$set': signup },
