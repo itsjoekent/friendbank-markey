@@ -17,7 +17,7 @@ async function sendMail(
       dynamic_template_data: templateData,
       from: 'info@friendbank.us',
       mailSettings: {
-        sandbox: {
+        sandboxMode: {
           enable: !!SENDGRID_DEBUG,
         },
       },
