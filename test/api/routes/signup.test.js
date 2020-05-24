@@ -105,6 +105,9 @@ describe('signup api route v1', function() {
     assert.equal(record.zip, '00000');
     assert.equal(record.supportLevel, 'Definitely');
     assert.equal(record.volunteerLevel, 'Yes');
+
+    const message = await _readServiceOutput('mail');
+    assert.doesNotHaveAnyKeys(message);
   });
 
   it('should create a signup associated with a page that triggers an email', async function() {

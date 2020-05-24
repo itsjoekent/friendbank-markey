@@ -47,6 +47,33 @@ describe('createUser api route v1', function() {
     assert.notEqual(record.password, 'password');
   });
 
+  it('should create a new user and normalize the email', async function() {
+    const response = await fetch(`${API_URL}/api/v1/user`, {
+      method: 'post',
+      body: JSON.stringify({
+        email: 'TEST@EDMARKEY.COM',
+        password: 'password',
+        firstName: 'Test',
+        zip: '00000',
+        emailFrequency: 'WEEKLY_EMAIL',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 200);
+
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const users = client.db().collection('users');
+
+    const record = await users.findOne({
+      email: 'test@edmarkey.com',
+    });
+
+    assert.isOk(record._id);
+  });
+
   it('should not create a new user if the email is already in use', async function() {
     await fakeUser({});
 

@@ -42,6 +42,21 @@ describe('forgotPassword api route v1', function() {
     assert.equal(dbToken.user, standard.user._id.toString());
   });
 
+  it('should not trigger a forgot password if the email field fails validation', async function() {
+    await standardTestSetup();
+
+    const response = await fetch(`${API_URL}/api/v1/forgot-password`, {
+      method: 'post',
+    });
+
+    assert.equal(response.status, 400);
+
+    const { field, error } = await response.json();
+    assert.equal(field, 'email');
+    assert.equal(error, 'validations.required');
+  });
+
+
   it('should return a successful response but no email for an invalid email', async function() {
     const standard = await standardTestSetup();
 

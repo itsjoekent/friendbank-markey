@@ -28,7 +28,7 @@ module.exports = ({ db }) => {
         return;
       }
 
-      const user = await getUser(db, email);
+      const user = await getUser(db, validationResult.email);
 
       if (user instanceof Error) {
         throw user;

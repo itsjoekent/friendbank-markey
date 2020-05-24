@@ -40,6 +40,23 @@ describe('login api route v1', function() {
     assert.equal(dbToken.user, standard.user._id.toString());
   });
 
+  it('should login regardless of email capitalization', async function() {
+    const standard = await standardTestSetup();
+
+    const response = await fetch(`${API_URL}/api/v1/login`, {
+      method: 'post',
+      body: JSON.stringify({
+        email: 'ED@EDMARKEY.COM',
+        password: 'password',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    assert.equal(response.status, 200);
+  });
+
   it('should not login if the email is incorrect', async function() {
     await standardTestSetup();
 

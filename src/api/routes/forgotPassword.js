@@ -2,6 +2,7 @@ const ms = require('ms');
 const sendMail = require('../services/sendMail');
 const makeToken = require('../db/makeToken');
 const getUser = require('../db/getUser');
+const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 
 module.exports = ({ db }) => {
@@ -13,7 +14,18 @@ module.exports = ({ db }) => {
         },
       } = req;
 
-      const user = await getUser(db, email);
+      const validationResult = validateAndNormalizeApiRequestFields({ email });
+
+      if (Array.isArray(validationResult)) {
+        res.status(400).json({
+          field: validationResult[0],
+          error: validationResult[1],
+        });
+
+        return;
+      }
+
+      const user = await getUser(db, validationResult.email);
 
       if (user instanceof Error) {
         throw user;

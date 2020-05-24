@@ -18,19 +18,18 @@ Should also go back and refactor in (english only):
 ### Backend Work
 - [ ] Emails
  - [ ] Weekly email
- - [ ] Administrative export
+ - [ ] Daily administrative export
 - [ ] Indexes
 - [ ] Get page signups endpoint
 - [ ] Get user pages endpoint
-- [ ] Edit user endpoint
-- [ ] Remove BSD submission
+- [ ] Get user endpoint
+- [ ] Add "subscribe" flag to signup endpoint
 
 ### Frontend Work
 - [ ] New navigation bar
 - [ ] Use new endpoints
 
 ### Transition Work
-
 
 # Milestone 2
 
