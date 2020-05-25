@@ -1,39 +1,5 @@
-# ed-markey-relational-organizing
+# friendbank
 
-New translations required
-- [ ] validations.existingUser
-- [ ] validations.passwordLength
-- [ ] validations.failedLogin
+A relational organizing tool originally developed for Ed Markey's 2020 senate re-elect.
 
-Should also go back and refactor in (english only):
-- [ ] validations.notAuthorized
-- [ ] validations.wrongCampaign???
-
-# Milestone 1
-
-- Allow Ed Markey supporters to update their pages
-- Email supporters their signups
-- Automated export data process for admins
-
-### Backend Work
-- [ ] Emails
- - [ ] Finish BSD connection
- - [ ] Weekly email
-- [ ] Indexes
-
-### Frontend Work
-- [ ] New navigation bar
-- [ ] Use new endpoints
-
-### Transition Work
-
-# Milestone 2
-
-- Allow any campaign to pay for the service
-- Marketing/Landing page
-- Stripe integration for handling payment
-- Admin Configuration UI
-- Versioned static site
-- Refactor routing / initial props to be in the NextJS style
-- Administrative export
-- Campaign action
+More documentation and ways to help contribute coming soon!
