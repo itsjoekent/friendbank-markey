@@ -1,4 +1,4 @@
-module.exports = async function getUser(db, email) {
+module.exports = async function findUser(db, email) {
   try {
     const users = db.collection('users');
 

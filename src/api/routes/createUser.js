@@ -1,5 +1,5 @@
 const makeToken = require('../db/makeToken');
-const getUser = require('../db/getUser');
+const findUser = require('../db/findUser');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 const { passwordHash } = require('../utils/auth');
@@ -34,7 +34,7 @@ module.exports = ({ db }) => {
         return;
       }
 
-      const existingUser = await getUser(db, validationResult.email);
+      const existingUser = await findUser(db, validationResult.email);
 
       if (existingUser instanceof Error) {
         throw existingUser;

@@ -7,7 +7,7 @@ New translations required
 
 Should also go back and refactor in (english only):
 - [ ] validations.notAuthorized
-- [ ] validations.wrongCampaign
+- [ ] validations.wrongCampaign???
 
 # Milestone 1
 
@@ -19,10 +19,6 @@ Should also go back and refactor in (english only):
 - [ ] Emails
  - [ ] Weekly email
 - [ ] Indexes
-- [ ] Get user signups endpoint
-- [ ] Get user pages endpoint
-- [ ] Get user endpoint
-- [ ] Contact endpoint
 
 ### Frontend Work
 - [ ] New navigation bar
