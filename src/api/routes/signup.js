@@ -12,6 +12,7 @@ const {
   BSD_SIGNUP_CODE_ID,
   BSD_SIGNUP_SUPPORT_ID,
   BSD_SIGNUP_VOLUNTEER_ID,
+  BSD_SIGNUP_FORM_SLUG,
 } = process.env;
 
 module.exports = ({ db }) => {
@@ -107,7 +108,7 @@ module.exports = ({ db }) => {
         }
       }
 
-      const bsdResult = await submitBsdForm({
+      const bsdResult = await submitBsdForm(BSD_SIGNUP_FORM_SLUG, {
         email: signup.email,
         firstname: signup.firstName,
         lastname: signup.lastName,
