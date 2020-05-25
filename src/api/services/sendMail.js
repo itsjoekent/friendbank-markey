@@ -1,9 +1,11 @@
-const sgMail = require('@sendgrid/mail');
+const fetch = require('node-fetch');
+const fieldUrlEncoder = require('../utils/fieldUrlEncoder');
 const _writeServiceOutput = require('./_writeServiceOutput');
 
-const { SENDGRID_API_KEY, SENDGRID_DEBUG } = process.env;
-
-sgMail.setApiKey(SENDGRID_API_KEY);
+const {
+  MAIL_DEBUG,
+  BSD_API_BASE_URL,
+} = process.env;
 
 async function sendMail(
   to = '',
@@ -11,27 +13,31 @@ async function sendMail(
   templateData = {},
 ) {
   try {
-    const message = {
-      to,
-      templateId,
-      dynamic_template_data: templateData,
-      from: 'info@friendbank.us',
-      mailSettings: {
-        sandboxMode: {
-          enable: !!SENDGRID_DEBUG,
-        },
+    const url = `${BSD_API_BASE_URL}/page/api/mailer/send_triggered_email`;
+
+    const body = fieldUrlEncoder({
+      mailing_id: templateId,
+      email: to,
+      trigger_values: JSON.stringify(templateData),
+    });
+
+    const options = {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
       },
+      body,
     };
 
-    if (SENDGRID_DEBUG) {
-      await _writeServiceOutput('mail', message);
+    if (MAIL_DEBUG) {
+      await _writeServiceOutput('mail', { ...options, url });
+      return true;
     }
 
-    await sgMail.send(message);
-  } catch (error) {
-    // Catch full nested Sendgrid error response
-    error.message = error.response ? JSON.stringify(error) : error.message;
+    const response = await fetch(url, options);
 
+    return response;
+  } catch (error) {
     return error;
   }
 }

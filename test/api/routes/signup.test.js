@@ -279,11 +279,11 @@ describe('signup api route v1', function() {
     assert.equal(response.status, 200);
 
     const message = await _readServiceOutput('mail');
-    assert.equal(message.to, author.email);
-    assert.equal(message.dynamic_template_data.signupFirstName, 'First');
-    assert.equal(message.dynamic_template_data.signupLastName, 'Last');
-    assert.equal(message.dynamic_template_data.campaignName, standard.campaign.name);
-    assert.equal(message.dynamic_template_data.domain, 'support.edmarkey.com');
+    assert.include(message.body, encodeURIComponent(author.email));
+    assert.include(message.body, 'First');
+    assert.include(message.body, 'Last');
+    assert.include(message.body, encodeURIComponent(standard.campaign.name));
+    assert.include(message.body, encodeURIComponent('support.edmarkey.com'));
   });
 
   it('should create a signup without all fields', async function() {

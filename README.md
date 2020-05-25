@@ -17,6 +17,7 @@ Should also go back and refactor in (english only):
 
 ### Backend Work
 - [ ] Emails
+ - [ ] Finish BSD connection
  - [ ] Weekly email
 - [ ] Indexes
 

@@ -37,7 +37,7 @@ services:
     environment:
       - PORT=5000
       - MONGODB_URL=mongodb://admin:secret@mongo:27017
-      - DISABLE_BSD=true
+      - DEBUG_CRM_SIGNUP=true
     volumes:
       - type: volume
         source: servicesTest
