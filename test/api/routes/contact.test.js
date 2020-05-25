@@ -16,6 +16,8 @@ const {
   fakeToken,
 } = require('./_faker');
 
+const _readServiceOutput = require('../__services/_readServiceOutput');
+
 describe('contact api route v1', function() {
   it('should create a contact', async function() {
     const standard = await standardTestSetup();
@@ -60,6 +62,35 @@ describe('contact api route v1', function() {
     assert.equal(record.zip, '00000');
     assert.equal(record.supportLevel, 'Definitely');
     assert.equal(record.volunteerLevel, 'Yes');
+  });
+
+  it('should create a contact and send the data to bsd', async function() {
+    const standard = await standardTestSetup();
+
+    const response = await fetch(`${API_URL}/api/v1/contact`, {
+      method: 'post',
+      body: JSON.stringify({
+        email: 'supporter@gmail.com',
+        firstName: 'First',
+        lastName: 'Last',
+        phone: '000 000 0000',
+        zip: '00000',
+        supportLevel: 'Definitely',
+        volunteerLevel: 'Yes',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Relational-Token': standard.token,
+      },
+    });
+
+    assert.equal(response.status, 200);
+
+    const payload = await _readServiceOutput('bsd');
+    assert.include(payload.url, process.env.BSD_CONTACT_FORM_SLUG);
+    assert.include(payload.body, 'email=supporter%40gmail.com');
+    assert.include(payload.body, 'firstname=First');
+    assert.include(payload.body, `${process.env.BSD_CONTACT_FRIEND_ID}=${encodeURIComponent('ed@edmarkey.com')}`);
   });
 
   it('should update an existing contact', async function() {

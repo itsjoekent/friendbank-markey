@@ -12,6 +12,8 @@ services:
     links:
       - mongo
       - api
+    env_file:
+      - .env      
     environment:
       - API_URL=http://api:5000
       - MONGODB_URL=mongodb://admin:secret@mongo:27017

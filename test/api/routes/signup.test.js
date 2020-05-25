@@ -370,6 +370,7 @@ describe('signup api route v1', function() {
     assert.equal(response.status, 200);
 
     const payload = await _readServiceOutput('bsd');
+    assert.include(payload.url, process.env.BSD_SIGNUP_FORM_SLUG);
     assert.include(payload.body, 'email=supporter%40gmail.com');
     assert.include(payload.body, 'firstname=First');
   });
