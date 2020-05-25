@@ -30,16 +30,15 @@ describe('forgotPassword api route v1', function() {
     assert.equal(response.status, 200);
 
     const message = await _readServiceOutput('mail');
-    assert.equal(message.to, 'ed@edmarkey.com');
-    assert.isString(message.dynamic_template_data.token);
-    assert.lengthOf(message.dynamic_template_data.token, 128);
-    assert.equal(message.dynamic_template_data.accountEmail, 'ed@edmarkey.com');
+    assert.include(message.body, `email=${encodeURIComponent('ed@edmarkey.com')}`);
 
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
-    const tokens = client.db().collection('tokens');
+    const tokensCollection = client.db().collection('tokens')
+    const tokens = await tokensCollection.find().sort({ expiresAt: 1 }).toArray();
+    const mostRecentToken = tokens[0];
 
-    const dbToken = await tokens.findOne({ _id: message.dynamic_template_data.token });
-    assert.equal(dbToken.user, standard.user._id.toString());
+    assert.include(message.body, mostRecentToken._id.toString());
+    assert.equal(mostRecentToken.user, standard.user._id.toString());
   });
 
   it('should not trigger a forgot password if the email field fails validation', async function() {
