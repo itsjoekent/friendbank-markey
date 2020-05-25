@@ -4,7 +4,6 @@ module.exports = function transformUserResponse(user) {
   }
 
   const {
-    _id,
     firstName,
     email,
     zip,

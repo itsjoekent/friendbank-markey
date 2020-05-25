@@ -62,6 +62,7 @@ module.exports = ({ db }) => {
 
       const signup = {
         ...validationResult,
+        campaign: campaign._id.toString(),
         recruitedBy: null,
         type: 'subscriber',
         lastUpdatedAt: Date.now(),
@@ -127,7 +128,7 @@ module.exports = ({ db }) => {
         {
           email: signup.email,
           recruitedBy: signup.recruitedBy,
-          campaign: campaign._id.toString(),
+          campaign: signup.campaign,
         },
         { '$set': signup },
         { upsert: true },

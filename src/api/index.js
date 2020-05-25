@@ -12,8 +12,11 @@ const getPage = require('./routes/getPage');
 const editPage = require('./routes/editPage');
 const signup = require('./routes/signup');
 const contact = require('./routes/contact');
+const getUser = require('./routes/getUser');
 const createUser = require('./routes/createUser');
 const editUser = require('./routes/editUser');
+const getUserPages = require('./routes/getUserPages');
+const getUserSignups = require('./routes/getUserSignups');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
 const forgotPassword = require('./routes/forgotPassword');
@@ -140,6 +143,16 @@ app.post(
   },
 );
 
+app.get(
+  '/api/v1/user',
+  async function(req, res, next) {
+    await loadToken({ db })(req, res, next);
+  },
+  async function(req, res) {
+    await getUser({ db })(req, res);
+  },
+);
+
 app.put(
   '/api/v1/user',
   async function(req, res, next) {
@@ -147,6 +160,32 @@ app.put(
   },
   async function(req, res) {
     await editUser({ db })(req, res);
+  },
+);
+
+app.get(
+  '/api/v1/user/pages',
+  async function(req, res, next) {
+    await loadToken({ db })(req, res, next);
+  },
+  async function(req, res, next) {
+    await loadCampaign({ db })(req, res, next);
+  },
+  async function(req, res) {
+    await getUserPages({ db })(req, res);
+  },
+);
+
+app.get(
+  '/api/v1/user/signups',
+  async function(req, res, next) {
+    await loadToken({ db })(req, res, next);
+  },
+  async function(req, res, next) {
+    await loadCampaign({ db })(req, res, next);
+  },
+  async function(req, res) {
+    await getUserSignups({ db })(req, res);
   },
 );
 

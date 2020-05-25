@@ -1,7 +1,7 @@
 const ms = require('ms');
 const sendMail = require('../services/sendMail');
 const makeToken = require('../db/makeToken');
-const getUser = require('../db/getUser');
+const findUser = require('../db/findUser');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 
@@ -25,7 +25,7 @@ module.exports = ({ db }) => {
         return;
       }
 
-      const user = await getUser(db, validationResult.email);
+      const user = await findUser(db, validationResult.email);
 
       if (user instanceof Error) {
         throw user;
