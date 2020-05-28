@@ -3,6 +3,7 @@ import UrlPattern from 'url-pattern';
 import ErrorPage from './pages/Error';
 import Homepage, { HOMEPAGE_ROUTE } from './pages/Homepage';
 import Signup, { getSignupInitialProps, SIGNUP_ROUTE } from './pages/Signup';
+import Login, { LOGIN_ROUTE } from './pages/Login';
 import { SPANISH_PREFIX } from '../shared/lang';
 
 function removeTrailingSlash(from) {
@@ -14,6 +15,11 @@ const PAGE_MAP = [
     HOMEPAGE_ROUTE,
     null,
     Homepage,
+  ],
+  [
+    LOGIN_ROUTE,
+    null,
+    Login,
   ],
   [
     SIGNUP_ROUTE,
