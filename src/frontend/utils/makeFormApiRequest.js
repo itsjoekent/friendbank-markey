@@ -1,21 +1,19 @@
-import getCopy from '../utils/getCopy';
+import makeApiRequest from './makeApiRequest';
 
-export default async function makeFormApiRequest(path, data) {
+export default async function makeFormApiRequest(path, data, afterRequest) {
   try {
-    const response = await fetch(path, {
-      method: 'post',
-      body: JSON.stringify(data),
-      headers: { 'Content-Type': 'application/json' },
-    });
+    const {
+      errorMessage,
+      json,
+      response,
+    } = await makeApiRequest(path, 'post', data);
 
-    if (response.status !== 200) {
-      const { field, error } = await response.json();
-      console.log(field, error);
+    if (errorMessage && errorMessage.length) {
+      return errorMessage;
+    }
 
-      return [
-        getCopy(error, true, null) || getCopy('genericError'),
-        getCopy(`formLabels.${field}`, true, null) || null,
-      ];
+    if (afterRequest) {
+      await afterRequest(json, response);
     }
 
     return null;

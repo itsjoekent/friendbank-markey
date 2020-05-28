@@ -12,6 +12,11 @@
     "build:webpack": "webpack --mode production",
     "test:api": "mocha --exit ./test/api/**/*.js"
   },
+  "nodemonConfig": {
+    "ignore": [
+      "src/api/services/__test"
+    ]
+  },
   "dependencies": {
     "@2toad/profanity": "^1.1.0",
     "@babel/runtime": "^7.9.6",
@@ -27,6 +32,7 @@
     "react-dom": "^16.13.1",
     "react-helmet": "^6.0.0",
     "styled-components": "^5.1.0",
+    "url-pattern": "^1.0.3",
     "whatwg-fetch": "^3.0.0",
     "xss": "^1.0.6"
   },

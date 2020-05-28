@@ -8,6 +8,7 @@ import isHeapReady from '../utils/isHeapReady';
 import {
   SingleLineTextInput,
   SINGLE_LINE_TEXT_INPUT,
+  PASSWORD_INPUT,
   CodeInputField,
   CODE_INPUT_FIELD,
   RadioField,
@@ -70,11 +71,11 @@ const FormFieldsContainer = styled.form`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  margin-bottom: 24px;
 `;
 
 const FormDisclaimer = styled(DefaultParagraph)`
   margin-top: 24px;
+  margin-bottom: 0;
   font-size: 12px;
 `;
 
@@ -393,6 +394,26 @@ export default function Form(props) {
                   setFormValues={setFormValues}
                   value={value || ""}
                   options={options || []}
+                />
+              );
+            }
+
+            case PASSWORD_INPUT: {
+              const { isHalfWidth = false } = field;
+
+              return (
+                <SingleLineTextInput
+                  key={fieldId}
+                  formId={formId}
+                  fieldId={fieldId}
+                  isHalfWidth={isHalfWidth}
+                  label={label}
+                  help={help}
+                  validationMessage={validationMessage}
+                  hasTouchedSubmit={hasTouchedSubmit}
+                  onChange={onTextInputChange}
+                  value={value || ""}
+                  type="password"
                 />
               );
             }

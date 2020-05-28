@@ -1,6 +1,6 @@
 import { ENGLISH, SPANISH, SPANISH_PREFIX } from '../../shared/lang';
 
-const copy = {
+export const copy = {
   formLabels: {
     backButton: {
       [ENGLISH]: 'Go back',
@@ -50,17 +50,20 @@ const copy = {
       [ENGLISH]: 'Last name',
       [SPANISH]: 'Apellido',
     },
-    zip:{
+    zip: {
       [ENGLISH]: 'Zip',
       [SPANISH]: 'Código postal',
     },
-    phone:{
+    phone: {
       [ENGLISH]: 'Phone',
       [SPANISH]: 'Teléfono',
     },
-    email:{
+    email: {
       [ENGLISH]: 'Email',
       [SPANISH]: 'Correo electrónico',
+    },
+    password: {
+      [ENGLISH]: 'Password',
     },
   },
   idQuestions: {
@@ -155,6 +158,9 @@ const copy = {
     },
     passwordLength: {
       [ENGLISH]: 'Must be at least 8 characters',
+    },
+    existingUser: {
+      [ENGLISH]: 'An account is already registered with this email',
     },
   },
   homepage: {
@@ -261,8 +267,8 @@ const copy = {
       [SPANISH]: 'Logo de Ed Markey para el Senado',
     },
     return: {
-      [ENGLISH]: 'return to edmarkey.com',
-      [SPANISH]: 'volver a edmarkey.com',
+      [ENGLISH]: '← return to edmarkey.com',
+      [SPANISH]: '← volver a edmarkey.com',
     },
     returnLink: {
       [ENGLISH]: 'https://www.edmarkey.com/',
@@ -273,6 +279,16 @@ const copy = {
     },
     donateForm: {
       [ENGLISH]: 'https://secure.actblue.com/donate/ejm2020',
+    },
+    language: {
+      [ENGLISH]: 'Español',
+      [SPANISH]: 'English',
+    },
+    login: {
+      [ENGLISH]: 'Login',
+    },
+    dashboard: {
+      [ENGLISH]: 'Dashboard',
     },
   },
   share: {

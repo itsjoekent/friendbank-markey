@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Helmet } from 'react-helmet';
 import getCopy from '../utils/getCopy';
 import { useApplicationContext } from '../ApplicationContext';
 import { RedButton } from '../components/Buttons';
 import { DefaultTitle, DefaultParagraph } from '../components/Typography';
-import CommitteeDisclaimer, { DisclaimerWrapper } from '../components/CommitteeDisclaimer';
 import SplitScreen from '../components/SplitScreen';
 import Modal from '../components/Modal';
 import Form from '../components/Form';
@@ -14,6 +14,54 @@ import signupContactFields from '../forms/signupContactFields';
 import signupIdFields from '../forms/signupIdFields';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
+import normalizePageCode from '../../shared/normalizePageCode';
+
+export const SIGNUP_ROUTE = '/:code';
+
+export async function getSignupInitialProps({
+  routeMatch,
+  db,
+  ObjectId,
+  campaign,
+}) {
+  try {
+    const { code } = routeMatch;
+    const normalizedCode = normalizePageCode(code);
+
+    const campaignId = campaign._id.toString();
+
+    const pages = db.collection('pages');
+
+    const page = await pages.findOne({
+      code: normalizedCode,
+      campaign: campaignId,
+    });
+
+    const {
+      title,
+      subtitle,
+      background,
+      createdBy,
+    } = page;
+
+    const createdByUser = await db.collection('users')
+      .findOne({ _id: ObjectId(createdBy) });
+
+    const createdByFirstName = createdByUser.firstName;
+
+    return {
+      page: {
+        code: normalizedCode,
+        title,
+        subtitle,
+        background,
+        createdByFirstName,
+      },
+    };
+  } catch (error) {
+    return error;
+  }
+}
 
 const PostSignupContainer = styled.div`
   display: flex;
@@ -51,7 +99,7 @@ export default function Signup() {
 
   function onStepSubmitGenerator(index) {
     async function onStepSubmit(formValues) {
-      return await makeFormApiRequest(`/api/v1/page/${code.toLowerCase()}/signup/${index}`, formValues);
+      return await makeFormApiRequest(`/api/v1/page/signup`, { ...formValues, code });
     }
 
     return onStepSubmit;
@@ -92,6 +140,15 @@ export default function Signup() {
 
   return (
     <React.Fragment>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={backgrounds[background].source} />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+      </Helmet>
       {isModalOpen && (
         <Modal
           modalTitle={getCopy('signupPage.modalTitle')}
@@ -102,39 +159,36 @@ export default function Signup() {
         />
       )}
       <SplitScreen media={backgrounds[background]}>
-        <DisclaimerWrapper>
-          {hasReachedEnd && (
-            <PostSignupContainer>
-              <DefaultTitle>
-                {getCopy('signupPage.postSignupTitle')}
-              </DefaultTitle>
-              <DefaultParagraph>
-                {getCopy('signupPage.postSignupSubtitle').replace('{{FIRST_NAME}}', createdByFirstName)}
-              </DefaultParagraph>
-              <ShareWidget
-                theme={DARK_THEME}
-                customShareText={`${title} ${subtitle}`}
-              />
-              <DefaultTitle>
-                {getCopy('signupPage.postSignupCreateTitle')}
-              </DefaultTitle>
-              <DefaultParagraph>
-                {getCopy('signupPage.postSignupCreateSubtitle')}
-              </DefaultParagraph>
-              <RedButton as="a" href={makeLocaleLink("/")} data-track="create-my-own">
-                {getCopy('signupPage.postSignupCreateButtonLabel')}
-              </RedButton>
-            </PostSignupContainer>
-          )}
-          {!hasReachedEnd && (
-            <Form
-              formId="signup"
-              steps={steps}
-              onCompletion={onCompletion}
+        {hasReachedEnd && (
+          <PostSignupContainer>
+            <DefaultTitle>
+              {getCopy('signupPage.postSignupTitle')}
+            </DefaultTitle>
+            <DefaultParagraph>
+              {getCopy('signupPage.postSignupSubtitle').replace('{{FIRST_NAME}}', createdByFirstName)}
+            </DefaultParagraph>
+            <ShareWidget
+              theme={DARK_THEME}
+              customShareText={`${title} ${subtitle}`}
             />
-          )}
-          <CommitteeDisclaimer />
-        </DisclaimerWrapper>
+            <DefaultTitle>
+              {getCopy('signupPage.postSignupCreateTitle')}
+            </DefaultTitle>
+            <DefaultParagraph>
+              {getCopy('signupPage.postSignupCreateSubtitle')}
+            </DefaultParagraph>
+            <RedButton as="a" href={makeLocaleLink("/")} data-track="create-my-own">
+              {getCopy('signupPage.postSignupCreateButtonLabel')}
+            </RedButton>
+          </PostSignupContainer>
+        )}
+        {!hasReachedEnd && (
+          <Form
+            formId="signup"
+            steps={steps}
+            onCompletion={onCompletion}
+          />
+        )}
       </SplitScreen>
     </React.Fragment>
   );

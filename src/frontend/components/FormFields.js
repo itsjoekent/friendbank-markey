@@ -122,6 +122,8 @@ export function SingleLineTextInput(props) {
   );
 }
 
+export const PASSWORD_INPUT = 'PASSWORD_INPUT';
+
 export const MULTI_LINE_TEXT_INPUT = 'MULTI_LINE_TEXT_INPUT';
 
 export const BaseMultiLineTextInput = styled.textarea`

@@ -1,30 +1,95 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Helmet } from 'react-helmet';
 import getCopy from '../utils/getCopy';
 import SplitScreen from '../components/SplitScreen';
 import Form from '../components/Form';
-import CommitteeDisclaimer, { DisclaimerWrapper } from '../components/CommitteeDisclaimer';
 import backgrounds from '../../shared/backgrounds';
-import signupContactFields from '../forms/signupContactFields';
 import signupIdFields from '../forms/signupIdFields';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
 import {
   SINGLE_LINE_TEXT_INPUT,
+  PASSWORD_INPUT,
   MULTI_LINE_TEXT_INPUT,
   CODE_INPUT_FIELD,
   GALLERY_PICKER,
 } from '../components/FormFields';
+import { TRANSACTIONAL_EMAIL } from '../../shared/emailFrequency';
 import {
+  validateName,
+  validateZip,
+  validateEmail,
+  validatePhone,
+  validatePassword,
   validateCode,
   validateRequired,
 } from '../../shared/fieldValidations';
 
-export default function Homepage() {
-  async function onFinalStepSubmit(formValues) {
-    const { code, ...rest } = formValues;
+export const HOMEPAGE_ROUTE = '/';
 
-    return await makeFormApiRequest(`/api/v1/page/${code.toLowerCase()}`, rest);
+export default function Homepage() {
+  const [normalizedCode, setNormalizedCode] = React.useState(null);
+
+  async function onUserSubmit(formValues) {
+    const {
+      email,
+      password,
+      firstName,
+      zip,
+    } = formValues;
+
+    const payload = {
+      email,
+      password,
+      firstName,
+      zip,
+      emailFrequency: TRANSACTIONAL_EMAIL,
+    };
+
+    return await makeFormApiRequest('/api/v1/user', payload);
+  }
+
+  async function onPageSubmit(formValues) {
+    const { code, title, subtitle, background } = formValues;
+
+    const payload = {
+      title,
+      subtitle,
+      background,
+    };
+
+    async function afterPageSubmit(data) {
+      setNormalizedCode(data.page.code);
+    }
+
+    return await makeFormApiRequest(`/api/v1/page/${code}`, payload, afterPageSubmit);
+  }
+
+  async function onSignup(formValues) {
+    const {
+      code,
+      firstName,
+      lastName,
+      email,
+      phone,
+      zip,
+      supportLevel,
+      volunteerLevel,
+    } = formValues;
+
+    const payload = {
+      code,
+      firstName,
+      lastName,
+      email,
+      phone,
+      zip,
+      supportLevel,
+      volunteerLevel,
+    };
+
+    return await makeFormApiRequest('/api/v1/signup', payload);
   }
 
   function onCompletion(formValues) {
@@ -39,15 +104,50 @@ export default function Homepage() {
       title: getCopy('homepage.formTitle'),
       subtitle: getCopy('homepage.formSubtitle'),
       buttonCopy: getCopy('homepage.formButtonLabel'),
+      onStepSubmit: onUserSubmit,
       showSmsDisclaimer: true,
       fields: [
-        ...signupContactFields(),
         {
-          fieldId: 'code',
-          fieldType: CODE_INPUT_FIELD,
-          label: getCopy('formLabels.shareCode'),
-          help: getCopy('formLabels.shareCodeHelp'),
-          validator: validateCode,
+          fieldId: 'email',
+          fieldType: SINGLE_LINE_TEXT_INPUT,
+          isHalfWidth: true,
+          label: getCopy('formLabels.email'),
+          validator: validateEmail,
+        },
+        {
+          fieldId: 'password',
+          fieldType: PASSWORD_INPUT,
+          isHalfWidth: true,
+          label: getCopy('formLabels.password'),
+          validator: validatePassword,
+        },
+        {
+          fieldId: 'firstName',
+          fieldType: SINGLE_LINE_TEXT_INPUT,
+          isHalfWidth: true,
+          label: getCopy('formLabels.firstName'),
+          validator: validateName,
+        },
+        {
+          fieldId: 'lastName',
+          fieldType: SINGLE_LINE_TEXT_INPUT,
+          isHalfWidth: true,
+          label: getCopy('formLabels.lastName'),
+          validator: validateName,
+        },
+        {
+          fieldId: 'zip',
+          fieldType: SINGLE_LINE_TEXT_INPUT,
+          isHalfWidth: true,
+          label: getCopy('formLabels.zip'),
+          validator: validateZip,
+        },
+        {
+          fieldId: 'phone',
+          fieldType: SINGLE_LINE_TEXT_INPUT,
+          isHalfWidth: true,
+          label: getCopy('formLabels.phone'),
+          validator: validatePhone,
         },
       ],
     },
@@ -55,7 +155,15 @@ export default function Homepage() {
       title: getCopy('homepage.customizeTitle'),
       subtitle: getCopy('homepage.customizeSubtitle'),
       buttonCopy: getCopy('homepage.formButtonLabel'),
+      onStepSubmit: onPageSubmit,
       fields: [
+        {
+          fieldId: 'code',
+          fieldType: CODE_INPUT_FIELD,
+          label: getCopy('formLabels.shareCode'),
+          help: getCopy('formLabels.shareCodeHelp'),
+          validator: validateCode,
+        },
         {
           fieldId: 'title',
           fieldType: SINGLE_LINE_TEXT_INPUT,
@@ -86,7 +194,7 @@ export default function Homepage() {
       title: getCopy('homepage.formTitle'),
       subtitle: getCopy('homepage.formSubtitle'),
       buttonCopy: getCopy('homepage.createButtonLabel'),
-      onStepSubmit: onFinalStepSubmit,
+      onStepSubmit: onSignup,
       fields: [...signupIdFields()],
     },
   ];
@@ -128,15 +236,21 @@ export default function Homepage() {
 
   return (
     <SplitScreen media={backgrounds['ed-climate-march']}>
-      <DisclaimerWrapper>
-        <Form
-          formId="create"
-          steps={steps}
-          onFormValueChange={onFormValueChange}
-          onCompletion={onCompletion}
-        />
-        <CommitteeDisclaimer />
-      </DisclaimerWrapper>
+      <Helmet>
+        <title>{getCopy('homepage.formTitle')}</title>
+        <meta name="og:title" content={getCopy('homepage.formTitle')} />
+        <meta property="og:description" content={getCopy('homepage.formSubtitle')} />
+        <meta property="og:image" content={backgrounds['ed-climate-march'].source} />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:title" content={getCopy('homepage.formTitle')} />
+        <meta property="twitter:description" content={getCopy('homepage.formSubtitle')} />
+      </Helmet>
+      <Form
+        formId="create"
+        steps={steps}
+        onFormValueChange={onFormValueChange}
+        onCompletion={onCompletion}
+      />
     </SplitScreen>
   );
 }
