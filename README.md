@@ -6,12 +6,19 @@ More documentation and ways to help contribute coming soon!
 
 ----
 
+Supporter Pages
 - [ ] Edit page
-- [ ] Dashboard
+
+Dashboard
  - [ ] View pages
  - [ ] View signups
  - [ ] Edit profile
-- [ ] Login page
- - [ ] Signup view
+
+Auth
+ - [ ] Signup page
  - [ ] Request Forgot Password
  - [ ] Change password
+
+Misc
+- [ ] 404 page
+- [ ] 500 page
