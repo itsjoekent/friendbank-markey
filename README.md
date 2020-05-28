@@ -6,7 +6,6 @@ More documentation and ways to help contribute coming soon!
 
 ----
 
-- [ ] react-helmet
 - [ ] Edit page
 - [ ] Dashboard
  - [ ] View pages
