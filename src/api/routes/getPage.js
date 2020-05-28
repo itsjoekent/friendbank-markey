@@ -1,7 +1,7 @@
 const getPageForCode = require('../db/getPageForCode');
-const normalizePageCode = require('../utils/normalizePageCode');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 const transformPageResponse = require('../transformers/transformPageResponse');
+const normalizePageCode = require('../../shared/normalizePageCode');
 
 module.exports = ({ db }) => {
   async function getPage(req, res) {

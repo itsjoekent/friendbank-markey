@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 
 const express = require('express');
-const MongoClient = require('mongodb').MongoClient;
+const { MongoClient, ObjectId } = require('mongodb');
 
 const loadCampaign = require('./middleware/loadCampaign');
 const loadToken = require('./middleware/loadToken');
@@ -22,6 +22,8 @@ const logout = require('./routes/logout');
 const forgotPassword = require('./routes/forgotPassword');
 
 const setupDb = require('./db/setup');
+const getCampaignForDomain = require('./db/getCampaignForDomain');
+
 const ssr = require('./ssr').default;
 
 const { SPANISH_PREFIX } = require('../shared/lang');
@@ -213,83 +215,42 @@ app.post(
   },
 );
 
-function fillTemplate(req, config = {}) {
-  const title = config.title || 'Create your own Ed Markey supporter page';
-  const description = config.description || 'Our grassroots campaign is powered by people like you who are connecting with family, friends, and neighbors about this important election.';
-  const cover = config.cover || 'https://ed-markey-supporter-photos.s3.amazonaws.com/Taylor+St.+Germain+-+P2+Markey+(52+of+70).jpg';
-  const status = config.status || 200;
-
-  const data = config.data || { pageType: 'notfound' };
-
-  global.location = { pathname: req.path };
-
-  const ssrResult = ssr(data);
-
-  global.location = undefined;
-
-  if (ssrResult instanceof Error) {
-    console.error(ssrResult);
-    return 'Yikes, we\'re experiencing some errors. Hang tight!';
-  }
-
-  const { html, styleTags } = ssrResult;
-
-  return template.replace(/{{REACT_DATA}}/g, JSON.stringify(data))
-    .replace(/{{HTML}}/g, html)
-    .replace(/{{HEAP_TAG}}/g, IS_PROD_HEAP ? PROD_HEAP : DEV_HEAP)
-    .replace(/{{STYLE_TAGS}}/g, styleTags)
-    .replace(/{{TITLE}}/g, title)
-    .replace(/{{DESCRIPTION}}/g, description)
-    .replace(/{{COVER}}/g, cover);
-}
-
 app.get('*', async function (req, res) {
   try {
     const { path } = req;
 
+    const host = req.get('host');
+    const campaign = await getCampaignForDomain(db, host);
+
+    if (campaign instanceof Error) {
+      throw campaign;
+    }
+
+    global.location = { pathname: path };
+
+    const ssrResult = await ssr(path, { db, campaign, ObjectId });
+
+    global.location = undefined;
+
+    if (ssrResult instanceof Error) {
+      console.error(ssrResult);
+      return 'Yikes, we\'re experiencing some errors. Hang tight!';
+    }
+
+    const { html, headTags, styleTags, initialProps } = ssrResult;
+
+    const page = template.replace(/{{REACT_DATA}}/g, JSON.stringify(initialProps))
+      .replace(/{{HEAD}}/g, headTags)
+      .replace(/{{HTML}}/g, html)
+      .replace(/{{STYLE_TAGS}}/g, styleTags)
+
     res.set('Content-Type', 'text/html');
-
-    if (path === '/' || path.replace(/\/$/, '') === SPANISH_PREFIX) {
-      res.send(fillTemplate(req, {
-        data: { pageType: 'homepage' },
-      }));
-
-      return;
-    }
-
-    const slug = path.startsWith(SPANISH_PREFIX)
-      ? path.replace(SPANISH_PREFIX, '').replace('/', '')
-      : path.replace('/', '');
-
-    const page = await getPageForCode(normalizePageCode(slug));
-
-    if (page instanceof Error) {
-      throw page;
-    }
-
-    if (!page) {
-      res.status(404).send(fillTemplate(req, {
-        title: 'Ed Markey | Page Not Found',
-        data: { pageType: 'notfound' },
-      }));
-
-      return;
-    }
-
-    res.send(fillTemplate(req, {
-      title: page.title,
-      description: page.subtitle,
-      cover: backgrounds[page.background].source,
-      data: { pageType: 'signup', page },
-    }));
-
+    res.send(page);
   } catch (error) {
     console.error(error);
 
-    res.status(500).send(fillTemplate(req, {
-      title: 'Ed Markey | Server Error',
-      data: { pageType: 'error' },
-    }));
+    // TODO: Send generic 500 page HTML
+    res.status(500).send('oops');
   }
 });
 

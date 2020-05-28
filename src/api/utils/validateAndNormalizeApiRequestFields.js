@@ -1,7 +1,7 @@
 const xss = require('xss');
 const phoneValidation = require('phone');
 const profanity = require('@2toad/profanity').profanity;
-const normalizePageCode = require('./normalizePageCode');
+const normalizePageCode = require('../../shared/normalizePageCode');
 const fieldValidations = require('../../shared/fieldValidations');
 
 function profanityCheck(value) {

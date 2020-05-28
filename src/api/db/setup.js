@@ -16,6 +16,13 @@ module.exports = async function setupDb(db) {
     const users = db.collection('users');
     await users.createIndex({ email: 1 });
 
+    if (process.env.SEED_LOCALHOST_CAMPAIGN) {
+      await campaigns.insertOne({
+        domains: ['localhost:5000'],
+        name: 'Friendbank Dev',
+      });
+    }
+
     return true;
   } catch (error) {
     return error;

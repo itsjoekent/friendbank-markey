@@ -25,3 +25,7 @@ node_modules/
 # Build files
 public/dist/*
 src/api/ssr.js
+
+# Test files
+src/api/services/__test/*
+!src/api/services/__test/.gitkeep

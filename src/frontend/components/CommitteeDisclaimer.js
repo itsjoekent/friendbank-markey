@@ -4,10 +4,9 @@ import getCopy from '../utils/getCopy';
 
 const Disclaimer = styled.span`
   display: block;
+  width: fit-content;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 72px;
-  margin-bottom: 12px;
   padding: 8px 16px;
 
   font-family: ${({ theme }) => theme.fonts.mainFamily};
@@ -15,14 +14,6 @@ const Disclaimer = styled.span`
   font-size: 12px;
   color: ${({ theme }) => theme.colors.blue};
   border: 2px solid ${({ theme }) => theme.colors.blue};
-`;
-
-export const DisclaimerWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  min-height: 80vh;
 `;
 
 export default function CommitteeDisclaimer() {

@@ -7,7 +7,12 @@ const Layout = styled.div`
   flex-direction: column-reverse;
   justify-content: flex-end;
   width: 100%;
-  min-height: 100vh;
+  box-shadow: 0px 1px 4px rgba(0,0,0,25%);
+  margin-bottom: 48px;
+
+  @media ${({ theme }) => theme.media.tablet} {
+    height: 80vh;
+  }
 
   @media ${({ theme }) => theme.media.desktop} {
     flex-direction: row;
@@ -20,11 +25,10 @@ const ContentPanel = styled.main`
   flex-direction: row;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.white};
-  border-top: 4px solid ${({ theme }) => theme.colors.red};
 
   @media ${({ theme }) => theme.media.desktop} {
     width: 40%;
-    height: 100vh;
+    height: 100%;
     overflow-y: scroll;
     overflow-x: visible;
     justify-content: center;
@@ -41,7 +45,6 @@ const ContentPanelContainer = styled.div`
     width: 100%;
     max-width: 500px;
     padding: 32px 24px;
-    margin-top: 70px;
     overflow-y: scroll;
   }
 `;
@@ -58,7 +61,7 @@ const MediaPanel = styled.div`
 
   @media ${({ theme }) => theme.media.desktop} {
     width: 60%;
-    height: 100vh;
+    height: 100%;
   }
 `;
 

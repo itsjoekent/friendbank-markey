@@ -1,8 +1,8 @@
 const getPageForCode = require('../db/getPageForCode');
 const getToken = require('../db/getToken');
-const normalizePageCode = require('../utils/normalizePageCode');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 const apiErrorHandler = require('../utils/apiErrorHandler');
+const normalizePageCode = require('../../shared/normalizePageCode');
 
 module.exports = ({ db }) => {
   async function editPage(req, res) {
