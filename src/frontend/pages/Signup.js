@@ -37,6 +37,10 @@ export async function getSignupInitialProps({
       campaign: campaignId,
     });
 
+    if (!page) {
+      return {};
+    }
+
     const {
       title,
       subtitle,
@@ -85,6 +89,13 @@ const PostSignupContainer = styled.div`
 `;
 
 export default function Signup() {
+  const context = useApplicationContext();
+
+  if (!context.page) {
+    // TODO: return 404
+    return null;
+  }
+
   const {
     page: {
       code,
@@ -93,7 +104,7 @@ export default function Signup() {
       background,
       createdByFirstName,
     },
-  } = useApplicationContext();
+  } = context;
 
   const [hasReachedEnd, setHasReachedEnd] = React.useState(false);
 

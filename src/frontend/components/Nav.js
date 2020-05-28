@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import getCopy, { copy } from '../utils/getCopy';
 import { RedButton } from './Buttons';
+import { LOGIN_ROUTE } from '../pages/Login';
+import { HOMEPAGE_ROUTE } from '../pages/Homepage';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import isSpanishPath from '../utils/isSpanishPath';
 import { isAuthenticated } from '../utils/auth';
@@ -158,12 +160,12 @@ export default function Nav(props) {
     : `${SPANISH_PREFIX}${location.pathname}`;
 
   const [rightLink, setRightLink] = React.useState(
-    [makeLocaleLink('/login'), getCopy('nav.login')],
+    [makeLocaleLink(LOGIN_ROUTE), getCopy('nav.login')],
   );
 
   React.useEffect(() => {
     setRightLink([
-      makeLocaleLink(isAuthenticated() ? '/dashboard' : '/login'),
+      makeLocaleLink(isAuthenticated() ? '/dashboard' : LOGIN_ROUTE),
       isAuthenticated() ? getCopy('nav.dashboard') : getCopy('nav.login'),
     ]);
   }, []);
@@ -179,7 +181,7 @@ export default function Nav(props) {
         </DonateRedirect>
       </RedirectRow>
       <NavContainer>
-        <Logo href={makeLocaleLink("/")}>
+        <Logo href={makeLocaleLink(HOMEPAGE_ROUTE)}>
           <img src="https://ed-markey-supporter-photos.s3.amazonaws.com/logo.png" alt={getCopy('nav.logoAlt')} />
         </Logo>
         <NavItemsContainer>

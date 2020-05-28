@@ -62,6 +62,10 @@ const app = express();
 app.use(express.json());
 app.use(express.static('public', {
   setHeaders: (res, path, stat) => {
+    if (path.includes('/fonts/')) {
+      res.set('Cache-Control', 'max-age=31104000, public');
+    }
+
     if (!CACHE_PUBLIC_ASSETS) {
       return;
     }
@@ -234,7 +238,7 @@ app.get('*', async function (req, res) {
 
     if (ssrResult instanceof Error) {
       console.error(ssrResult);
-      return 'Yikes, we\'re experiencing some errors. Hang tight!';
+      throw ssrResult;
     }
 
     const { html, headTags, styleTags, initialProps } = ssrResult;

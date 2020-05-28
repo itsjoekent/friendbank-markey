@@ -60,7 +60,7 @@ const FormContainer = styled.div`
   `}
 `;
 
-const FormTitleContainer = styled.div`
+export const FormTitleContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 24px;

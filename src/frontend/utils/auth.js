@@ -14,7 +14,7 @@ export function getAuthToken(token) {
   return localStorage.getItem('token');
 }
 
-export function isAuthenticated(token) {
+export function isAuthenticated() {
   if (typeof localStorage === 'undefined') {
     return false;
   }
