@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Helmet } from 'react-helmet';
+import { DASHBOARD_ROUTE } from './Dashboard';
 import getCopy from '../utils/getCopy';
+import StandardHelmet from '../components/StandardHelmet';
 import Form, { FormTitleContainer } from '../components/Form';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
 import makeLocaleLink from '../utils/makeLocaleLink';
@@ -17,8 +18,11 @@ import {
 
 export const LOGIN_ROUTE = '/friendbank/login';
 
+export const NOT_AUTHORIZED_QUERY = 'not_authorized=1';
+
 const Layout = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -33,7 +37,7 @@ const Container = styled.div`
   max-width: 400px;
   padding: 24px;
   background: ${({ theme }) => theme.colors.white};
-  box-shadow: 0px 1px 4px rgba(0,0,0,25%);
+  box-shadow: ${({ theme }) => theme.shadow};
 
   ${FormTitleContainer} {
     margin-bottom: 0;
@@ -61,33 +65,60 @@ const Link = styled.a`
   }
 `;
 
+const NotAuthorizedBanner = styled.p`
+  display: block;
+  font-family: ${({ theme }) => theme.fonts.mainFamily};
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 4px;
+  background-color: ${({ theme }) => theme.colors.red};
+  color: ${({ theme }) => theme.colors.white};
+`;
+
 export default function Login() {
+  const [isNotAuthorizedFlag, setIsNotAuthorizedFlag] = React.useState(false);
+
   async function onLogin(formValues) {
     const { email, password } = formValues;
 
-    return await makeFormApiRequest('/api/v1/login', { email, password });
+    return await makeFormApiRequest('/api/v1/login', 'post', { email, password }, null, false);
   }
 
   function onCompletion() {
-    // TODO: Import route?
-    window.location.href = makeLocaleLink(`/friendbank/dashboard`);
+    window.location.href = makeLocaleLink(DASHBOARD_ROUTE);
   }
 
   React.useEffect(() => {
     if (isAuthenticated()) {
-      window.location.href = makeLocaleLink(`/friendbank/dashboard`);
+      window.location.href = makeLocaleLink(DASHBOARD_ROUTE);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (location.search.includes(NOT_AUTHORIZED_QUERY)) {
+      setIsNotAuthorizedFlag(true);
+      window.history.replaceState(null, '', location.pathname)
     }
   }, []);
 
   return (
     <Layout>
+      <StandardHelmet />
+      {isNotAuthorizedFlag && (
+        <NotAuthorizedBanner>
+          {getCopy('authPage.notAuthorizedFlag')}
+        </NotAuthorizedBanner>
+      )}
       <Container>
         <Form
           formId="login"
           steps={[{
-            title: 'Login',
+            title: getCopy('authPage.login'),
             onStepSubmit: onLogin,
-            buttonCopy: 'Submit',
+            buttonCopy: getCopy('formLabels.submit'),
             fields: [
               {
                 fieldId: 'email',
@@ -106,8 +137,12 @@ export default function Login() {
           onCompletion={onCompletion}
         />
         <LinkRow>
-          <Link href={makeLocaleLink('/friendbank/signup')}>Create new account</Link>
-          <Link href={makeLocaleLink('/friendbank/forgot-password')}>Forgot my password</Link>
+          <Link href={makeLocaleLink('/friendbank/signup')}>
+            {getCopy('authPage.newAccount')}
+          </Link>
+          <Link href={makeLocaleLink('/friendbank/forgot-password')}>
+            {getCopy('authPage.forgotPassword')}
+          </Link>
         </LinkRow>
       </Container>
     </Layout>

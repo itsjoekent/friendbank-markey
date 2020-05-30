@@ -7,7 +7,7 @@ const Layout = styled.div`
   flex-direction: column-reverse;
   justify-content: flex-end;
   width: 100%;
-  box-shadow: 0px 1px 4px rgba(0,0,0,25%);
+  box-shadow: ${({ theme }) => theme.shadow};
   margin-bottom: 48px;
 
   @media ${({ theme }) => theme.media.tablet} {

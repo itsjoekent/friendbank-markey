@@ -4,6 +4,7 @@ module.exports = function transformSignupResponse(signup) {
   }
 
   const {
+    _id,
     code,
     firstName,
     lastName,
@@ -17,6 +18,7 @@ module.exports = function transformSignupResponse(signup) {
   } = signup;
 
   const safe = {
+    id: _id.toString(),
     code,
     firstName,
     lastName,

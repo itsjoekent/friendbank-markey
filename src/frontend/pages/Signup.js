@@ -108,12 +108,8 @@ export default function Signup() {
 
   const [hasReachedEnd, setHasReachedEnd] = React.useState(false);
 
-  function onStepSubmitGenerator(index) {
-    async function onStepSubmit(formValues) {
-      return await makeFormApiRequest(`/api/v1/page/signup`, { ...formValues, code });
-    }
-
-    return onStepSubmit;
+  async function onStepSubmit(formValues) {
+    return await makeFormApiRequest('/api/v1/signup', 'post', { ...formValues, code });
   }
 
   function onCompletion(formValues) {
@@ -127,14 +123,14 @@ export default function Signup() {
       buttonCopy: getCopy('signupPage.stepOneButtonLabel'),
       fields: [...signupContactFields()],
       showSmsDisclaimer: true,
-      onStepSubmit: onStepSubmitGenerator(1),
+      onStepSubmit: onStepSubmit,
     },
     {
       title: title,
       subtitle: subtitle,
       buttonCopy: getCopy('signupPage.stepTwoButtonLabel'),
       fields: [...signupIdFields()],
-      onStepSubmit: onStepSubmitGenerator(2),
+      onStepSubmit: onStepSubmit,
     },
   ];
 
@@ -154,11 +150,11 @@ export default function Signup() {
       <Helmet>
         <title>{title}</title>
         <meta name="og:title" content={title} />
-        <meta property="og:description" content={description} />
+        <meta property="og:description" content={subtitle} />
         <meta property="og:image" content={backgrounds[background].source} />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:title" content={title} />
-        <meta property="twitter:description" content={description} />
+        <meta property="twitter:description" content={subtitle} />
       </Helmet>
       {isModalOpen && (
         <Modal

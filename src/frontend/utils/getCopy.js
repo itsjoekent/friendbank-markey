@@ -65,6 +65,13 @@ export const copy = {
     password: {
       [ENGLISH]: 'Password',
     },
+    passwordConfirmation: {
+      [ENGLISH]: 'Password Confirmation',
+    },
+    submit: {
+      [ENGLISH]: 'Submit',
+      [SPANISH]: 'Someter',
+    },
   },
   idQuestions: {
     support: {
@@ -158,6 +165,9 @@ export const copy = {
     },
     passwordLength: {
       [ENGLISH]: 'Must be at least 8 characters',
+    },
+    passwordMismatch: {
+      [ENGLISH]: 'Passwords do not match',
     },
     existingUser: {
       [ENGLISH]: 'An account is already registered with this email',
@@ -307,6 +317,76 @@ export const copy = {
     link: {
       [ENGLISH]: 'copy link',
       [SPANISH]: 'Copiar enlace',
+    },
+  },
+  authPage: {
+    login: {
+      [ENGLISH]: 'Login',
+    },
+    newAccount: {
+      [ENGLISH]: 'Create new account',
+    },
+    forgotPassword: {
+      [ENGLISH]: 'Forgot my password',
+    },
+    notAuthorizedFlag: {
+      [ENGLISH]: 'Not authorized to perform that action',
+    },
+  },
+  dashboard: {
+    loadMore: {
+      [ENGLISH]: 'Load more',
+    },
+    profileHeader: {
+      [ENGLISH]: 'Profile',
+    },
+    editProfileHeader: {
+      [ENGLISH]: 'Edit profile',
+    },
+    editProfileButton: {
+      [ENGLISH]: 'Update profile',
+    },
+    editPasswordHeader: {
+      [ENGLISH]: 'Edit password',
+    },
+    editPasswordButton: {
+      [ENGLISH]: 'Update password',
+    },
+    editPasswordSuccess: {
+      [ENGLISH]: 'Successfully updated password',
+    },
+    emailSubscriptionLabel: {
+      [ENGLISH]: 'Email Subscription',
+    },
+    logoutLabel: {
+      [ENGLISH]: 'Logout',
+    },
+    signupsHeader: {
+      [ENGLISH]: 'Signups',
+    },
+    signupPagesHeader: {
+      [ENGLISH]: 'Signup Pages',
+    },
+    signupTableSource: {
+      [ENGLISH]: 'Source',
+    },
+    signupTablePhonebankSource: {
+      [ENGLISH]: 'Phonebank',
+    },
+    signupTableSupport: {
+      [ENGLISH]: 'Support Level',
+    },
+    signupTableVolunteer: {
+      [ENGLISH]: 'Volunteer Level',
+    },
+    totalSignups: {
+      [ENGLISH]: 'Total signups:',
+    },
+    phonebankLabel: {
+      [ENGLISH]: 'Add Phonebank Contacts',
+    },
+    editPageHeader: {
+      [ENGLISH]: 'Edit page',
     },
   },
   genericError: {

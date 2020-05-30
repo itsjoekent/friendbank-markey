@@ -39,3 +39,14 @@ export const WhiteBlueButton = styled(BaseButton)`
     color: ${({ theme }) => theme.colors.white};
   }
 `;
+
+export const DarkBlueButton = styled(BaseButton)`
+  border: 2px solid ${({ theme }) => theme.colors.darkBlue};
+  background-color: ${({ theme }) => theme.colors.darkBlue};
+  color: ${({ theme }) => theme.colors.white};
+
+  &:hover {
+    background-color: transparent;
+    color: ${({ theme }) => theme.colors.darkBlue};
+  }
+`;
