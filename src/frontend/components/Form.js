@@ -49,7 +49,7 @@ const spinnerKeyframes = keyframes`
   }
 `;
 
-const FormContainer = styled.div`
+export const FormContainer = styled.div`
   position: relative;
   opacity: 0;
   animation: ${FADE_IN_TIME}ms forwards ${fadeInKeyframes};
@@ -144,6 +144,7 @@ export default function Form(props) {
     steps,
     onCompletion,
     onFormValueChange,
+    initialFieldValues,
   } = props;
 
   const { page } = useApplicationContext();
@@ -200,16 +201,32 @@ export default function Form(props) {
       }
 
       if (!!onCompletion) {
-        onCompletion(formValues);
+        onCompletion(formValues, setTargetStep, setFormValues);
       }
     }
-  }, [steps, onCompletion, activeStep]);
+  }, [steps, onCompletion, activeStep, setTargetStep, setFormValues]);
 
   React.useEffect(() => {
     if (onFormValueChange) {
       onFormValueChange(formValues, setFormValues, activeStep);
     }
   }, [onFormValueChange, formValues]);
+
+  React.useEffect(() => {
+    if (initialFieldValues) {
+      const upsert = Object.keys(initialFieldValues).reduce((acc, key) => {
+        if (!formValues[key]) {
+          return { ...acc, [key]: initialFieldValues[key] };
+        }
+
+        return acc;
+      }, {});
+
+      if (Object.keys(upsert).length) {
+        setFormValues((copy) => ({ ...copy, ...upsert }));
+      }
+    }
+  }, [initialFieldValues, formValues, setFormValues]);
 
   function onSubmit(event) {
     event.preventDefault();

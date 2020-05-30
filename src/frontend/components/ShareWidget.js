@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import copyToClipboard from 'copy-to-clipboard';
+import share from '../utils/share';
 import getCopy from '../utils/getCopy';
 
 export const DARK_THEME = 'DARK_THEME';
@@ -102,15 +102,12 @@ export default function ShareWidget(props) {
     customShareText = '',
   } = props;
 
-  const shareLink = window.location.href;
-
-  const facebookLink = `https://www.facebook.com/sharer/sharer.php?u=${shareLink}&quote=${encodeURIComponent(customShareText || '')}`;
-  const twitterLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`${customShareText || ''}\n${shareLink}`)}`;
-  const emailLink = `mailto:yourfriend@gmail.com?body=${encodeURIComponent(`${customShareText || ''}\n${shareLink}`)}`;
-
-  function onCopy() {
-    copyToClipboard(shareLink);
-  }
+  const {
+    facebookLink,
+    twitterLink,
+    emailLink,
+    onCopy,
+  } = share(customShareText);
 
   return (
     <ThemeProvider theme={(pre) => ({ ...pre, shareTheme: theme })}>

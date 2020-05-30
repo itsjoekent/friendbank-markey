@@ -1,12 +1,13 @@
+import getCopy from './getCopy';
 import makeApiRequest from './makeApiRequest';
 
-export default async function makeFormApiRequest(path, data, afterRequest) {
+export default async function makeFormApiRequest(path, method, data, afterRequest, enableAuthorizationRedirect = true) {
   try {
     const {
       errorMessage,
       json,
       response,
-    } = await makeApiRequest(path, 'post', data);
+    } = await makeApiRequest(path, method, data, enableAuthorizationRedirect);
 
     if (errorMessage && errorMessage.length) {
       return errorMessage;

@@ -4,6 +4,7 @@ import getCopy, { copy } from '../utils/getCopy';
 import { RedButton } from './Buttons';
 import { LOGIN_ROUTE } from '../pages/Login';
 import { HOMEPAGE_ROUTE } from '../pages/Homepage';
+import { DASHBOARD_ROUTE } from '../pages/Dashboard';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import isSpanishPath from '../utils/isSpanishPath';
 import { isAuthenticated } from '../utils/auth';
@@ -12,6 +13,11 @@ import { ENGLISH, SPANISH, SPANISH_PREFIX } from '../../shared/lang';
 const NavStack = styled.div`
   display: flex;
   flex-direction: column;
+  box-shadow: ${({ theme }) => theme.shadow};
+
+  @media ${({ theme }) => theme.media.tablet} {
+    margin-bottom: 24px;
+  }
 `;
 
 const NavContainer = styled.div`
@@ -25,11 +31,6 @@ const NavContainer = styled.div`
   margin-right: auto;
 
   background-color: ${({ theme }) => theme.colors.white};
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 25%);
-
-  @media ${({ theme }) => theme.media.tablet} {
-    margin-bottom: 24px;
-  }
 `;
 
 const Logo = styled.a`
@@ -165,7 +166,7 @@ export default function Nav(props) {
 
   React.useEffect(() => {
     setRightLink([
-      makeLocaleLink(isAuthenticated() ? '/dashboard' : LOGIN_ROUTE),
+      makeLocaleLink(isAuthenticated() ? DASHBOARD_ROUTE : LOGIN_ROUTE),
       isAuthenticated() ? getCopy('nav.dashboard') : getCopy('nav.login'),
     ]);
   }, []);

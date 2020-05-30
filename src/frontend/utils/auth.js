@@ -14,6 +14,14 @@ export function getAuthToken(token) {
   return localStorage.getItem('token');
 }
 
+export function removeAuthToken(token) {
+  if (typeof localStorage === 'undefined') {
+    return null;
+  }
+
+  return localStorage.removeItem('token');
+}
+
 export function isAuthenticated() {
   if (typeof localStorage === 'undefined') {
     return false;

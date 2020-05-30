@@ -1,7 +1,9 @@
 import getCopy from './getCopy';
 import { getAuthToken, setAuthToken } from './auth';
+import makeLocaleLink from './makeLocaleLink';
+import { LOGIN_ROUTE, NOT_AUTHORIZED_QUERY } from '../pages/Login';
 
-export default async function makeApiRequest(path, method, data) {
+export default async function makeApiRequest(path, method, data, enableAuthorizationRedirect = true) {
   try {
     const headers = { 'Content-Type': 'application/json' };
 
@@ -17,9 +19,13 @@ export default async function makeApiRequest(path, method, data) {
 
     const json = await response.json();
 
-    if (response.status !== 200) {
+    if (response.status === 401 && enableAuthorizationRedirect) {
+      window.location.href = makeLocaleLink(`${LOGIN_ROUTE}?${NOT_AUTHORIZED_QUERY}`);
+    }
+
+    if (response.status >= 400) {
       const { field, error } = json;
-      console.log(field, error);
+      console.error({ field, error });
 
       return {
         response,

@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Helmet } from 'react-helmet';
 import getCopy from '../utils/getCopy';
+import StandardHelmet from '../components/StandardHelmet';
 import SplitScreen from '../components/SplitScreen';
 import Form from '../components/Form';
 import backgrounds from '../../shared/backgrounds';
 import signupIdFields from '../forms/signupIdFields';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
+import { isAuthenticated } from '../utils/auth';
 import {
   SINGLE_LINE_TEXT_INPUT,
   PASSWORD_INPUT,
@@ -47,7 +48,7 @@ export default function Homepage() {
       emailFrequency: TRANSACTIONAL_EMAIL,
     };
 
-    return await makeFormApiRequest('/api/v1/user', payload);
+    return await makeFormApiRequest('/api/v1/user', 'post', payload);
   }
 
   async function onPageSubmit(formValues) {
@@ -63,7 +64,7 @@ export default function Homepage() {
       setNormalizedCode(data.page.code);
     }
 
-    return await makeFormApiRequest(`/api/v1/page/${code}`, payload, afterPageSubmit);
+    return await makeFormApiRequest(`/api/v1/page/${code}`, 'post', payload, afterPageSubmit);
   }
 
   async function onSignup(formValues) {
@@ -89,7 +90,7 @@ export default function Homepage() {
       volunteerLevel,
     };
 
-    return await makeFormApiRequest('/api/v1/signup', payload);
+    return await makeFormApiRequest('/api/v1/signup', 'post', payload);
   }
 
   function onCompletion(formValues) {
@@ -199,6 +200,20 @@ export default function Homepage() {
     },
   ];
 
+  const authenticatedSteps = [
+    {
+      ...steps[1],
+      buttonCopy: getCopy('homepage.createButtonLabel'),
+    }
+  ];
+
+  const [clientSteps, setClientSteps] = React.useState(steps);
+  React.useEffect(() => {
+    if (isAuthenticated()) {
+      setClientSteps(authenticatedSteps);
+    }
+  }, []);
+
   const [hasPrefilledCode, setHasPrefilledCode] = React.useState(false);
   const [hasPrefilledTitle, setHasPrefilledTitle] = React.useState(false);
 
@@ -236,18 +251,10 @@ export default function Homepage() {
 
   return (
     <SplitScreen media={backgrounds['ed-climate-march']}>
-      <Helmet>
-        <title>{getCopy('homepage.formTitle')}</title>
-        <meta name="og:title" content={getCopy('homepage.formTitle')} />
-        <meta property="og:description" content={getCopy('homepage.formSubtitle')} />
-        <meta property="og:image" content={backgrounds['ed-climate-march'].source} />
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:title" content={getCopy('homepage.formTitle')} />
-        <meta property="twitter:description" content={getCopy('homepage.formSubtitle')} />
-      </Helmet>
+      <StandardHelmet />
       <Form
         formId="create"
-        steps={steps}
+        steps={clientSteps}
         onFormValueChange={onFormValueChange}
         onCompletion={onCompletion}
       />
