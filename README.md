@@ -6,8 +6,8 @@ More documentation and ways to help contribute coming soon!
 
 ----
 
-Supporter Pages
-- [ ] Edit page (1-2 hrs)
+Homepage
+- [ ] Change "CUSTOMIZE YOUR PAGE" to "CREATE NEW PAGE" when logged in
 
 Dashboard
  - [ ] Fix emailFrequency label/options (2hrs)
