@@ -24,4 +24,5 @@ Misc Frontend
 
 Misc Backend
 - [ ] BSD API Email Auth (30mins-1hr)
+- [ ] Weekly email job?
 - [ ] Create + Test BSD Email Templates (1-2hrs)

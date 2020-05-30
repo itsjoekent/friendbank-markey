@@ -24,7 +24,9 @@ import {
   validatePhone,
   validatePassword,
   validateCode,
-  validateRequired,
+  validateTitle,
+  validateSubtitle,
+  validateBackground,
 } from '../../shared/fieldValidations';
 
 export const HOMEPAGE_ROUTE = '/';
@@ -169,20 +171,20 @@ export default function Homepage() {
           fieldId: 'title',
           fieldType: SINGLE_LINE_TEXT_INPUT,
           label: getCopy('formLabels.title'),
-          validator: validateRequired,
+          validator: validateTitle,
         },
         {
           fieldId: 'subtitle',
           fieldType: MULTI_LINE_TEXT_INPUT,
           label: getCopy('formLabels.subtitle'),
           defaultValue: getCopy('homepage.defaultSubtitle'),
-          validator: validateRequired,
+          validator: validateSubtitle,
         },
         {
           fieldId: 'background',
           fieldType: GALLERY_PICKER,
           label: getCopy('formLabels.background'),
-          validator: validateRequired,
+          validator: validateBackground,
           options: Object.keys(backgrounds).map((key) => ({
             name: key,
             src: backgrounds[key].source,

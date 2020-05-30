@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { HOMEPAGE_ROUTE } from './Homepage';
 import { PHONEBANK_FORM_ROUTE } from './PhonebankForm';
+import { EDIT_PAGE_ROUTE } from './EditPage';
 import StandardHelmet from '../components/StandardHelmet';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { DarkBlueButton } from '../components/Buttons';
@@ -670,6 +671,8 @@ export default function Dashboard() {
                 onCopy,
               } = share(page.title, makeLocaleLink(`/${page.code}`));
 
+              const editRoute = makeLocaleLink(EDIT_PAGE_ROUTE.replace(':code', page.code));
+
               return (
                 <PageContainer key={page.code}>
                   <PageCover>
@@ -681,7 +684,7 @@ export default function Dashboard() {
                       <PageSubheader>{page.subtitle}</PageSubheader>
                     </div>
                     <PageDetailsFooter>
-                      <EditPageButton>
+                      <EditPageButton as="a" href={editRoute}>
                         {getCopy('dashboard.editPageHeader')}
                       </EditPageButton>
                       <PageDetailsFooter>
