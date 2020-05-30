@@ -9,12 +9,12 @@ import SplitScreen from '../components/SplitScreen';
 import Modal from '../components/Modal';
 import Form from '../components/Form';
 import ShareWidget, { DARK_THEME, ShareContainer } from '../components/ShareWidget';
-import backgrounds from '../../shared/backgrounds';
 import signupContactFields from '../forms/signupContactFields';
 import signupIdFields from '../forms/signupIdFields';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
 import normalizePageCode from '../../shared/normalizePageCode';
+import backgrounds from '../../shared/backgrounds';
 
 export const SIGNUP_ROUTE = '/:code';
 

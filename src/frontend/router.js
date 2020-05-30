@@ -6,6 +6,7 @@ import Signup, { getSignupInitialProps, SIGNUP_ROUTE } from './pages/Signup';
 import Login, { LOGIN_ROUTE } from './pages/Login';
 import Dashboard, { DASHBOARD_ROUTE } from './pages/Dashboard';
 import PhonebankForm, { PHONEBANK_FORM_ROUTE } from './pages/PhonebankForm';
+import EditPage, { getEditPageInitialProps, EDIT_PAGE_ROUTE } from './pages/EditPage';
 import { SPANISH_PREFIX } from '../shared/lang';
 
 function removeTrailingSlash(from) {
@@ -32,6 +33,11 @@ const PAGE_MAP = [
     PHONEBANK_FORM_ROUTE,
     null,
     PhonebankForm,
+  ],
+  [
+    EDIT_PAGE_ROUTE,
+    getEditPageInitialProps,
+    EditPage,
   ],
   [
     SIGNUP_ROUTE,
