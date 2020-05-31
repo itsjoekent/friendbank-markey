@@ -1,5 +1,5 @@
 import getCopy from './getCopy';
-import { getAuthToken, setAuthToken } from './auth';
+import { getAuthToken, setAuthToken, removeAuthToken } from './auth';
 import makeLocaleLink from './makeLocaleLink';
 import { LOGIN_ROUTE, NOT_AUTHORIZED_QUERY } from '../pages/Login';
 
@@ -20,6 +20,7 @@ export default async function makeApiRequest(path, method, data, enableAuthoriza
     const json = await response.json();
 
     if (response.status === 401 && enableAuthorizationRedirect) {
+      removeAuthToken();
       window.location.href = makeLocaleLink(`${LOGIN_ROUTE}?${NOT_AUTHORIZED_QUERY}`);
     }
 
