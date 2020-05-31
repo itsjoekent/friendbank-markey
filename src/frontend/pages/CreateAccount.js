@@ -1,6 +1,7 @@
 import React from 'react';
 import { DASHBOARD_ROUTE } from './Dashboard';
 import { LOGIN_ROUTE } from './Login';
+import { FORGOT_PASSWORD_ROUTE } from './ForgotPassword';
 import Form from '../components/Form';
 import Gateway from '../components/Gateway';
 import getCopy from '../utils/getCopy';
@@ -53,7 +54,7 @@ export default function CreateAccount() {
         copy: getCopy('authPage.login'),
       }}
       rightLink={{
-        path: '/friendbank/forgot-password',
+        path: FORGOT_PASSWORD_ROUTE,
         copy: getCopy('authPage.forgotPassword'),
       }}
     >

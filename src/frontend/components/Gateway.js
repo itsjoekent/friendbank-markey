@@ -63,18 +63,20 @@ export default function Gateway(props) {
       {!!preContainerChildren && preContainerChildren}
       <Container>
         {children}
-        <LinkRow>
-          {leftLink && (
-            <Link href={makeLocaleLink(leftLink.path)}>
-              {leftLink.copy}
-            </Link>
-          )}
-          {rightLink && (
-            <Link href={makeLocaleLink(rightLink.path)}>
-              {rightLink.copy}
-            </Link>
-          )}
-        </LinkRow>
+        {(leftLink || rightLink) && (
+          <LinkRow>
+            {leftLink && (
+              <Link href={makeLocaleLink(leftLink.path)}>
+                {leftLink.copy}
+              </Link>
+            )}
+            {rightLink && (
+              <Link href={makeLocaleLink(rightLink.path)}>
+                {rightLink.copy}
+              </Link>
+            )}
+          </LinkRow>
+        )}
       </Container>
     </Layout>
   );

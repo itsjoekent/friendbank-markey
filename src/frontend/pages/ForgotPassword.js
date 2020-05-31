@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { DASHBOARD_ROUTE } from './Dashboard';
+import { LOGIN_ROUTE } from './Login';
 import { CREATE_ACCOUNT_ROUTE } from './CreateAccount';
-import { FORGOT_PASSWORD_ROUTE } from './ForgotPassword';
 import getCopy from '../utils/getCopy';
 import Form from '../components/Form';
 import Gateway from '../components/Gateway';
@@ -11,18 +11,14 @@ import makeLocaleLink from '../utils/makeLocaleLink';
 import { isAuthenticated } from '../utils/auth';
 import {
   SINGLE_LINE_TEXT_INPUT,
-  PASSWORD_INPUT,
 } from '../components/FormFields';
 import {
   validateEmail,
-  validatePassword,
 } from '../../shared/fieldValidations';
 
-export const LOGIN_ROUTE = '/friendbank/login';
+export const FORGOT_PASSWORD_ROUTE = '/friendbank/forgot-password';
 
-export const NOT_AUTHORIZED_QUERY = 'not_authorized=1';
-
-const NotAuthorizedBanner = styled.p`
+const Banner = styled.p`
   display: block;
   font-family: ${({ theme }) => theme.fonts.mainFamily};
   font-weight: bold;
@@ -30,23 +26,20 @@ const NotAuthorizedBanner = styled.p`
   text-align: center;
   width: 100%;
   max-width: 400px;
-  padding: 4px;
-  background-color: ${({ theme }) => theme.colors.red};
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.darkBlue};
 `;
 
-export default function Login() {
-  const [isNotAuthorizedFlag, setIsNotAuthorizedFlag] = React.useState(false);
+export default function ForgotPassword() {
+  const [hasSentEmail, setHasSentEmail] = React.useState(false);
 
-  async function onLogin(formValues) {
-    const { email, password } = formValues;
-    setIsNotAuthorizedFlag(false);
+  async function onRequestForgotPassword(formValues) {
+    const { email } = formValues;
 
-    return await makeFormApiRequest('/api/v1/login', 'post', { email, password }, null, false);
+    return await makeFormApiRequest('/api/v1/forgot-password', 'post', { email });
   }
 
   function onCompletion() {
-    window.location.href = makeLocaleLink(DASHBOARD_ROUTE);
+    setHasSentEmail(true);
   }
 
   React.useEffect(() => {
@@ -55,34 +48,32 @@ export default function Login() {
     }
   }, []);
 
-  React.useEffect(() => {
-    if (location.search.includes(NOT_AUTHORIZED_QUERY)) {
-      setIsNotAuthorizedFlag(true);
-      window.history.replaceState(null, '', location.pathname)
-    }
-  }, []);
+  if (hasSentEmail) {
+    return (
+      <Gateway>
+        <Banner>
+          {getCopy('authPage.forgotPasswordSent')}
+        </Banner>
+      </Gateway>
+    );
+  }
 
   return (
     <Gateway
-      preContainerChildren={isNotAuthorizedFlag && (
-        <NotAuthorizedBanner>
-          {getCopy('authPage.notAuthorizedFlag')}
-        </NotAuthorizedBanner>
-      )}
       leftLink={{
         path: CREATE_ACCOUNT_ROUTE,
         copy: getCopy('authPage.newAccount'),
       }}
       rightLink={{
-        path: FORGOT_PASSWORD_ROUTE,
-        copy: getCopy('authPage.forgotPassword'),
+        path: LOGIN_ROUTE,
+        copy: getCopy('authPage.login'),
       }}
     >
       <Form
         formId="login"
         steps={[{
-          title: getCopy('authPage.login'),
-          onStepSubmit: onLogin,
+          title: getCopy('authPage.forgotPassword'),
+          onStepSubmit: onRequestForgotPassword,
           buttonCopy: getCopy('formLabels.submit'),
           fields: [
             {
@@ -90,12 +81,6 @@ export default function Login() {
               fieldType: SINGLE_LINE_TEXT_INPUT,
               label: getCopy('formLabels.email'),
               validator: validateEmail,
-            },
-            {
-              fieldId: 'password',
-              fieldType: PASSWORD_INPUT,
-              label: getCopy('formLabels.password'),
-              validator: validatePassword,
             },
           ],
         }]}

@@ -329,8 +329,14 @@ export const copy = {
     forgotPassword: {
       [ENGLISH]: 'Forgot my password',
     },
+    resetPassword: {
+      [ENGLISH]: 'Reset password',
+    },
     notAuthorizedFlag: {
       [ENGLISH]: 'Not authorized to perform that action',
+    },
+    forgotPasswordSent: {
+      [ENGLISH]: 'An email with a link to reset your password has been sent.',
     },
   },
   dashboard: {
