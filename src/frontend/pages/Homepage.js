@@ -205,6 +205,7 @@ export default function Homepage() {
   const authenticatedSteps = [
     {
       ...steps[1],
+      title: getCopy('homepage.formTitle'),
       buttonCopy: getCopy('homepage.createButtonLabel'),
     }
   ];

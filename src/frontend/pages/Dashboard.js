@@ -27,6 +27,10 @@ import {
   validatePassword,
   validateRequired,
 } from '../../shared/fieldValidations';
+import {
+  TRANSACTIONAL_EMAIL,
+  UNSUBSCRIBED,
+} from '../../shared/emailFrequency';
 
 export const DASHBOARD_ROUTE = '/friendbank/dashboard';
 
@@ -341,7 +345,15 @@ export default function Dashboard() {
       const { response, json } = await makeApiRequest('/api/v1/user', 'get');
 
       if (!cancel) {
-        setProfile(json.user);
+        const { user } = json;
+
+        const uiOptions = getCopy('dashboard.emailSubscriptionOptions');
+        const apiOptions = [TRANSACTIONAL_EMAIL, UNSUBSCRIBED];
+
+        setProfile({
+          ...user,
+          emailFrequency: uiOptions[apiOptions.indexOf(user.emailFrequency)],
+        });
       }
     }
 
@@ -422,6 +434,14 @@ export default function Dashboard() {
   async function onEditProfile(formValues) {
     const payload = Object.keys(profile).reduce((acc, key) => {
       if (profile[key] !== formValues[key]) {
+        if (key === 'emailFrequency') {
+          const uiOptions = getCopy('dashboard.emailSubscriptionOptions');
+          const apiOptions = [TRANSACTIONAL_EMAIL, UNSUBSCRIBED];
+          const subscriptionValue = apiOptions[uiOptions.indexOf(formValues[key])];
+
+          return { ...acc, [key]: subscriptionValue };
+        }
+
         return { ...acc, [key]: formValues[key] };
       }
 
@@ -613,10 +633,7 @@ export default function Dashboard() {
                     fieldType: RADIO_FIELD,
                     label: getCopy('dashboard.emailSubscriptionLabel'),
                     validator: validateRequired,
-                    options: [
-                      'Recieve new signup notifications',
-                      'Unsubscribe from all signup emails',
-                    ],
+                    options: getCopy('dashboard.emailSubscriptionOptions'),
                   },
                 ],
               }]}

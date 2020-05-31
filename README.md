@@ -6,12 +6,6 @@ More documentation and ways to help contribute coming soon!
 
 ----
 
-Homepage
-- [ ] Change "CUSTOMIZE YOUR PAGE" to "CREATE NEW PAGE" when logged in
-
-Dashboard
- - [ ] Fix emailFrequency label/options (2hrs)
-
 Auth
  - [ ] Signup page (1hr)
  - [ ] Forgot Password Flow (1-2hrs)
@@ -25,4 +19,5 @@ Misc Frontend
 Misc Backend
 - [ ] BSD API Email Auth (30mins-1hr)
 - [ ] Weekly email job?
+- [ ] Unsubscribe token?
 - [ ] Create + Test BSD Email Templates (1-2hrs)
