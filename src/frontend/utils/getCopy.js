@@ -358,6 +358,12 @@ export const copy = {
     emailSubscriptionLabel: {
       [ENGLISH]: 'Email Subscription',
     },
+    emailSubscriptionOptions: {
+      [ENGLISH]: [
+        'Recieve new signup notifications',
+        'Unsubscribe from all signup emails',
+      ],
+    },
     logoutLabel: {
       [ENGLISH]: 'Logout',
     },
