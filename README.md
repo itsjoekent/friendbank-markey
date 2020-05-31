@@ -6,9 +6,6 @@ More documentation and ways to help contribute coming soon!
 
 ----
 
-Auth
- - [ ] Forgot Password Flow (1-2hrs)
-
 Misc Frontend
 - [ ] 404 page (1hr)
 - [ ] 500 page (30mins)
@@ -20,3 +17,11 @@ Misc Backend
 - [ ] Weekly email job?
 - [ ] Unsubscribe token?
 - [ ] Create + Test BSD Email Templates (1-2hrs)
+
+Frontend Testing
+- [ ] ...
+
+Transition
+- [ ] Page migration
+- [ ] Signups import script
+- [ ] Custom "forgot password" email send for everyone that already made a page

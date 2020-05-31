@@ -6,6 +6,8 @@ import Signup, { getSignupInitialProps, SIGNUP_ROUTE } from './pages/Signup';
 import EditPage, { getEditPageInitialProps, EDIT_PAGE_ROUTE } from './pages/EditPage';
 import Login, { LOGIN_ROUTE } from './pages/Login';
 import CreateAccount, { CREATE_ACCOUNT_ROUTE } from './pages/CreateAccount';
+import ForgotPassword, { FORGOT_PASSWORD_ROUTE } from './pages/ForgotPassword';
+import ResetPassword, { RESET_PASSWORD_ROUTE } from './pages/ResetPassword';
 import Dashboard, { DASHBOARD_ROUTE } from './pages/Dashboard';
 import PhonebankForm, { PHONEBANK_FORM_ROUTE } from './pages/PhonebankForm';
 import { SPANISH_PREFIX } from '../shared/lang';
@@ -29,6 +31,16 @@ const PAGE_MAP = [
     CREATE_ACCOUNT_ROUTE,
     null,
     CreateAccount,
+  ],
+  [
+    FORGOT_PASSWORD_ROUTE,
+    null,
+    ForgotPassword,
+  ],
+  [
+    RESET_PASSWORD_ROUTE,
+    null,
+    ResetPassword,
   ],
   [
     DASHBOARD_ROUTE,
