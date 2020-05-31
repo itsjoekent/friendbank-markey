@@ -1,10 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
 import { DASHBOARD_ROUTE } from './Dashboard';
-import { CREATE_ACCOUNT_ROUTE } from './CreateAccount';
-import getCopy from '../utils/getCopy';
+import { LOGIN_ROUTE } from './Login';
 import Form from '../components/Form';
 import Gateway from '../components/Gateway';
+import getCopy from '../utils/getCopy';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import { isAuthenticated } from '../utils/auth';
@@ -15,33 +14,26 @@ import {
 import {
   validateEmail,
   validatePassword,
+  validateName,
+  validateZip,
 } from '../../shared/fieldValidations';
+import { TRANSACTIONAL_EMAIL } from '../../shared/emailFrequency';
 
-export const LOGIN_ROUTE = '/friendbank/login';
+export const CREATE_ACCOUNT_ROUTE = '/friendbank/create-account';
 
-export const NOT_AUTHORIZED_QUERY = 'not_authorized=1';
+export default function CreateAccount() {
+  async function onCreateAccount(formValues) {
+    const { email, password, firstName, zip } = formValues;
 
-const NotAuthorizedBanner = styled.p`
-  display: block;
-  font-family: ${({ theme }) => theme.fonts.mainFamily};
-  font-weight: bold;
-  font-size: 18px;
-  text-align: center;
-  width: 100%;
-  max-width: 400px;
-  padding: 4px;
-  background-color: ${({ theme }) => theme.colors.red};
-  color: ${({ theme }) => theme.colors.white};
-`;
+    const payload = {
+      email,
+      password,
+      firstName,
+      zip,
+      emailFrequency: TRANSACTIONAL_EMAIL,
+    };
 
-export default function Login() {
-  const [isNotAuthorizedFlag, setIsNotAuthorizedFlag] = React.useState(false);
-
-  async function onLogin(formValues) {
-    const { email, password } = formValues;
-    setIsNotAuthorizedFlag(false);
-
-    return await makeFormApiRequest('/api/v1/login', 'post', { email, password }, null, false);
+    return await makeFormApiRequest('/api/v1/user', 'post', payload);
   }
 
   function onCompletion() {
@@ -54,23 +46,11 @@ export default function Login() {
     }
   }, []);
 
-  React.useEffect(() => {
-    if (location.search.includes(NOT_AUTHORIZED_QUERY)) {
-      setIsNotAuthorizedFlag(true);
-      window.history.replaceState(null, '', location.pathname)
-    }
-  }, []);
-
   return (
     <Gateway
-      preContainerChildren={isNotAuthorizedFlag && (
-        <NotAuthorizedBanner>
-          {getCopy('authPage.notAuthorizedFlag')}
-        </NotAuthorizedBanner>
-      )}
       leftLink={{
-        path: CREATE_ACCOUNT_ROUTE,
-        copy: getCopy('authPage.newAccount'),
+        path: LOGIN_ROUTE,
+        copy: getCopy('authPage.login'),
       }}
       rightLink={{
         path: '/friendbank/forgot-password',
@@ -78,12 +58,26 @@ export default function Login() {
       }}
     >
       <Form
-        formId="login"
+        formId="create-account"
         steps={[{
-          title: getCopy('authPage.login'),
-          onStepSubmit: onLogin,
+          title: getCopy('authPage.newAccount'),
+          onStepSubmit: onCreateAccount,
           buttonCopy: getCopy('formLabels.submit'),
           fields: [
+            {
+              fieldId: 'firstName',
+              fieldType: SINGLE_LINE_TEXT_INPUT,
+              isHalfWidth: true,
+              label: getCopy('formLabels.firstName'),
+              validator: validateName,
+            },
+            {
+              fieldId: 'zip',
+              fieldType: SINGLE_LINE_TEXT_INPUT,
+              isHalfWidth: true,
+              label: getCopy('formLabels.zip'),
+              validator: validateZip,
+            },
             {
               fieldId: 'email',
               fieldType: SINGLE_LINE_TEXT_INPUT,
