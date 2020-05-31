@@ -14,7 +14,7 @@ export function getAuthToken(token) {
   return localStorage.getItem('token');
 }
 
-export function removeAuthToken(token) {
+export function removeAuthToken() {
   if (typeof localStorage === 'undefined') {
     return null;
   }

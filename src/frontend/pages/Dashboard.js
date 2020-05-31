@@ -93,6 +93,10 @@ const SignupPagesCard = styled(Card)`
   overflow-y: scroll;
 
   @media ${({ theme }) => theme.media.tablet} {
+    width: calc(50% - 24px);
+  }
+
+  @media ${({ theme }) => theme.media.desktop} {
     width: calc(66.66% - 24px);
   }
 `;
