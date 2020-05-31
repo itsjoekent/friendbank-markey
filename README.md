@@ -7,7 +7,6 @@ More documentation and ways to help contribute coming soon!
 ----
 
 Auth
- - [ ] Signup page (1hr)
  - [ ] Forgot Password Flow (1-2hrs)
 
 Misc Frontend

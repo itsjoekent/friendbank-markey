@@ -3,10 +3,11 @@ import UrlPattern from 'url-pattern';
 import ErrorPage from './pages/Error';
 import Homepage, { HOMEPAGE_ROUTE } from './pages/Homepage';
 import Signup, { getSignupInitialProps, SIGNUP_ROUTE } from './pages/Signup';
+import EditPage, { getEditPageInitialProps, EDIT_PAGE_ROUTE } from './pages/EditPage';
 import Login, { LOGIN_ROUTE } from './pages/Login';
+import CreateAccount, { CREATE_ACCOUNT_ROUTE } from './pages/CreateAccount';
 import Dashboard, { DASHBOARD_ROUTE } from './pages/Dashboard';
 import PhonebankForm, { PHONEBANK_FORM_ROUTE } from './pages/PhonebankForm';
-import EditPage, { getEditPageInitialProps, EDIT_PAGE_ROUTE } from './pages/EditPage';
 import { SPANISH_PREFIX } from '../shared/lang';
 
 function removeTrailingSlash(from) {
@@ -23,6 +24,11 @@ const PAGE_MAP = [
     LOGIN_ROUTE,
     null,
     Login,
+  ],
+  [
+    CREATE_ACCOUNT_ROUTE,
+    null,
+    CreateAccount,
   ],
   [
     DASHBOARD_ROUTE,
