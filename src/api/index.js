@@ -245,6 +245,7 @@ app.get('*', async function (req, res) {
     const { html, headTags, styleTags, initialProps } = ssrResult;
 
     const page = template.replace(/{{REACT_DATA}}/g, JSON.stringify(initialProps))
+      .replace(/{{HEAP_TAG}}/g, IS_PROD_HEAP ? PROD_HEAP : DEV_HEAP)
       .replace(/{{HEAD}}/g, headTags)
       .replace(/{{HTML}}/g, html)
       .replace(/{{STYLE_TAGS}}/g, styleTags);

@@ -706,7 +706,7 @@ export default function Dashboard() {
                     </div>
                     <PageDetailsFooter>
                       <EditPageButton as="a" href={editRoute}>
-                        {getCopy('dashboard.editPageHeader')}
+                        {getCopy('dashboard.editPageButton')}
                       </EditPageButton>
                       <PageDetailsFooter>
                         <ShareButtonIcon href={facebookLink} target="_blank" rel="noopener noreferrer">
