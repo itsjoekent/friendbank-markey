@@ -10,10 +10,7 @@ Misc Frontend
 - [ ] Document + Plug in new Spanish translations (1hr)
 
 Misc Backend
-- [ ] BSD API Email Auth (30mins-1hr)
-- [ ] Weekly email job?
-- [ ] Unsubscribe token?
-- [ ] Create + Test BSD Email Templates (1-2hrs)
+- [ ] Sendgrid migration?
 
 Transition
 - [ ] Page migration

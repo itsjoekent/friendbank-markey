@@ -282,6 +282,7 @@ export const copy = {
     },
     returnLink: {
       [ENGLISH]: 'https://www.edmarkey.com/',
+      [SPANISH]: 'https://www.edmarkey.com/es/',d
     },
     donate: {
       [ENGLISH]: 'donate',
@@ -324,7 +325,7 @@ export const copy = {
       [ENGLISH]: 'Login',
     },
     newAccount: {
-      [ENGLISH]: 'Create new account',
+      [ENGLISH]: 'Create a new account',
     },
     forgotPassword: {
       [ENGLISH]: 'Forgot my password',
@@ -397,7 +398,7 @@ export const copy = {
     phonebankLabel: {
       [ENGLISH]: 'Add Phonebank Contacts',
     },
-    editPageHeader: {
+    editPageButton: {
       [ENGLISH]: 'Edit page',
     },
   },
