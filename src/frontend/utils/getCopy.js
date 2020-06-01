@@ -401,9 +401,22 @@ export const copy = {
       [ENGLISH]: 'Edit page',
     },
   },
+  pageNotFound: {
+    [ENGLISH]: 'Page not found',
+  },
   genericError: {
     [ENGLISH]: 'Looks like we had an error, try again? If this continues to happen, please contact us https://www.edmarkey.com/contact-us/',
     [SPANISH]: 'Parece que tuvimos un error, ¿intentar de nuevo? Si esto continúa sucediendo, por favor contáctenos https://www.edmarkey.com/contact-us/',
+  },
+  privacyPolicy: {
+    label: {
+      [ENGLISH]: 'Privacy Policy',
+      [SPANISH]: 'Política de privacidad',
+    },
+    link: {
+      [ENGLISH]: 'https://www.edmarkey.com/privacy-policy/',
+      [SPANISH]: 'https://www.edmarkey.com/es/privacy-policy/',
+    },
   },
   politicalDiclaimer: {
     [ENGLISH]: 'PAID FOR BY THE MARKEY COMMITTEE',

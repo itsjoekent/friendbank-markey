@@ -78,6 +78,7 @@ app.use(express.static('public', {
 
 let db = null;
 let template = null;
+let errorPage = null;
 
 app.get('/api/v1/health', async function(req, res) {
   res.json({ ok: true });
@@ -246,15 +247,15 @@ app.get('*', async function (req, res) {
     const page = template.replace(/{{REACT_DATA}}/g, JSON.stringify(initialProps))
       .replace(/{{HEAD}}/g, headTags)
       .replace(/{{HTML}}/g, html)
-      .replace(/{{STYLE_TAGS}}/g, styleTags)
+      .replace(/{{STYLE_TAGS}}/g, styleTags);
 
     res.set('Content-Type', 'text/html');
     res.send(page);
   } catch (error) {
     console.error(error);
 
-    // TODO: Send generic 500 page HTML
-    res.status(500).send('oops');
+    res.set('Content-Type', 'text/html');
+    res.status(500).send(errorPage);
   }
 });
 
@@ -279,7 +280,8 @@ app.get('*', async function (req, res) {
   }
 
   try {
-    template = await fs.readFile(path.join(__dirname, 'template.html'), 'utf-8');
+    template = await fs.readFile(path.join(__dirname, 'template.200.html'), 'utf-8');
+    errorPage = await fs.readFile(path.join(__dirname, 'template.500.html'), 'utf-8');
   } catch (error) {
     console.log('Failed to read HTML template');
     console.error(error);

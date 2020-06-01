@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
-import getCopy from '../utils/getCopy';
+import _404 from './_404';
 import { useApplicationContext } from '../ApplicationContext';
 import { RedButton } from '../components/Buttons';
 import { DefaultTitle, DefaultParagraph } from '../components/Typography';
@@ -12,6 +12,7 @@ import ShareWidget, { DARK_THEME, ShareContainer } from '../components/ShareWidg
 import signupContactFields from '../forms/signupContactFields';
 import signupIdFields from '../forms/signupIdFields';
 import makeLocaleLink from '../utils/makeLocaleLink';
+import getCopy from '../utils/getCopy';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
 import normalizePageCode from '../../shared/normalizePageCode';
 import backgrounds from '../../shared/backgrounds';
@@ -92,8 +93,7 @@ export default function Signup() {
   const context = useApplicationContext();
 
   if (!context.page) {
-    // TODO: return 404
-    return null;
+    return <_404 />;
   }
 
   const {

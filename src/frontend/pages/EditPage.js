@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import _404 from './_404';
 import { useApplicationContext } from '../ApplicationContext';
 import getCopy from '../utils/getCopy';
 import StandardHelmet from '../components/StandardHelmet';
@@ -71,8 +72,7 @@ export default function EditPage() {
   const context = useApplicationContext();
 
   if (!context.page) {
-    // TODO: return 404
-    return null;
+    return <_404 />;
   }
 
   const {

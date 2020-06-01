@@ -36,7 +36,7 @@ module.exports = ({ db }) => {
 
         const mailResult = await sendMail(
           user.email,
-          process.env.SENDGRID_TEMPLATE_PASSWORD_RESET,
+          process.env.MAIL_PASSWORD_RESET_ID,
           {
             token: resetToken,
             accountEmail: user.email,
