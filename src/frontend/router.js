@@ -1,6 +1,6 @@
 import React from 'react';
 import UrlPattern from 'url-pattern';
-import ErrorPage from './pages/Error';
+import _404 from './pages/_404';
 import Homepage, { HOMEPAGE_ROUTE } from './pages/Homepage';
 import Signup, { getSignupInitialProps, SIGNUP_ROUTE } from './pages/Signup';
 import EditPage, { getEditPageInitialProps, EDIT_PAGE_ROUTE } from './pages/EditPage';
@@ -88,5 +88,5 @@ export default function router(path) {
   }, null);
 
   // TODO: Return 404 page
-  return match || [null, () => {}, React.Fragment];
+  return match || [null, () => {}, _404];
 }

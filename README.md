@@ -7,9 +7,6 @@ More documentation and ways to help contribute coming soon!
 ----
 
 Misc Frontend
-- [ ] 404 page (1hr)
-- [ ] 500 page (30mins)
-- [ ] Privacy Policy link (30mins)
 - [ ] Document + Plug in new Spanish translations (1hr)
 
 Misc Backend
@@ -17,9 +14,6 @@ Misc Backend
 - [ ] Weekly email job?
 - [ ] Unsubscribe token?
 - [ ] Create + Test BSD Email Templates (1-2hrs)
-
-Frontend Testing
-- [ ] ...
 
 Transition
 - [ ] Page migration

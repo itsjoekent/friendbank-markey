@@ -4,7 +4,6 @@ import { ApplicationContext } from './ApplicationContext';
 import GlobalStyle from './GlobalStyle';
 import Nav from './components/Nav';
 import CommitteeDisclaimer from './components/CommitteeDisclaimer';
-import ErrorPage from './pages/Error';
 import Homepage from './pages/Homepage';
 import SignupPage from './pages/Signup';
 import theme from './theme';
@@ -58,10 +57,6 @@ export default function Application(props) {
             <PageContainer>
               <Nav />
               <PageComponent />
-              {/* {(!state || !state.pageType || state.pageType === 'error') && <ErrorPage />}
-              {(state.pageType === 'notfound') && <ErrorPage is404 />}
-              {(state.pageType === 'homepage') && <Homepage />}
-              {(state.pageType === 'signup') && <SignupPage />} */}
               <CommitteeDisclaimer />
             </PageContainer>
           </Chrome>
