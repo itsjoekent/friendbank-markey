@@ -9,6 +9,7 @@ module.exports = ({ db }) => {
   async function forgotPassword(req, res) {
     try {
       const {
+        campaign,
         body: {
           email,
         },
@@ -34,11 +35,14 @@ module.exports = ({ db }) => {
       if (user) {
         const resetToken = await makeToken(db, user, ms('1 hour'));
 
+        const resetUrl = `https://${campaign.domains.pop()}/friendbank/reset-password?token=${resetToken}`;
+
         const mailResult = await sendMail(
           user.email,
           process.env.MAIL_PASSWORD_RESET_ID,
           {
-            token: resetToken,
+            resetUrl,
+            campaignName: campaign.name,
             accountEmail: user.email,
           },
         );

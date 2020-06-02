@@ -93,7 +93,7 @@ module.exports = ({ db }) => {
         if (pageAuthor && pageAuthor.emailFrequency === EMAIL_FREQUENCY.TRANSACTIONAL_EMAIL) {
           const mailResult = await sendMail(
             pageAuthor.email,
-            process.env.SENDGRID_TEMPLATE_TRANSACTIONAL_SIGNUP,
+            process.env.MAIL_SIGNUP_ID,
             {
               signupFirstName: signup.firstName,
               signupLastName: signup.lastName,
