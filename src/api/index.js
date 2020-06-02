@@ -2,6 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 
 const express = require('express');
+const secure = require('express-force-https');
 const { MongoClient, ObjectId } = require('mongodb');
 
 const loadCampaign = require('./middleware/loadCampaign');
@@ -53,24 +54,24 @@ const {
   BSD_SIGNUP_SUPPORT_ID,
   BSD_SIGNUP_VOLUNTEER_ID,
 
-  CACHE_PUBLIC_ASSETS,
-  IS_PROD_HEAP,
+  IS_PROD,
 } = process.env;
 
 const app = express();
 
+if (IS_PROD) {
+  app.use(secure);
+}
+
 app.use(express.json());
+
 app.use(express.static('public', {
   setHeaders: (res, path, stat) => {
     if (path.includes('/fonts/')) {
       res.set('Cache-Control', 'max-age=31104000, public');
     }
 
-    if (!CACHE_PUBLIC_ASSETS) {
-      return;
-    }
-
-    if (!path.includes('/dist/')) {
+    if (IS_PROD && !path.includes('/dist/')) {
       res.set('Cache-Control', 'max-age=31104000, public');
     }
   },
@@ -215,6 +216,9 @@ app.post(
 
 app.post(
   '/api/v1/forgot-password',
+  async function(req, res, next) {
+    await loadCampaign({ db })(req, res, next);
+  },
   async function(req, res) {
     await forgotPassword({ db })(req, res);
   },
@@ -245,7 +249,7 @@ app.get('*', async function (req, res) {
     const { html, headTags, styleTags, initialProps } = ssrResult;
 
     const page = template.replace(/{{REACT_DATA}}/g, JSON.stringify(initialProps))
-      .replace(/{{HEAP_TAG}}/g, IS_PROD_HEAP ? PROD_HEAP : DEV_HEAP)
+      .replace(/{{HEAP_TAG}}/g, IS_PROD ? PROD_HEAP : DEV_HEAP)
       .replace(/{{HEAD}}/g, headTags)
       .replace(/{{HTML}}/g, html)
       .replace(/{{STYLE_TAGS}}/g, styleTags);

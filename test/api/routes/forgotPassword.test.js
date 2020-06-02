@@ -30,14 +30,15 @@ describe('forgotPassword api route v1', function() {
     assert.equal(response.status, 200);
 
     const message = await _readServiceOutput('mail');
-    assert.include(message.body, `email=${encodeURIComponent('ed@edmarkey.com')}`);
+    assert.equal(message.to, 'ed@edmarkey.com');
+    assert.equal(message.dynamic_template_data.campaignName, standard.campaign.name);
 
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
     const tokensCollection = client.db().collection('tokens')
     const tokens = await tokensCollection.find().sort({ expiresAt: 1 }).toArray();
     const mostRecentToken = tokens[0];
 
-    assert.include(message.body, mostRecentToken._id.toString());
+    assert.equal(message.dynamic_template_data.resetUrl, `https://api:5000/friendbank/reset-password?token=${mostRecentToken._id}`)
     assert.equal(mostRecentToken.user, standard.user._id.toString());
   });
 
@@ -54,7 +55,6 @@ describe('forgotPassword api route v1', function() {
     assert.equal(field, 'email');
     assert.equal(error, 'validations.required');
   });
-
 
   it('should return a successful response but no email for an invalid email', async function() {
     const standard = await standardTestSetup();

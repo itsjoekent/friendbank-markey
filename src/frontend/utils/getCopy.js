@@ -282,7 +282,7 @@ export const copy = {
     },
     returnLink: {
       [ENGLISH]: 'https://www.edmarkey.com/',
-      [SPANISH]: 'https://www.edmarkey.com/es/',d
+      [SPANISH]: 'https://www.edmarkey.com/es/',
     },
     donate: {
       [ENGLISH]: 'donate',
