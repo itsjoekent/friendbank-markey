@@ -64,9 +64,11 @@ export const copy = {
     },
     password: {
       [ENGLISH]: 'Password',
+      [SPANISH]: 'Contraseña',
     },
     passwordConfirmation: {
       [ENGLISH]: 'Password Confirmation',
+      [SPANISH]: 'Confirmación de contraseña',
     },
     submit: {
       [ENGLISH]: 'Submit',
@@ -162,15 +164,19 @@ export const copy = {
     },
     failedLogin: {
       [ENGLISH]: 'Invalid email or password',
+      [SPANISH]: 'Correo electrónico o contraseña inválidos',
     },
     passwordLength: {
       [ENGLISH]: 'Must be at least 8 characters',
+      [SPANISH]: 'Debe tener al menos 8 caracteres',
     },
     passwordMismatch: {
       [ENGLISH]: 'Passwords do not match',
+      [SPANISH]: 'Las contraseñas no coinciden',
     },
     existingUser: {
       [ENGLISH]: 'An account is already registered with this email',
+      [SPANISH]: 'Una cuenta ya está registrada con este correo electrónico',
     },
   },
   homepage: {
@@ -297,9 +303,11 @@ export const copy = {
     },
     login: {
       [ENGLISH]: 'Login',
+      [SPANISH]: 'Ingresar',
     },
     dashboard: {
       [ENGLISH]: 'Dashboard',
+      [SPANISH]: 'Página de inicio',
     },
   },
   share: {
@@ -323,87 +331,116 @@ export const copy = {
   authPage: {
     login: {
       [ENGLISH]: 'Login',
+      [SPANISH]: 'Ingresar',
     },
     newAccount: {
       [ENGLISH]: 'Create a new account',
+      [SPANISH]: 'Crear una cuenta nueva',
     },
     forgotPassword: {
       [ENGLISH]: 'Forgot my password',
+      [SPANISH]: 'Olvidé mi contraseña',
     },
     resetPassword: {
       [ENGLISH]: 'Reset password',
+      [SPANISH]: 'Restablecer la contraseña',
     },
     notAuthorizedFlag: {
       [ENGLISH]: 'Not authorized to perform that action',
+      [SPANISH]: 'No está autorizado a realizar esa acción',
     },
     forgotPasswordSent: {
       [ENGLISH]: 'An email with a link to reset your password has been sent.',
+      [SPANISH]: 'Se ha enviado un correo electrónico con un enlace para restablecer su contraseña.',
     },
   },
   dashboard: {
     loadMore: {
       [ENGLISH]: 'Load more',
+      [SPANISH]: 'Añadir más',
     },
     profileHeader: {
       [ENGLISH]: 'Profile',
+      [SPANISH]: 'Perfil',
     },
     editProfileHeader: {
       [ENGLISH]: 'Edit profile',
+      [SPANISH]: 'Editar el perfil',
     },
     editProfileButton: {
       [ENGLISH]: 'Update profile',
+      [SPANISH]: 'Actualizar el perfil',
     },
     editPasswordHeader: {
       [ENGLISH]: 'Edit password',
+      [SPANISH]: 'Editar la contraseña',
     },
     editPasswordButton: {
       [ENGLISH]: 'Update password',
+      [SPANISH]: 'Actualizar la contraseña',
     },
     editPasswordSuccess: {
       [ENGLISH]: 'Successfully updated password',
+      [SPANISH]: 'Contraseña actualizada exitosamente',
     },
     emailSubscriptionLabel: {
       [ENGLISH]: 'Email Subscription',
+      [SPANISH]: 'Suscripción por correo electrónico',
     },
     emailSubscriptionOptions: {
       [ENGLISH]: [
         'Recieve new signup notifications',
         'Unsubscribe from all signup emails',
       ],
+      [SPANISH]: [
+        'Recibir notificaciones de registros nuevos',
+        'Cancelar suscripción de todos los correos electrónicos de registro',
+      ],
     },
     logoutLabel: {
       [ENGLISH]: 'Logout',
+      [SPANISH]: 'Cerrar sesión',
     },
     signupsHeader: {
       [ENGLISH]: 'Signups',
+      [SPANISH]: 'Inscripciones',
     },
     signupPagesHeader: {
       [ENGLISH]: 'Signup Pages',
+      [SPANISH]: 'Páginas de registro',
     },
     signupTableSource: {
       [ENGLISH]: 'Source',
+      [SPANISH]: 'Fuente',
     },
     signupTablePhonebankSource: {
       [ENGLISH]: 'Phonebank',
+      [SPANISH]: 'Banco de números telefónicos',
     },
     signupTableSupport: {
       [ENGLISH]: 'Support Level',
+      [SPANISH]: 'Nivel de apoyo',
     },
     signupTableVolunteer: {
       [ENGLISH]: 'Volunteer Level',
+      [SPANISH]: 'Nivel de voluntarios',
     },
     totalSignups: {
       [ENGLISH]: 'Total signups:',
+      [SPANISH]: 'Total de inscripciones:',
     },
     phonebankLabel: {
       [ENGLISH]: 'Add Phonebank Contacts',
+      [SPANISH]: 'Agregar contactos del banco de números telefónicos',
     },
     editPageButton: {
       [ENGLISH]: 'Edit page',
+      [SPANISH]: 'Editar la página',
     },
   },
   pageNotFound: {
     [ENGLISH]: 'Page not found',
+    [SPANISH]: 'No encontramos la página',
   },
   genericError: {
     [ENGLISH]: 'Looks like we had an error, try again? If this continues to happen, please contact us https://www.edmarkey.com/contact-us/',
