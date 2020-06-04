@@ -90,15 +90,29 @@ module.exports = ({ db }) => {
         const pageAuthor = await db.collection('users')
           .findOne({ _id: ObjectId(pageMatch.createdBy) });
 
-        if (pageAuthor && pageAuthor.emailFrequency === EMAIL_FREQUENCY.TRANSACTIONAL_EMAIL) {
+        if (
+          pageAuthor
+          && pageAuthor.emailFrequency === EMAIL_FREQUENCY.TRANSACTIONAL_EMAIL
+          && (!validationResult.supportLevel && !validationResult.volunteerLevel)
+        ) {
+          const domain = campaign.domains.pop();
+          const shareLink = `https://${domain}/${pageMatch.code}`;
+
+          const facebookLink = `https://www.facebook.com/sharer/sharer.php?u=${shareLink}&quote=${encodeURIComponent(pageMatch.title)}`;
+          const twitterLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`${pageMatch.title}\n${shareLink}`)}`;
+
           const mailResult = await sendMail(
             pageAuthor.email,
             process.env.MAIL_SIGNUP_ID,
             {
+              authorFirstName: pageAuthor.firstName,
               signupFirstName: signup.firstName,
               signupLastName: signup.lastName,
+              shareCode: pageMatch.code,
               campaignName: campaign.name,
-              domain: campaign.domains.pop(),
+              facebookLink,
+              twitterLink,
+              domain,
             },
           );
 
