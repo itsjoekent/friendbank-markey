@@ -122,16 +122,27 @@ module.exports = ({ db }) => {
         }
       }
 
-      const bsdResult = await submitBsdForm(BSD_SIGNUP_FORM_SLUG, {
+      const bsdPayload = {
         email: signup.email,
         firstname: signup.firstName,
         lastname: signup.lastName,
         phone: signup.phone,
         zip: signup.zip,
-        [BSD_SIGNUP_CODE_ID]: signup.code,
-        [BSD_SIGNUP_SUPPORT_ID]: BSD_VAN_MAP.support[signup.supportLevel],
-        [BSD_SIGNUP_VOLUNTEER_ID]: BSD_VAN_MAP.volunteer[signup.volunteerLevel],
-      });
+      };
+
+      if (signup.code) {
+        bsdPayload[BSD_SIGNUP_CODE_ID] = signup.code;
+      }
+
+      if (signup.supportLevel) {
+        bsdPayload[BSD_SIGNUP_SUPPORT_ID] = BSD_VAN_MAP.support[signup.supportLevel];
+      }
+
+      if (signup.volunteerLevel) {
+        bsdPayload[BSD_SIGNUP_VOLUNTEER_ID] = BSD_VAN_MAP.volunteer[signup.volunteerLevel];
+      }
+
+      const bsdResult = await submitBsdForm(BSD_SIGNUP_FORM_SLUG, bsdPayload);
 
       if (bsdResult instanceof Error) {
         throw bsdResult;
