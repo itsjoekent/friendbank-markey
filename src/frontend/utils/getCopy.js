@@ -438,6 +438,14 @@ export const copy = {
       [SPANISH]: 'Editar la página',
     },
   },
+  phonebankPage: {
+    title: {
+      [ENGLISH]: 'Phonebank Contact Form',
+    },
+    subtitle: {
+      [ENGLISH]: 'Enter your friends, family, and people in your network. Grow your list of the people you’re personally bringing to this grassroots movement, let Ed know if they support him, and help make sure this campaign reaches its goals.',
+    }
+  },
   pageNotFound: {
     [ENGLISH]: 'Page not found',
     [SPANISH]: 'No encontramos la página',

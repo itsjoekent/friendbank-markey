@@ -76,9 +76,9 @@ export default function PhonebankForm() {
           <Form
             onCompletion={onCompletion}
             steps={[{
-              title: 'Phonebank Contact Form',
-              subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-              buttonCopy: 'Submit',
+              title: getCopy('phonebankPage.title'),
+              subtitle: getCopy('phonebankPage.subtitle'),
+              buttonCopy: getCopy('formLabels.submit'),
               onStepSubmit: onSubmit,
               fields: [
                 ...signupContactFields(),
