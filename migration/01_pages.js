@@ -28,7 +28,7 @@ const {
       throw indexResult;
     }
 
-    const pages = db.collection('pages');
+    const pagesCollection = db.collection('pages');
     const users = db.collection('users');
     const campaigns = db.collection('campaigns');
 
@@ -43,7 +43,7 @@ const {
     const campaignInsertResult = await campaigns.insertOne(markeyCampaignData);
     const campaign = campaignInsertResult.ops[0];
 
-    const pages = await pages.find().toArray();
+    const pages = await pagesCollection.find().toArray();
 
     for (const page of pages) {
       const userData = {
@@ -77,7 +77,6 @@ const {
         },
       };
 
-      const pagesCollection = db.collection('pages');
       await pagesCollection.updateOne({ _id: page._id }, pageUpdate);
     }
   } catch (error) {
