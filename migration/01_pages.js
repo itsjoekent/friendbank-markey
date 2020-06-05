@@ -34,6 +34,7 @@ const {
 
     const markeyCampaignData = {
       domains: [
+        'ed-markey-support-prod.herokuapp.com',
         'support.edmarkey.com',
       ],
       name: 'Team Markey',
