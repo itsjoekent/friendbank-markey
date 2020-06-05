@@ -62,6 +62,7 @@ const {
       if (!user) {
         const userInsertResult = await users.insertOne(userData);
         user = userInsertResult.ops[0];
+        console.log(`creating user: email=${userData.email}`);
       }
 
       const pageUpdate = {
@@ -81,13 +82,14 @@ const {
         },
       };
 
+      console.log(`updating page: code=${page.code}`);
       await pagesCollection.updateOne({ _id: page._id }, pageUpdate);
     }
   } catch (error) {
     console.error(error);
     process.exit(1);
   }
-});
+})();
 
 // v1 page schema
 // {
