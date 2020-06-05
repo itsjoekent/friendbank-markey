@@ -77,8 +77,8 @@ const {
         },
       };
 
-      const pages = db.collection('pages');
-      await pages.updateOne({ _id: page._id }, pageUpdate);
+      const pagesCollection = db.collection('pages');
+      await pagesCollection.updateOne({ _id: page._id }, pageUpdate);
     }
   } catch (error) {
     console.error(error);
