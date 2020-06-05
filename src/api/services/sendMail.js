@@ -28,12 +28,13 @@ async function sendMail(
           enable: true,
         },
       };
-      
+
       await _writeServiceOutput('mail', message);
     }
 
     await mail.send(message);
   } catch (error) {
+    error.message = JSON.stringify(error);
     return error;
   }
 }
