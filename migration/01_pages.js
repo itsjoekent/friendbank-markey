@@ -57,8 +57,12 @@ const {
         lastAuthenticationUpdate: Date.now(),
       };
 
-      const userInsertResult = await users.insertOne(userData);
-      const user = userInsertResult.ops[0];
+      let user = await users.findOne({ email: userData.email });
+
+      if (!user) {
+        const userInsertResult = await users.insertOne(userData);
+        const user = userInsertResult.ops[0];
+      }
 
       const pageUpdate = {
         '$set': {
