@@ -61,7 +61,7 @@ const {
 
       if (!user) {
         const userInsertResult = await users.insertOne(userData);
-        const user = userInsertResult.ops[0];
+        user = userInsertResult.ops[0];
       }
 
       const pageUpdate = {
