@@ -414,7 +414,7 @@ export const copy = {
       [SPANISH]: 'Fuente',
     },
     signupTablePhonebankSource: {
-      [ENGLISH]: 'Phonebank',
+      [ENGLISH]: 'Manual Add',
       [SPANISH]: 'Banco de números telefónicos',
     },
     signupTableSupport: {
@@ -430,8 +430,8 @@ export const copy = {
       [SPANISH]: 'Total de inscripciones:',
     },
     phonebankLabel: {
-      [ENGLISH]: 'Add Phonebank Contacts',
-      [SPANISH]: 'Agregar contactos del banco de números telefónicos',
+      [ENGLISH]: 'Add Contacts',
+      [SPANISH]: 'Añadir contactos',
     },
     editPageButton: {
       [ENGLISH]: 'Edit page',
@@ -440,10 +440,11 @@ export const copy = {
   },
   phonebankPage: {
     title: {
-      [ENGLISH]: 'Phonebank Contact Form',
+      [ENGLISH]: 'Contact Form',
     },
     subtitle: {
       [ENGLISH]: 'Enter your friends, family, and people in your network. Grow your list of the people you’re personally bringing to this grassroots movement, let Ed know if they support him, and help make sure this campaign reaches its goals.',
+      [SPANISH]: 'Añade a tus amigos, familiares y personas de tu red. Crece tu lista de personas que personalmente trajiste a este movimiento impulsado por el pueblo, déjale saber a Ed si lo apoyan y ayuda a la campaña a alcanzar sus metas.',
     }
   },
   pageNotFound: {
