@@ -8,6 +8,10 @@ import signupIdFields from '../forms/signupIdFields';
 import useAuthGate from '../hooks/useAuthGate';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
 import { isAuthenticated } from '../utils/auth';
+import {
+  validateZipNotRequired,
+  validatePhoneNotRequired,
+} from '../../shared/fieldValidations';
 
 export const PHONEBANK_FORM_ROUTE = '/friendbank/phonebank';
 
@@ -68,6 +72,14 @@ export default function PhonebankForm() {
     setSuccessfullySubmitted(true);
   }
 
+  const fields = [
+    ...signupContactFields(),
+    ...signupIdFields(),
+  ];
+
+  fields[2].validator = validateZipNotRequired;
+  fields[3].validator = validatePhoneNotRequired;
+
   return (
     <React.Fragment>
       <StandardHelmet />
@@ -80,10 +92,7 @@ export default function PhonebankForm() {
               subtitle: getCopy('phonebankPage.subtitle'),
               buttonCopy: getCopy('formLabels.submit'),
               onStepSubmit: onSubmit,
-              fields: [
-                ...signupContactFields(),
-                ...signupIdFields(),
-              ],
+              fields,
             }]}
           />
           {successfullySubmitted && (

@@ -29,9 +29,37 @@ function validateZip(value) {
   return false;
 }
 
+function validateZipNotRequired(value) {
+  if (!value) {
+    return false;
+  }
+
+  if (value.length !== 5) {
+    return 'validations.zipFormat';
+  }
+
+  if (!/^\d+$/.test(value)) {
+    return 'validations.zipFormat';
+  }
+
+  return false;
+}
+
 function validatePhone(value) {
   if (!value) {
     return 'validations.required';
+  }
+
+  if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(value)) {
+    return 'validations.phoneFormat';
+  }
+
+  return false;
+}
+
+function validatePhoneNotRequired(value) {
+  if (!value) {
+    return false;
   }
 
   if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(value)) {
@@ -140,7 +168,9 @@ function validatePassword(value) {
 module.exports = {
   validateName,
   validateZip,
+  validateZipNotRequired,
   validatePhone,
+  validatePhoneNotRequired,
   validateEmail,
   validateCode,
   validateRequired,
