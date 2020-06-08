@@ -415,7 +415,7 @@ export const copy = {
     },
     signupTablePhonebankSource: {
       [ENGLISH]: 'Manual Add',
-      [SPANISH]: 'Banco de números telefónicos',
+      [SPANISH]: 'Añadido manualmente',
     },
     signupTableSupport: {
       [ENGLISH]: 'Support Level',
@@ -440,7 +440,8 @@ export const copy = {
   },
   phonebankPage: {
     title: {
-      [ENGLISH]: 'Contact Form',
+      [ENGLISH]: 'Add a Contact',
+      [SPANISH]: 'Añadir un contacto',
     },
     subtitle: {
       [ENGLISH]: 'Enter your friends, family, and people in your network. Grow your list of the people you’re personally bringing to this grassroots movement, let Ed know if they support him, and help make sure this campaign reaches its goals.',
