@@ -85,7 +85,7 @@ module.exports = ({ db }) => {
       const hasRealEmail = !!signup.email && !!signup.email.length;
 
       if (!hasRealEmail) {
-        const randomEmailValue = await randomToken()
+        const randomEmailValue = await randomToken();
         signup.email = `missing::${randomEmailValue}`;
       }
 
