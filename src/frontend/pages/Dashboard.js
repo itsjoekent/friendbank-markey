@@ -244,6 +244,7 @@ const TableColumnValueLink = styled(TableColumnValue)`
   text-decoration: underline;
   cursor: pointer;
   color: ${({ theme }) => theme.colors.darkBlue};
+  overflow-x: auto;
 
   &:hover {
     color: ${({ theme }) => theme.colors.blue};
