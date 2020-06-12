@@ -11,6 +11,7 @@ import { isAuthenticated } from '../utils/auth';
 import {
   validateZipNotRequired,
   validatePhoneNotRequired,
+  validateEmailNotRequired,
 } from '../../shared/fieldValidations';
 
 export const PHONEBANK_FORM_ROUTE = '/friendbank/phonebank';
@@ -79,6 +80,7 @@ export default function PhonebankForm() {
 
   fields[2].validator = validateZipNotRequired;
   fields[3].validator = validatePhoneNotRequired;
+  fields[4].validator = validateEmailNotRequired;
 
   return (
     <React.Fragment>

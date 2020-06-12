@@ -237,6 +237,7 @@ const TableColumnLabel = styled.p`
 
 const TableColumnValue = styled(TableColumnLabel)`
   font-weight: normal;
+  overflow-x: scroll;
 `;
 
 const TableColumnValueLink = styled(TableColumnValue)`
@@ -545,7 +546,7 @@ export default function Dashboard() {
                     </TableColumn>
                     <TableColumn>
                       <TableColumnValue>
-                        {signup.email}
+                        {signup.email && !signup.email.startsWith('missing::') ? signup.email : ''}
                       </TableColumnValue>
                     </TableColumn>
                     <TableColumn>

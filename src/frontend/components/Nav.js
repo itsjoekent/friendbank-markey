@@ -87,8 +87,8 @@ const LeftLink = styled(NavItem)`
 `;
 
 const RightLink = styled(NavItem)`
-  @media ${({ theme }) => theme.media.tablet} {
-    margin-right: 24px;
+  @media ${({ theme, disableNavDonate }) => theme.media.tablet} {
+    margin-right: ${({ disableNavDonate }) => disableNavDonate ? '0' : '24px'};
   }
 `;
 
@@ -99,7 +99,7 @@ const RedirectRow = styled.div`
 
 export const Redirect = styled.a`
   display: block;
-  width: 66.66%;
+  width: ${({ disableNavDonate }) => disableNavDonate ? '100%' : '66.66%'};
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme }) => theme.colors.blue};
   font-family: ${({ theme }) => theme.fonts.headerFamily};
@@ -154,6 +154,8 @@ const DonateButton = styled(RedButton)`
 `;
 
 export default function Nav(props) {
+  const disableNavDonate = getCopy('disableNavDonate');
+
   const isSpanish = isSpanishPath(location.pathname);
 
   const languageLink = isSpanish
@@ -174,12 +176,14 @@ export default function Nav(props) {
   return (
     <NavStack>
       <RedirectRow>
-        <Redirect href={getCopy('nav.returnLink')}>
+        <Redirect href={getCopy('nav.returnLink')} disableNavDonate={disableNavDonate}>
           {getCopy('nav.return')}
         </Redirect>
-        <DonateRedirect href={getCopy('nav.donateForm')}>
-          {getCopy('nav.donate')}
-        </DonateRedirect>
+        {!disableNavDonate && (
+          <DonateRedirect href={getCopy('nav.donateForm')}>
+            {getCopy('nav.donate')}
+          </DonateRedirect>
+        )}
       </RedirectRow>
       <NavContainer>
         <Logo href={makeLocaleLink(HOMEPAGE_ROUTE)}>
@@ -190,12 +194,14 @@ export default function Nav(props) {
             {getCopy('nav.language')}
           </LeftLink>
           <RightNavItemsRow>
-            <RightLink href={rightLink[0]}>
+            <RightLink href={rightLink[0]} disableNavDonate={disableNavDonate}>
               {rightLink[1]}
             </RightLink>
-            <DonateButton as="a" href={getCopy('nav.donateForm')}>
-              {getCopy('nav.donate')}
-            </DonateButton>
+            {!disableNavDonate && (
+              <DonateButton as="a" href={getCopy('nav.donateForm')}>
+                {getCopy('nav.donate')}
+              </DonateButton>
+            )}
           </RightNavItemsRow>
         </NavItemsContainer>
       </NavContainer>

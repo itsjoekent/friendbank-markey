@@ -389,7 +389,7 @@ export const copy = {
     },
     emailSubscriptionOptions: {
       [ENGLISH]: [
-        'Recieve new signup notifications',
+        'Receive new signup notifications',
         'Unsubscribe from all signup emails',
       ],
       [SPANISH]: [
@@ -473,6 +473,9 @@ export const copy = {
   smsDisclaimer: {
     [ENGLISH]: 'By providing your cell phone number you consent to receive periodic campaign updates from the Markey Committee. Text HELP for help, STOP to end. Message & data rates may apply. https://www.edmarkey.com/privacy-policy/',
     [SPANISH]: 'Al proporcionar su número de teléfono celular usted consiente en recibir actualizaciones periódicas de la campaña de The Markey Committee. Envíe un mensaje de texto que diga HELP para pedir ayuda o STOP para descontinuar los mensajes. Pueden aplicar tarifas de mensajes y data. https://www.edmarkey.com/privacy-policy/',
+  },
+  disableNavDonate: {
+    [ENGLISH]: true,
   },
 };
 
