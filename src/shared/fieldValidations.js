@@ -81,6 +81,18 @@ function validateEmail(value) {
   return false;
 }
 
+function validateEmailNotRequired(value) {
+  if (!value) {
+    return false;
+  }
+
+  if (!/\S+@\S+\.\S+/.test(value)) {
+    return 'validations.emailFormat';
+  }
+
+  return false;
+}
+
 function validateCode(value) {
   if (!value) {
     return 'validations.required';
@@ -172,6 +184,7 @@ module.exports = {
   validatePhone,
   validatePhoneNotRequired,
   validateEmail,
+  validateEmailNotRequired,
   validateCode,
   validateRequired,
   validateTitle,

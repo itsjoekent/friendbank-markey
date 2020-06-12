@@ -2,6 +2,7 @@ const { ObjectId } = require('mongodb');
 const getPageForCode = require('../db/getPageForCode');
 const submitBsdForm = require('../services/submitBsdForm');
 const apiErrorHandler = require('../utils/apiErrorHandler');
+const { randomToken } = require('../utils/auth');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 
 const BSD_VAN_MAP = require('../utils/markeyVanFields');
@@ -31,6 +32,7 @@ module.exports = ({ db }) => {
       } = req;
 
       const inputs = {
+        email,
         firstName,
         lastName,
         phone,
@@ -39,12 +41,10 @@ module.exports = ({ db }) => {
         volunteerLevel,
       };
 
-      const validationRequirements = {
-        email,
-      };
+      const validationRequirements = {};
 
       Object.keys(inputs)
-        .filter((key) => typeof inputs[key] !== 'undefined')
+        .filter((key) => typeof inputs[key] !== 'undefined' && !!inputs[key].length)
         .forEach((key) => validationRequirements[key] = inputs[key]);
 
       const validationResult = validateAndNormalizeApiRequestFields(validationRequirements);
@@ -65,8 +65,8 @@ module.exports = ({ db }) => {
         lastUpdatedAt: Date.now(),
       };
 
-      const bsdResult = await submitBsdForm(BSD_CONTACT_FORM_SLUG, {
-        email: signup.email,
+      const bsdPayload = {
+        email: signup.email || '',
         firstname: signup.firstName,
         lastname: signup.lastName,
         phone: signup.phone,
@@ -74,10 +74,19 @@ module.exports = ({ db }) => {
         [BSD_CONTACT_FRIEND_ID]: token.user.email,
         [BSD_CONTACT_SUPPORT_ID]: BSD_VAN_MAP.support[signup.supportLevel],
         [BSD_CONTACT_VOLUNTEER_ID]: BSD_VAN_MAP.volunteer[signup.volunteerLevel],
-      });
+      };
+
+      const bsdResult = await submitBsdForm(BSD_CONTACT_FORM_SLUG, bsdPayload);
 
       if (bsdResult instanceof Error) {
         throw bsdResult;
+      }
+
+      const hasRealEmail = !!signup.email && !!signup.email.length;
+
+      if (!hasRealEmail) {
+        const randomEmailValue = await randomToken()
+        signup.email = `missing::${randomEmailValue}`;
       }
 
       const signups = db.collection('signups');
