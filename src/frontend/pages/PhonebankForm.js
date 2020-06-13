@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import getCopy from '../utils/getCopy';
 import StandardHelmet from '../components/StandardHelmet';
 import Form, { FormTitleContainer } from '../components/Form';
+import { MULTI_LINE_TEXT_INPUT } from '../components/FormFields';
 import signupContactFields from '../forms/signupContactFields';
 import signupIdFields from '../forms/signupIdFields';
 import useAuthGate from '../hooks/useAuthGate';
@@ -12,6 +13,7 @@ import {
   validateZipNotRequired,
   validatePhoneNotRequired,
   validateEmailNotRequired,
+  validateNote,
 } from '../../shared/fieldValidations';
 
 export const PHONEBANK_FORM_ROUTE = '/friendbank/phonebank';
@@ -76,6 +78,12 @@ export default function PhonebankForm() {
   const fields = [
     ...signupContactFields(),
     ...signupIdFields(),
+    {
+      fieldId: 'note',
+      fieldType: MULTI_LINE_TEXT_INPUT,
+      label: getCopy('formLabels.note'),
+      validator: validateNote,
+    },
   ];
 
   fields[2].validator = validateZipNotRequired;

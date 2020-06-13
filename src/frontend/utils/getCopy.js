@@ -74,6 +74,9 @@ export const copy = {
       [ENGLISH]: 'Submit',
       [SPANISH]: 'Someter',
     },
+    note: {
+      [ENGLISH]: 'Note',
+    },
   },
   idQuestions: {
     support: {
@@ -177,6 +180,9 @@ export const copy = {
     existingUser: {
       [ENGLISH]: 'An account is already registered with this email',
       [SPANISH]: 'Una cuenta ya está registrada con este correo electrónico',
+    },
+    noteLength: {
+      [ENGLISH]: 'Note must be less than 2000 characters',
     },
   },
   homepage: {

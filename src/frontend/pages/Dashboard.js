@@ -537,6 +537,11 @@ export default function Dashboard() {
                       {getCopy('dashboard.signupTableVolunteer')}
                     </TableColumnLabel>
                   </TableColumn>
+                  <TableColumn>
+                    <TableColumnLabel>
+                      {getCopy('formLabels.note')}
+                    </TableColumnLabel>
+                  </TableColumn>
                 </TableRow>
                 {signups && signups.map((signup) => (
                   <TableRow key={signup.id}>
@@ -581,6 +586,11 @@ export default function Dashboard() {
                     <TableColumn>
                       <TableColumnValue>
                         {signup.volunteerLevel}
+                      </TableColumnValue>
+                    </TableColumn>
+                    <TableColumn>
+                      <TableColumnValue>
+                        {signup.note}
                       </TableColumnValue>
                     </TableColumn>
                   </TableRow>

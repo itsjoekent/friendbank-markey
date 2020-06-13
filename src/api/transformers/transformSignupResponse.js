@@ -15,6 +15,7 @@ module.exports = function transformSignupResponse(signup) {
     volunteerLevel,
     type,
     lastUpdatedAt,
+    note,
   } = signup;
 
   const safe = {
@@ -29,6 +30,7 @@ module.exports = function transformSignupResponse(signup) {
     volunteerLevel,
     type,
     lastUpdatedAt,
+    note,
   };
 
   return safe;
