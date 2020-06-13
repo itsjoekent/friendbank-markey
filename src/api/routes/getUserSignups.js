@@ -23,10 +23,10 @@ module.exports = ({ db }) => {
       const total = await signups.countDocuments(query);
 
       if (lastId) {
-        query._id = { '$gt': ObjectId(lastId) };
+        query._id = { '$lt': ObjectId(lastId) };
       }
 
-      const result = await signups.find(query, { limit: 25 }).toArray();
+      const result = await signups.find(query, { limit: 25 }).sort({ _id: -1 }).toArray();
 
       res.json({
         signups: (result || []).map(transformSignupResponse),

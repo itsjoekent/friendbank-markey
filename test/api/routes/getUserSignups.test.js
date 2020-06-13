@@ -107,11 +107,11 @@ describe('getUserSignups api route v1', function() {
 
     assert.lengthOf(initialJson.signups, 25);
     assert.equal(initialJson.total, 50);
-    assert.equal(initialJson.lastId, insertedSignups.ops[24]._id.toString());
-    assert.equal(initialJson.signups[0].code, 'test-0');
-    assert.equal(initialJson.signups[0].firstName, 'First 0');
-    assert.equal(initialJson.signups[24].code, 'test-24');
-    assert.equal(initialJson.signups[24].firstName, 'First 24');
+    assert.equal(initialJson.lastId, insertedSignups.ops[25]._id.toString());
+    assert.equal(initialJson.signups[0].code, 'test-49');
+    assert.equal(initialJson.signups[0].firstName, 'First 49');
+    assert.equal(initialJson.signups[24].code, 'test-25');
+    assert.equal(initialJson.signups[24].firstName, 'First 25');
 
     const paginatedResponse = await fetch(`${API_URL}/api/v1/user/signups?lastId=${initialJson.lastId}`, {
       method: 'get',
@@ -126,11 +126,11 @@ describe('getUserSignups api route v1', function() {
 
     assert.lengthOf(paginatedJson.signups, 25);
     assert.equal(paginatedJson.total, 50);
-    assert.equal(paginatedJson.lastId, insertedSignups.ops[49]._id.toString());
-    assert.equal(paginatedJson.signups[0].code, 'test-25');
-    assert.equal(paginatedJson.signups[0].firstName, 'First 25');
-    assert.equal(paginatedJson.signups[24].code, 'test-49');
-    assert.equal(paginatedJson.signups[24].firstName, 'First 49');
+    assert.equal(paginatedJson.lastId, insertedSignups.ops[0]._id.toString());
+    assert.equal(paginatedJson.signups[0].code, 'test-24');
+    assert.equal(paginatedJson.signups[0].firstName, 'First 24');
+    assert.equal(paginatedJson.signups[24].code, 'test-0');
+    assert.equal(paginatedJson.signups[24].firstName, 'First 0');
   });
 
   it('should not get user signups if not authenticated', async function() {
