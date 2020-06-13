@@ -268,8 +268,6 @@ describe('signup api route v1', function() {
         lastName: 'Last',
         phone: '000 000 0000',
         zip: '00000',
-        supportLevel: 'Definitely',
-        volunteerLevel: 'Yes',
       }),
       headers: {
         'Content-Type': 'application/json',

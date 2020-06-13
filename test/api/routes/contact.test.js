@@ -195,7 +195,7 @@ describe('contact api route v1', function() {
     assert.equal(records[1].firstName, 'two');
   });
 
-  it('should not create a contact if the email field is missing', async function() {
+  it('should create a contact if the email field is missing', async function() {
     const standard = await standardTestSetup();
 
     const response = await fetch(`${API_URL}/api/v1/contact`, {
@@ -203,6 +203,7 @@ describe('contact api route v1', function() {
       body: JSON.stringify({
         firstName: 'First',
         lastName: 'Last',
+        email: '',
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -210,11 +211,17 @@ describe('contact api route v1', function() {
       },
     });
 
-    assert.equal(response.status, 400);
+    assert.equal(response.status, 200);
 
-    const { field, error } = await response.json();
-    assert.equal(field, 'email');
-    assert.equal(error, 'validations.required');
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const signups = client.db().collection('signups');
+
+    const record = await signups.findOne({
+      campaign: standard.campaign._id.toString(),
+      recruitedBy: standard.user._id.toString(),
+    });
+
+    assert.include(record.email, 'missing::');
   });
 
   it('should not create a contact if the firstName field fails validation', async function() {
@@ -268,7 +275,7 @@ describe('contact api route v1', function() {
       method: 'post',
       body: JSON.stringify({
         email: 'supporter@gmail.com',
-        phone: null,
+        phone: '111 2222 444',
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -280,7 +287,7 @@ describe('contact api route v1', function() {
 
     const { field, error } = await response.json();
     assert.equal(field, 'phone');
-    assert.equal(error, 'validations.required');
+    assert.equal(error, 'validations.phoneFormat');
   });
 
   it('should not create a contact if the zip field fails validation', async function() {
@@ -290,7 +297,7 @@ describe('contact api route v1', function() {
       method: 'post',
       body: JSON.stringify({
         email: 'supporter@gmail.com',
-        zip: null,
+        zip: '1',
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -302,7 +309,7 @@ describe('contact api route v1', function() {
 
     const { field, error } = await response.json();
     assert.equal(field, 'zip');
-    assert.equal(error, 'validations.required');
+    assert.equal(error, 'validations.zipFormat');
   });
 
   it('should not create a contact if the supportLevel field fails validation', async function() {

@@ -20,7 +20,7 @@ function normalizePhone(value) {
   return phoneValidation(value, '', true)[0];
 }
 
-module.exports = function validateAndNormalizeApiRequestFields(fields) {
+module.exports = function validateAndNormalizeApiRequestFields(fields, customValidations = {}) {
   const validations = {
     firstName: [
       fieldValidations.validateName,
@@ -29,13 +29,13 @@ module.exports = function validateAndNormalizeApiRequestFields(fields) {
     lastName: [
       fieldValidations.validateName,
     ],
-    zip: [
+    zip: customValidations.zip || [
       fieldValidations.validateZip,
     ],
-    email: [
+    email: customValidations.email || [
       fieldValidations.validateEmail,
     ],
-    phone: [
+    phone: customValidations.phone || [
       fieldValidations.validatePhone,
     ],
     code: [

@@ -4,6 +4,7 @@ const submitBsdForm = require('../services/submitBsdForm');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 const { randomToken } = require('../utils/auth');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
+const fieldValidations = require('../../shared/fieldValidations');
 
 const BSD_VAN_MAP = require('../utils/markeyVanFields');
 
@@ -44,10 +45,17 @@ module.exports = ({ db }) => {
       const validationRequirements = {};
 
       Object.keys(inputs)
-        .filter((key) => typeof inputs[key] !== 'undefined' && !!inputs[key].length)
+        .filter((key) => typeof inputs[key] !== 'undefined')
         .forEach((key) => validationRequirements[key] = inputs[key]);
 
-      const validationResult = validateAndNormalizeApiRequestFields(validationRequirements);
+      const validationResult = validateAndNormalizeApiRequestFields(
+        validationRequirements,
+        {
+          zip: [fieldValidations.validateZipNotRequired],
+          email: [fieldValidations.validateEmailNotRequired],
+          phone: [fieldValidations.validatePhoneNotRequired],
+        },
+      );
 
       if (Array.isArray(validationResult)) {
         res.status(400).json({
