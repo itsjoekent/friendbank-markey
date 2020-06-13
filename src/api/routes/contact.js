@@ -12,6 +12,7 @@ const {
   BSD_CONTACT_FRIEND_ID,
   BSD_CONTACT_SUPPORT_ID,
   BSD_CONTACT_VOLUNTEER_ID,
+  BSD_CONTACT_NOTE_ID,
   BSD_CONTACT_FORM_SLUG,
 } = process.env;
 
@@ -29,6 +30,7 @@ module.exports = ({ db }) => {
           zip,
           supportLevel,
           volunteerLevel,
+          note,
         },
       } = req;
 
@@ -40,6 +42,7 @@ module.exports = ({ db }) => {
         zip,
         supportLevel,
         volunteerLevel,
+        note,
       };
 
       const validationRequirements = {};
@@ -80,9 +83,19 @@ module.exports = ({ db }) => {
         phone: signup.phone,
         zip: signup.zip,
         [BSD_CONTACT_FRIEND_ID]: token.user.email,
-        [BSD_CONTACT_SUPPORT_ID]: BSD_VAN_MAP.support[signup.supportLevel],
-        [BSD_CONTACT_VOLUNTEER_ID]: BSD_VAN_MAP.volunteer[signup.volunteerLevel],
       };
+
+      if (signup.supportLevel) {
+        bsdPayload[BSD_CONTACT_SUPPORT_ID] = BSD_VAN_MAP.support[signup.supportLevel];
+      }
+
+      if (signup.volunteerLevel) {
+        bsdPayload[BSD_CONTACT_VOLUNTEER_ID] = BSD_VAN_MAP.volunteer[signup.volunteerLevel];
+      }
+
+      if (signup.note) {
+        bsdPayload[BSD_CONTACT_NOTE_ID] = signup.note;
+      }
 
       const bsdResult = await submitBsdForm(BSD_CONTACT_FORM_SLUG, bsdPayload);
 

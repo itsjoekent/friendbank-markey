@@ -177,6 +177,14 @@ function validatePassword(value) {
   return false;
 }
 
+function validateNote(value) {
+  if (value && value.length > 2000) {
+    return 'validations.noteLength';
+  }
+
+  return false;
+}
+
 module.exports = {
   validateName,
   validateZip,
@@ -192,4 +200,5 @@ module.exports = {
   validateBackground,
   validateEmailFrequency,
   validatePassword,
+  validateNote,
 }

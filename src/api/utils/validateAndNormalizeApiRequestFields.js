@@ -65,6 +65,9 @@ module.exports = function validateAndNormalizeApiRequestFields(fields, customVal
     password: [
       fieldValidations.validatePassword,
     ],
+    note: [
+      fieldValidations.validateNote,
+    ],
   };
 
   const normalizations = {
@@ -75,6 +78,7 @@ module.exports = function validateAndNormalizeApiRequestFields(fields, customVal
     phone: normalizePhone,
     title: normalizeName,
     subtitle: normalizeName,
+    note: normalizeName,
   };
 
   return Object.keys(fields).reduce((acc, key) => {
