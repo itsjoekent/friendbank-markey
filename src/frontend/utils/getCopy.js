@@ -1,4 +1,5 @@
-import { ENGLISH, SPANISH, SPANISH_PREFIX } from '../../shared/lang';
+import isSpanishPath from './isSpanishPath';
+import { ENGLISH, SPANISH } from '../../shared/lang';
 
 export const copy = {
   formLabels: {
@@ -486,7 +487,7 @@ export const copy = {
 };
 
 export default function getCopy(path, defaultToEnglish = true, fallback = '') {
-  const language = location.pathname.startsWith(SPANISH_PREFIX) ? SPANISH : ENGLISH;
+  const language = isSpanishPath(location.pathname) ? SPANISH : ENGLISH;
 
   let value = { ...copy };
 
