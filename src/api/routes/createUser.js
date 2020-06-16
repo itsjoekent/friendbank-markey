@@ -3,6 +3,7 @@ const findUser = require('../db/findUser');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 const { passwordHash } = require('../utils/auth');
+const { USER_ROLE } = require('../../shared/roles');
 
 module.exports = ({ db }) => {
   async function createUser(req, res) {
@@ -60,6 +61,7 @@ module.exports = ({ db }) => {
         createdAt: Date.now(),
         lastUpdatedAt: Date.now(),
         lastAuthenticationUpdate: Date.now(),
+        role: USER_ROLE,
       };
 
       const userInsertResult = await db.collection('users').insertOne(userData);

@@ -10,7 +10,8 @@
     "start:test-proxy": "node test/proxy/index.js",
     "start:webpack": "webpack --mode development --watch",
     "build:webpack": "webpack --mode production",
-    "test:api": "mocha --exit ./test/api/**/*.js"
+    "test:api": "mocha --exit ./test/api/**/*.js",
+    "seed": "node src/api/db/seed.js"
   },
   "nodemonConfig": {
     "ignore": [
