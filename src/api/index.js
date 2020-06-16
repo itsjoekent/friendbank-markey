@@ -236,10 +236,12 @@ app.get('*', async function (req, res) {
     }
 
     global.location = { pathname: path };
+    global.window = { __CAMPAIGN_COPY: JSON.parse(campaign.copy) };
 
     const ssrResult = await ssr(path, { db, campaign, ObjectId });
 
     global.location = undefined;
+    global.window = undefined;
 
     if (ssrResult instanceof Error) {
       console.error(ssrResult);
@@ -249,6 +251,7 @@ app.get('*', async function (req, res) {
     const { html, headTags, styleTags, initialProps } = ssrResult;
 
     const page = template.replace(/{{REACT_DATA}}/g, JSON.stringify(initialProps))
+      .replace(/{{CAMPAIGN_COPY}}/g, campaign.copy)
       .replace(/{{HEAP_TAG}}/g, IS_PROD ? PROD_HEAP : DEV_HEAP)
       .replace(/{{HEAD}}/g, headTags)
       .replace(/{{HTML}}/g, html)

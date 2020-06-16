@@ -8,6 +8,18 @@ services:
       - ./src:/usr/src/app/src:cached
       - ./public/dist:/usr/src/app/public/dist:cached
 
+  seed:
+    build: .
+    command: npm run seed
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    environment:
+      - MONGODB_URL=mongodb://admin:secret@mongo:27017
+    env_file:
+      - .env
+
   api:
     build: .
     command: npm run start:api

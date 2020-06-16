@@ -154,7 +154,7 @@ const DonateButton = styled(RedButton)`
 `;
 
 export default function Nav(props) {
-  const disableNavDonate = getCopy('disableNavDonate');
+  const disableNavDonate = getCopy('config.disableNavDonate');
 
   const isSpanish = isSpanishPath(location.pathname);
 
