@@ -5,6 +5,7 @@ const {
 } = process.env;
 
 const { USER_ROLE } = require('../src/shared/roles');
+const { ENGLISH, SPANISH } = require('../src/shared/lang');
 
 (async function() {
   const client = await MongoClient.connect(MONGODB_URL, {
@@ -16,6 +17,8 @@ const { USER_ROLE } = require('../src/shared/roles');
 
   const usersCollection = db.collection('users');
   const users = await usersCollection.find().toArray();
+
+  console.log('updating users');
 
   for (const user of users) {
     const userUpdate = {
@@ -89,6 +92,8 @@ const { USER_ROLE } = require('../src/shared/roles');
       alt: 'Ed marching with a labor union',
     },
   ];
+
+  console.log('adding default media');
 
   const media = db.collection('media');
   await media.insertMany(defaultMediaObjects);
@@ -271,6 +276,8 @@ const { USER_ROLE } = require('../src/shared/roles');
       [SPANISH]: 'Parece que tuvimos un error, ¿intentar de nuevo? Si esto continúa sucediendo, por favor contáctenos https://www.edmarkey.com/contact-us/',
     },
   });
+
+  console.log('updating campaign');
 
   const campaigns = db.collection('campaigns');
   await campaigns.updateOne(
