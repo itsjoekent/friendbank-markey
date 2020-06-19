@@ -11,11 +11,16 @@ export default async function makeApiRequest(path, method, data, enableAuthoriza
       headers['X-Relational-Token'] = getAuthToken();
     }
 
-    const response = await fetch(path, {
+    const fetchConfig = {
       method,
-      body: JSON.stringify(data),
       headers,
-    });
+    };
+
+    if (data) {
+      fetchConfig.body = JSON.stringify(data);
+    }
+
+    const response = await fetch(path, fetchConfig);
 
     const json = await response.json();
 

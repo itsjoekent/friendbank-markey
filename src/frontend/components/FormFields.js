@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import getCopy from '../utils/getCopy';
+import makeApiRequest from '../utils/makeApiRequest';
 
 export const BaseSingleLineTextInput = styled.input`
   width: 100%;
@@ -568,6 +569,169 @@ export function GalleryPickerField(props) {
           </GalleryItem>
         ))}
       </GalleryItemList>
+    </FormFieldColumn>
+  );
+}
+
+export const MEDIA_UPLOAD = 'MEDIA_UPLOAD';
+
+const MediaUploadFileInput = styled.input`
+  margin-bottom: 12px;
+`;
+
+const MediaUploadContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  ${BaseMultiLineTextInput} {
+    margin-bottom: 12px;
+  }
+`;
+
+const MediaUploadSubmit = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-family: ${({ theme }) => theme.fonts.headerFamily};
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 4px 8px;
+  border: 2px solid ${({ theme }) => theme.colors.darkBlue};
+  background-color: ${({ theme }) => theme.colors.darkBlue};
+  color: ${({ theme }) => theme.colors.white};
+  width: fit-content;
+
+  &:hover {
+    background-color: transparent;
+    color: ${({ theme }) => theme.colors.darkBlue};
+  }
+`;
+
+const MediaUploadStatus = styled.span`
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+
+  font-family: ${({ theme }) => theme.fonts.mainFamily};
+  font-size: 12px;
+  font-weight: normal;
+  color: ${({ theme }) => theme.colors.blue};
+
+  ${({ hasUploaded }) => hasUploaded && css`
+    color: ${({ theme }) => theme.colors.green};
+    font-weight: bold;
+  `}
+`;
+
+export function MediaUpload(props) {
+  const {
+    formId,
+    fieldId,
+    label,
+    validationMessage,
+    value,
+    setFormValues,
+    set,
+  } = props;
+
+  const joinedId = `${formId}-${fieldId}`;
+
+  const fileRef = React.useRef(null);
+  const [alt, setAlt] = React.useState('');
+  const [requestUpload, setRequestUpload] = React.useState(false);
+  const [hasUploaded, setHasUploaded] = React.useState(false);
+
+  const refHasFile = fileRef.current && fileRef.current.files[0];
+
+  function onSubmit() {
+    if (!alt || !refHasFile) {
+      return;
+    }
+
+    setRequestUpload(true);
+  }
+
+  // @FROM: https://devcenter.heroku.com/articles/s3-upload-node
+  function uploadFile(file, signedRequest, url) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', signedRequest);
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4) {
+        setRequestUpload(false);
+
+        if (xhr.status === 200) {
+          setHasUploaded(true);
+        }
+      }
+    };
+
+    xhr.send(file);
+  }
+
+  React.useEffect(() => {
+    if (!requestUpload) {
+      return;
+    }
+
+    const fileType = fileRef.current.files[0].name.split('.').pop();
+
+    makeApiRequest('/api/v1/media', 'post', { alt, fileType })
+      .then(({ json }) => {
+        const { media, signedUrl } = json;
+
+        if (!media || !signedUrl) {
+          setRequestUpload(false);
+          return;
+        }
+
+        setFormValues((copy) => ({ ...copy, [set]: media._id }));
+        uploadFile(fileRef.current.files[0], signedUrl, media.source);
+      });
+  }, [alt, requestUpload, set, setFormValues, setRequestUpload]);
+
+  return (
+    <FormFieldColumn>
+      <LabelRow>
+        <Label as="p" htmlFor={joinedId}>{label}</Label>
+      </LabelRow>
+      <MediaUploadContainer>
+        <MediaUploadFileInput
+          type="file"
+          id={joinedId}
+          ref={fileRef}
+        />
+        <HelpText
+          as="label"
+          htmlFor={`${joinedId}-alt`}
+        >{getCopy('formLabels.alt')}</HelpText>
+        <BaseMultiLineTextInput
+          id={`${joinedId}-alt`}
+          value={alt}
+          onChange={(event) => setAlt(event.target.value)}
+        />
+        {!requestUpload && !hasUploaded && (
+          <MediaUploadSubmit onClick={onSubmit}>
+            {getCopy('formLabels.upload')}
+          </MediaUploadSubmit>
+        )}
+        {requestUpload && (
+          <MediaUploadStatus>
+            {getCopy('formLabels.uploadPending')}
+          </MediaUploadStatus>
+        )}
+        {hasUploaded && (
+          <MediaUploadStatus>
+            {getCopy('formLabels.uploadSuccess')}
+          </MediaUploadStatus>
+        )}
+      </MediaUploadContainer>
     </FormFieldColumn>
   );
 }

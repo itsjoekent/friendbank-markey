@@ -77,6 +77,21 @@ export const copy = {
   'formLabels.note': {
     [ENGLISH]: 'Note',
   },
+  'formLabels.customBackground': {
+    [ENGLISH]: 'Custom Background',
+  },
+  'formLabels.alt': {
+    [ENGLISH]: 'Alt text',
+  },
+  'formLabels.upload': {
+    [ENGLISH]: 'Upload',
+  },
+  'formLabels.uploadPending': {
+    [ENGLISH]: 'Uploading media...',
+  },
+  'formLabels.uploadSuccess': {
+    [ENGLISH]: 'Successfully uploaded',
+  },
   'validations.required': {
     [ENGLISH]: '*Required',
     [SPANISH]: '*Requerido',
@@ -300,6 +315,10 @@ export default function getCopy(path, defaultToEnglish = true, fallback = '') {
 
   if (path.startsWith('config.')) {
     return value;
+  }
+
+  if (typeof value === 'undefined') {
+    return fallback;
   }
 
   return value[language] || (defaultToEnglish && value[ENGLISH]) || fallback;

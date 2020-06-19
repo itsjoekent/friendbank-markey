@@ -492,13 +492,6 @@ describe('validateAndNormalizeApiRequestFields utility', function() {
     );
 
     assert.deepEqual(
-      ['background', 'validations.required'],
-      validateAndNormalizeApiRequestFields({
-        background: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Joe_Kennedy_III%2C_official_portrait%2C_116th_Congress.jpg/220px-Joe_Kennedy_III%2C_official_portrait%2C_116th_Congress.jpg',
-      }),
-    );
-
-    assert.deepEqual(
       { background: 'default' },
       validateAndNormalizeApiRequestFields({
         background: 'default',
