@@ -19,7 +19,6 @@ import {
   PASSWORD_INPUT,
   RADIO_FIELD,
 } from '../components/FormFields';
-import backgrounds from '../../shared/backgrounds';
 import {
   validateName,
   validateZip,
@@ -709,7 +708,7 @@ export default function Dashboard() {
               return (
                 <PageContainer key={page.code}>
                   <PageCover>
-                    <PageCoverImage src={backgrounds[page.background].source} />
+                    <PageCoverImage src={page.media.source} />
                   </PageCover>
                   <PageDetails>
                     <div>

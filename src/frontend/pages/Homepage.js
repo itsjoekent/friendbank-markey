@@ -1,13 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import getCopy from '../utils/getCopy';
+import { useApplicationContext } from '../ApplicationContext';
 import StandardHelmet from '../components/StandardHelmet';
 import SplitScreen from '../components/SplitScreen';
 import Form from '../components/Form';
-import backgrounds from '../../shared/backgrounds';
 import signupIdFields from '../forms/signupIdFields';
+import useGetUserRole from '../hooks/useGetUserRole';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
+import getCopy from '../utils/getCopy';
+import getConfig from '../utils/getConfig';
 import { isAuthenticated } from '../utils/auth';
 import {
   SINGLE_LINE_TEXT_INPUT,
@@ -15,8 +17,10 @@ import {
   MULTI_LINE_TEXT_INPUT,
   CODE_INPUT_FIELD,
   GALLERY_PICKER,
+  MEDIA_UPLOAD,
 } from '../components/FormFields';
 import { TRANSACTIONAL_EMAIL } from '../../shared/emailFrequency';
+import { STAFF_ROLE } from '../../shared/roles';
 import {
   validateName,
   validateZip,
@@ -31,7 +35,30 @@ import {
 
 export const HOMEPAGE_ROUTE = '/';
 
-export default function Homepage() {
+export async function getHomepageInitialProps({
+  db,
+  campaign,
+}) {
+  try {
+    const config = JSON.parse(campaign.config);
+
+    const mediaCollection = db.collection('media');
+    const campaignMedia = await mediaCollection
+      .find({ _id: { '$in': config.media } })
+      .toArray();
+
+    return {
+      campaignMedia,
+    }
+  } catch (error) {
+    return error;
+  }
+}
+
+export default function Homepage(props) {
+  const { campaignMedia } = useApplicationContext();
+  const role = useGetUserRole();
+
   const [normalizedCode, setNormalizedCode] = React.useState(null);
 
   async function onUserSubmit(formValues) {
@@ -54,7 +81,12 @@ export default function Homepage() {
   }
 
   async function onPageSubmit(formValues) {
-    const { code, title, subtitle, background } = formValues;
+    const {
+      code,
+      title,
+      subtitle,
+      background,
+    } = formValues;
 
     const payload = {
       title,
@@ -185,10 +217,10 @@ export default function Homepage() {
           fieldType: GALLERY_PICKER,
           label: getCopy('formLabels.background'),
           validator: validateBackground,
-          options: Object.keys(backgrounds).map((key) => ({
-            name: key,
-            src: backgrounds[key].source,
-            alt: backgrounds[key].alt,
+          options: campaignMedia.map((media) => ({
+            name: media._id,
+            src: media.source,
+            alt: media.alt,
           })),
         },
       ],
@@ -202,6 +234,15 @@ export default function Homepage() {
     },
   ];
 
+  if (role === STAFF_ROLE) {
+    steps[1].fields.push({
+      fieldId: 'customBackground',
+      fieldType: MEDIA_UPLOAD,
+      label: getCopy('formLabels.customBackground'),
+      set: 'background',
+    });
+  }
+
   const authenticatedSteps = [
     {
       ...steps[1],
@@ -211,11 +252,16 @@ export default function Homepage() {
   ];
 
   const [clientSteps, setClientSteps] = React.useState(steps);
+
   React.useEffect(() => {
     if (isAuthenticated()) {
       setClientSteps(authenticatedSteps);
     }
   }, []);
+
+  React.useEffect(() => {
+    setClientSteps(isAuthenticated() ? authenticatedSteps : steps);
+  }, [role]);
 
   const [hasPrefilledCode, setHasPrefilledCode] = React.useState(false);
   const [hasPrefilledTitle, setHasPrefilledTitle] = React.useState(false);
@@ -253,7 +299,7 @@ export default function Homepage() {
   }
 
   return (
-    <SplitScreen media={backgrounds['ed-climate-march']}>
+    <SplitScreen media={getConfig('defaultMedia')}>
       <StandardHelmet />
       <Form
         formId="create"

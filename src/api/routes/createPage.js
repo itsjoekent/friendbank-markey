@@ -1,4 +1,5 @@
 const getPageForCode = require('../db/getPageForCode');
+const validateBackgroundField = require('../utils/validateBackgroundField');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 const transformPageResponse = require('../transformers/transformPageResponse');
@@ -32,6 +33,17 @@ module.exports = ({ db }) => {
           error: validationResult[1],
         });
 
+        return;
+      }
+
+      const backgroundFieldValidation = await validateBackgroundField(db, token, campaign, background);
+
+      if (backgroundFieldValidation instanceof Error) {
+        throw backgroundFieldValidation;
+      }
+
+      if (backgroundFieldValidation) {
+        res.status(400).json(backgroundFieldValidation);
         return;
       }
 

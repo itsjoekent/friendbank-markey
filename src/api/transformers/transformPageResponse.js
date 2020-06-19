@@ -8,6 +8,7 @@ module.exports = function transformPageResponse(page) {
     subtitle,
     background,
     code,
+    media,
   } = page;
 
   const safe = {
@@ -16,6 +17,10 @@ module.exports = function transformPageResponse(page) {
     background,
     code,
   };
+
+  if (!!media) {
+    safe.media = media;
+  }
 
   return safe;
 }

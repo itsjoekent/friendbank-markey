@@ -203,6 +203,38 @@ describe('editPage api route v1', function() {
     assert.equal(error, 'validations.required');
   });
 
+  it ('should return an error if the background does not exist for the campaign', async function() {
+    const standard = await standardTestSetup();
+
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const pages = client.db().collection('pages');
+
+    await pages.insertOne({
+      code: 'test',
+      campaign: standard.campaign._id.toString(),
+      createdBy: standard.user._id.toString(),
+    });
+
+    const response = await fetch(`${API_URL}/api/v1/page/test`, {
+      method: 'put',
+      body: JSON.stringify({
+        title: 'Demo page title',
+        subtitle: 'Demo page subtitle',
+        background: 'does-not-exist',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Relational-Token': standard.token,
+      },
+    });
+
+    assert.equal(response.status, 400);
+
+    const { field, error } = await response.json();
+    assert.equal(field, 'background');
+    assert.equal(error, 'validations.required');
+  });
+
   it ('should return an error if not authenticated', async function() {
     const standard = await standardTestSetup();
 
