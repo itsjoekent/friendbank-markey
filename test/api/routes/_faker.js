@@ -51,9 +51,36 @@ async function fakeToken({
   return result.ops[0];
 }
 
+async function fakeMedia({
+  _id = 'default',
+  type = 'image',
+  source = 'https://ed-markey-supporter-photos.s3.amazonaws.com/em-header-original.jpg',
+  alt = 'Ed at the Podium',
+}) {
+  const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+  const db = client.db();
+  const media = db.collection('media');
+
+  const result = await media.insertOne({
+    _id: 'default',
+    type: 'image',
+    source: 'https://ed-markey-supporter-photos.s3.amazonaws.com/em-header-original.jpg',
+    alt: 'Ed at the Podium',
+  });
+
+  return result.ops[0];
+}
+
 async function fakeCampaign({
   domains = ['api:5000'],
   name = 'Team Markey',
+  config = {
+    media: [
+      'default',
+      'hoops',
+    ],
+  },
+  copy = {},
 }) {
   const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
   const db = client.db();
@@ -62,6 +89,8 @@ async function fakeCampaign({
   const result = await campaigns.insertOne({
     domains,
     name,
+    copy: JSON.stringify(copy),
+    config: JSON.stringify(config),
   });
 
   return result.ops[0];
@@ -92,6 +121,7 @@ async function fakePage({
 }
 
 async function standardTestSetup() {
+  await fakeMedia({});
   const campaign = await fakeCampaign({});
   const user = await fakeUser({ campaign: campaign._id.toString() });
   const token = await fakeToken({ user: user._id.toString() });
@@ -106,6 +136,7 @@ async function standardTestSetup() {
 module.exports = {
   fakeUser,
   fakeToken,
+  fakeMedia,
   fakeCampaign,
   fakePage,
   standardTestSetup,

@@ -146,10 +146,6 @@ function validateBackground(value) {
     return 'validations.required';
   }
 
-  if (!backgrounds[value]) {
-    return 'validations.required';
-  }
-
   return false;
 }
 

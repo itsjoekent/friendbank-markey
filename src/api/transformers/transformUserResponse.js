@@ -8,6 +8,7 @@ module.exports = function transformUserResponse(user) {
     email,
     zip,
     emailFrequency,
+    role,
   } = user;
 
   const safe = {
@@ -15,6 +16,7 @@ module.exports = function transformUserResponse(user) {
     email,
     zip,
     emailFrequency,
+    role,
   };
 
   return safe;
