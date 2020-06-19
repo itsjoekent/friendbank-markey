@@ -7,15 +7,17 @@ import StandardHelmet from '../components/StandardHelmet';
 import SplitScreen from '../components/SplitScreen';
 import Form from '../components/Form';
 import useAuthGate from '../hooks/useAuthGate';
+import useGetUserRole from '../hooks/useGetUserRole';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
 import makeLocaleLink from '../utils/makeLocaleLink';
-import backgrounds from '../../shared/backgrounds';
 import normalizePageCode from '../../shared/normalizePageCode';
 import {
   SINGLE_LINE_TEXT_INPUT,
   MULTI_LINE_TEXT_INPUT,
   GALLERY_PICKER,
+  MEDIA_UPLOAD,
 } from '../components/FormFields';
+import { STAFF_ROLE } from '../../shared/roles';
 import {
   validateTitle,
   validateSubtitle,
@@ -53,13 +55,24 @@ export async function getEditPageInitialProps({
       background,
     } = page;
 
+    const config = JSON.parse(campaign.config);
+
+    const mediaCollection = db.collection('media');
+    const campaignMedia = await mediaCollection
+      .find({ _id: { '$in': config.media } })
+      .toArray();
+
+    const pageMedia = await mediaCollection.findOne({ _id: background });
+
     return {
       page: {
         code: normalizedCode,
         title,
         subtitle,
         background,
+        media: pageMedia,
       },
+      campaignMedia,
     };
   } catch (error) {
     return error;
@@ -70,6 +83,7 @@ export default function EditPage() {
   useAuthGate();
 
   const context = useApplicationContext();
+  const role = useGetUserRole();
 
   if (!context.page) {
     return <_404 />;
@@ -80,8 +94,9 @@ export default function EditPage() {
       code,
       title,
       subtitle,
-      background,
+      media,
     },
+    campaignMedia,
   } = context;
 
   async function onPageSubmit(formValues) {
@@ -117,22 +132,31 @@ export default function EditPage() {
           fieldType: GALLERY_PICKER,
           label: getCopy('formLabels.background'),
           validator: validateBackground,
-          options: Object.keys(backgrounds).map((key) => ({
-            name: key,
-            src: backgrounds[key].source,
-            alt: backgrounds[key].alt,
+          options: campaignMedia.map((item) => ({
+            name: item._id,
+            src: item.source,
+            alt: item.alt,
           })),
         },
       ],
     },
   ];
 
+  if (role === STAFF_ROLE) {
+    steps[0].fields.push({
+      fieldId: 'customBackground',
+      fieldType: MEDIA_UPLOAD,
+      label: getCopy('formLabels.customBackground'),
+      set: 'background',
+    });
+  }
+
   return (
-    <SplitScreen media={backgrounds[background]}>
+    <SplitScreen media={media}>
       <StandardHelmet />
       <Form
         formId="edit"
-        initialFieldValues={{ title, subtitle, background }}
+        initialFieldValues={{ title, subtitle, background: media._id }}
         steps={steps}
         onCompletion={onCompletion}
       />

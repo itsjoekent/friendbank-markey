@@ -1,35 +1,31 @@
 const { MongoClient, ObjectId } = require('mongodb');
-const { passwordHash } = require('../utils/auth');
-const { ENGLISH, SPANISH } = require('../../shared/lang');
-const { STAFF_ROLE } = require('../../shared/roles');
-const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
+
+const {
+  MONGODB_URL,
+} = process.env;
+
+const { USER_ROLE } = require('../src/shared/roles');
 
 (async function() {
-  console.log('Seeding database...');
-
-  const client = await MongoClient.connect(process.env.MONGODB_URL, {
+  const client = await MongoClient.connect(MONGODB_URL, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
   });
 
   db = client.db();
 
-  await db.dropDatabase();
+  const usersCollection = db.collection('users');
+  const users = await usersCollection.find().toArray();
 
-  const hashedPassword = await passwordHash('password');
-  const users = db.collection('users');
+  for (const user of users) {
+    const userUpdate = {
+      '$set': {
+        role: USER_ROLE,
+      },
+    };
 
-  await users.insertOne({
-    email: 'admin@friendbank.us',
-    password: hashedPassword,
-    firstName: 'Joe',
-    zip: '00000',
-    emailFrequency: TRANSACTIONAL_EMAIL,
-    createdAt: Date.now(),
-    lastUpdatedAt: Date.now(),
-    lastAuthenticationUpdate: Date.now(),
-    role: STAFF_ROLE,
-  });
+    await usersCollection.updateOne({ _id: user._id }, userUpdate);
+  }
 
   const defaultMediaObjects = [
     {
@@ -277,10 +273,13 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
   });
 
   const campaigns = db.collection('campaigns');
-  await campaigns.insertOne({
-    domains: ['localhost:5000'],
-    name: 'Friendbank Dev',
-    copy,
-    config,
-  });
+  await campaigns.updateOne(
+    { domains: 'support.edmarkey.com' },
+    {
+      '$set': {
+        copy,
+        config,
+      },
+    },
+  );
 })();

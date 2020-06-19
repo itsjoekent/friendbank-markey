@@ -4,9 +4,9 @@ const crypto = require('crypto');
 
 const randomBytes = promisify(crypto.randomBytes);
 
-async function randomToken() {
+async function randomToken(length = 64) {
   try {
-    const token = await randomBytes(64);
+    const token = await randomBytes(length);
     return token.toString('hex');
   } catch (error) {
     return error;

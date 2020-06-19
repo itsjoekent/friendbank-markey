@@ -17,6 +17,11 @@ You can also run `make unit-test-api` to run the API test suite.
 
 ----
 
+* Media endpoint test
+* Finish migration script
+
+----
+
 - Migration script for Markey
  - Attach users to Markey campaign
  - Add Markey copy to Markey campaign

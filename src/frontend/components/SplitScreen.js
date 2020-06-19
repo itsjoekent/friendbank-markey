@@ -65,17 +65,6 @@ const MediaPanel = styled.div`
   }
 `;
 
-const MediaPanelShadow = styled.div`
-  display: block;
-  width: 100%;
-  height: 50px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: ${({ theme }) => theme.zIndexes.navShadow};
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
-`;
-
 const MediaImage = styled.img`
   display: block;
   width: 100%;
@@ -102,7 +91,6 @@ export default function SplitScreen(props) {
         </ContentPanelContainer>
       </ContentPanel>
       <MediaPanel>
-        <MediaPanelShadow />
         {media && media.type === 'image' && (
           <MediaImage src={media.source} alt={media.alt} />
         )}

@@ -15,7 +15,6 @@ import makeLocaleLink from '../utils/makeLocaleLink';
 import getCopy from '../utils/getCopy';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
 import normalizePageCode from '../../shared/normalizePageCode';
-import backgrounds from '../../shared/backgrounds';
 
 export const SIGNUP_ROUTE = '/:code';
 
@@ -54,6 +53,9 @@ export async function getSignupInitialProps({
 
     const createdByFirstName = createdByUser.firstName;
 
+    const mediaCollection = db.collection('media');
+    const media = await mediaCollection.findOne({ _id: background });
+
     return {
       page: {
         code: normalizedCode,
@@ -61,6 +63,7 @@ export async function getSignupInitialProps({
         subtitle,
         background,
         createdByFirstName,
+        media,
       },
     };
   } catch (error) {
@@ -103,6 +106,7 @@ export default function Signup() {
       subtitle,
       background,
       createdByFirstName,
+      media,
     },
   } = context;
 
@@ -151,7 +155,7 @@ export default function Signup() {
         <title>{title}</title>
         <meta name="og:title" content={title} />
         <meta property="og:description" content={subtitle} />
-        <meta property="og:image" content={backgrounds[background].source} />
+        <meta property="og:image" content={media.source} />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:title" content={title} />
         <meta property="twitter:description" content={subtitle} />
@@ -165,7 +169,7 @@ export default function Signup() {
           onClose={() => setIsModalOpen(false)}
         />
       )}
-      <SplitScreen media={backgrounds[background]}>
+      <SplitScreen media={media}>
         {hasReachedEnd && (
           <PostSignupContainer>
             <DefaultTitle>

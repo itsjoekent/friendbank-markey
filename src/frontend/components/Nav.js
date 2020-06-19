@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import getCopy, { copy } from '../utils/getCopy';
 import { RedButton } from './Buttons';
 import { LOGIN_ROUTE } from '../pages/Login';
 import { HOMEPAGE_ROUTE } from '../pages/Homepage';
 import { DASHBOARD_ROUTE } from '../pages/Dashboard';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import isSpanishPath from '../utils/isSpanishPath';
+import getCopy from '../utils/getCopy';
+import getConfig from '../utils/getConfig';
 import { isAuthenticated } from '../utils/auth';
 import { ENGLISH, SPANISH, SPANISH_PREFIX } from '../../shared/lang';
 
@@ -154,7 +155,7 @@ const DonateButton = styled(RedButton)`
 `;
 
 export default function Nav(props) {
-  const disableNavDonate = getCopy('config.disableNavDonate');
+  const disableNavDonate = getConfig('disableNavDonate');
 
   const isSpanish = isSpanishPath(location.pathname);
 

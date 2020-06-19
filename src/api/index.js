@@ -21,6 +21,7 @@ const getUserSignups = require('./routes/getUserSignups');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
 const forgotPassword = require('./routes/forgotPassword');
+const uploadMedia = require('./routes/uploadMedia');
 
 const setupDb = require('./db/setup');
 const getCampaignForDomain = require('./db/getCampaignForDomain');
@@ -224,6 +225,16 @@ app.post(
   },
 );
 
+app.post(
+  '/api/v1/media',
+  async function(req, res, next) {
+    await loadToken({ db})(req, res, next);
+  },
+  async function(req, res) {
+    await uploadMedia({ db })(req, res);
+  },
+);
+
 app.get('*', async function (req, res) {
   try {
     const { path } = req;
@@ -236,7 +247,10 @@ app.get('*', async function (req, res) {
     }
 
     global.location = { pathname: path };
-    global.window = { __CAMPAIGN_COPY: JSON.parse(campaign.copy) };
+    global.window = {
+      __CAMPAIGN_COPY: JSON.parse(campaign.copy),
+      __CAMPAIGN_CONFIG: JSON.parse(campaign.config),
+    };
 
     const ssrResult = await ssr(path, { db, campaign, ObjectId });
 
@@ -252,6 +266,7 @@ app.get('*', async function (req, res) {
 
     const page = template.replace(/{{REACT_DATA}}/g, JSON.stringify(initialProps))
       .replace(/{{CAMPAIGN_COPY}}/g, campaign.copy)
+      .replace(/{{CAMPAIGN_CONFIG}}/g, campaign.config)
       .replace(/{{HEAP_TAG}}/g, IS_PROD ? PROD_HEAP : DEV_HEAP)
       .replace(/{{HEAD}}/g, headTags)
       .replace(/{{HTML}}/g, html)

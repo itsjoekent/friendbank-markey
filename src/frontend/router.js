@@ -1,7 +1,7 @@
 import React from 'react';
 import UrlPattern from 'url-pattern';
 import _404 from './pages/_404';
-import Homepage, { HOMEPAGE_ROUTE } from './pages/Homepage';
+import Homepage, { getHomepageInitialProps, HOMEPAGE_ROUTE } from './pages/Homepage';
 import Signup, { getSignupInitialProps, SIGNUP_ROUTE } from './pages/Signup';
 import EditPage, { getEditPageInitialProps, EDIT_PAGE_ROUTE } from './pages/EditPage';
 import Login, { LOGIN_ROUTE } from './pages/Login';
@@ -19,7 +19,7 @@ function removeTrailingSlash(from) {
 const PAGE_MAP = [
   [
     HOMEPAGE_ROUTE,
-    null,
+    getHomepageInitialProps,
     Homepage,
   ],
   [

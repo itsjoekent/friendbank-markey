@@ -18,6 +18,8 @@ import {
   GalleryPickerField,
   GALLERY_PICKER,
   HelpText,
+  MEDIA_UPLOAD,
+  MediaUpload,
 } from './FormFields';
 
 const FADE_IN_TIME = 1000;
@@ -376,6 +378,22 @@ export default function Form(props) {
                   setFormValues={setFormValues}
                   value={value || ""}
                   options={options || []}
+                />
+              );
+            }
+
+            case MEDIA_UPLOAD: {
+              const { set } = field;
+
+              return (
+                <MediaUpload
+                  key={fieldId}
+                  formId={formId}
+                  fieldId={fieldId}
+                  label={label}
+                  setFormValues={setFormValues}
+                  value={value || ""}
+                  set={set}
                 />
               );
             }
