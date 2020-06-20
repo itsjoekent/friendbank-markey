@@ -29,7 +29,6 @@ const getCampaignForDomain = require('./db/getCampaignForDomain');
 const ssr = require('./ssr').default;
 
 const { SPANISH_PREFIX } = require('../shared/lang');
-const backgrounds = require('../shared/backgrounds');
 
 const DEV_HEAP = `
 <script type="text/javascript">
