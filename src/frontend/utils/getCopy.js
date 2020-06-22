@@ -179,6 +179,9 @@ export const copy = {
     [ENGLISH]: 'Dashboard',
     [SPANISH]: 'Página de inicio',
   },
+  'nav.admin': {
+    [ENGLISH]: 'Admin',
+  },
   'share.facebook': {
     [ENGLISH]: 'Share on Facebook',
     [SPANISH]: 'Compartir en Facebook',

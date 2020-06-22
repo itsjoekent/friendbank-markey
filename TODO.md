@@ -1,8 +1,10 @@
+- [ ] admin dashboard
+
 # Multi-tenant refactor
 
+- [ ] Frontend UX integration testing
 - [ ] Users per campaign
   - [ ] Migrate Markey users to campaign
-  - [ ] Update API endpoints
 - [ ] Admin onboarding flow?
 - [ ] Admin Dashboard
   - [ ] Configuration meta
@@ -21,4 +23,3 @@
 - [ ] Performance & scaling
   - [ ] Code splitting
   - [ ] Static website (?)
-- [ ] Improve signups table UX?

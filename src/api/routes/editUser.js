@@ -50,7 +50,7 @@ module.exports = ({ db }) => {
       };
 
       if (userData.email) {
-        const existingUser = await findUser(db, validationResult.email);
+        const existingUser = await findUser(db, validationResult.email, token.user.campaign);
 
         if (existingUser instanceof Error) {
           throw existingUser;

@@ -10,6 +10,7 @@ import ForgotPassword, { FORGOT_PASSWORD_ROUTE } from './pages/ForgotPassword';
 import ResetPassword, { RESET_PASSWORD_ROUTE } from './pages/ResetPassword';
 import Dashboard, { DASHBOARD_ROUTE } from './pages/Dashboard';
 import PhonebankForm, { PHONEBANK_FORM_ROUTE } from './pages/PhonebankForm';
+import Admin, { ADMIN_ROUTE } from './pages/Admin';
 import { SPANISH_PREFIX } from '../shared/lang';
 
 function removeTrailingSlash(from) {
@@ -46,6 +47,11 @@ const PAGE_MAP = [
     DASHBOARD_ROUTE,
     null,
     Dashboard,
+  ],
+  [
+    ADMIN_ROUTE,
+    null,
+    Admin,
   ],
   [
     PHONEBANK_FORM_ROUTE,

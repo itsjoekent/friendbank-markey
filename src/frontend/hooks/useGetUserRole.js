@@ -1,14 +1,18 @@
 import React from 'react';
 import makeApiRequest from '../utils/makeApiRequest';
+import { isAuthenticated } from '../utils/auth';
 
 export default function useGetUserRole() {
   const [role, setRole] = React.useState(null);
 
   React.useEffect(() => {
-    if (role) return;
+    if (!!role || !isAuthenticated()) {
+      return;
+    }
 
-    if (localStorage.getItem('role')) {
-      setRole(localStorage.getItem('role'));
+    const cachedRole = localStorage.getItem('role');
+    if (cachedRole) {
+      setRole(cachedRole);
     }
 
     makeApiRequest('/api/v1/user', 'get', null, false).then(({ json }) => {

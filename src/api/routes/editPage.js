@@ -1,5 +1,4 @@
 const getPageForCode = require('../db/getPageForCode');
-const getToken = require('../db/getToken');
 const validateBackgroundField = require('../utils/validateBackgroundField');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 const apiErrorHandler = require('../utils/apiErrorHandler');
