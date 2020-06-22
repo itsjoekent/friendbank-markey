@@ -169,8 +169,8 @@ describe('signup api route v1', function() {
     const signups = client.db().collection('signups');
 
     const recruiters = await Promise.all([
-      await fakeUser({ email: 'first@edmarkey.com' }),
-      await fakeUser({ email: 'second@edmarkey.com' }),
+      await fakeUser({ email: 'first@edmarkey.com', campaign: standard.campaign._id.toString() }),
+      await fakeUser({ email: 'second@edmarkey.com', campaign: standard.campaign._id.toString() }),
     ]);
 
     await pages.insertMany([

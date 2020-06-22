@@ -9,10 +9,15 @@ const assert = chai.assert;
 
 require('./_setup');
 
-const { fakeUser } = require('./_faker');
+const {
+  standardTestSetup,
+  fakeUser,
+} = require('./_faker');
 
 describe('createUser api route v1', function() {
   it('should create a new user', async function() {
+    const standard = await standardTestSetup();
+
     const response = await fetch(`${API_URL}/api/v1/user`, {
       method: 'post',
       body: JSON.stringify({
@@ -45,9 +50,12 @@ describe('createUser api route v1', function() {
     assert.equal(record.zip, '00000');
     assert.equal(record.emailFrequency, 'WEEKLY_EMAIL');
     assert.notEqual(record.password, 'password');
+    assert.equal(record.campaign, standard.campaign._id.toString());
   });
 
   it('should create a new user and normalize the email', async function() {
+    const standard = await standardTestSetup();
+
     const response = await fetch(`${API_URL}/api/v1/user`, {
       method: 'post',
       body: JSON.stringify({
@@ -75,7 +83,7 @@ describe('createUser api route v1', function() {
   });
 
   it('should not create a new user if the email is already in use', async function() {
-    await fakeUser({});
+    const standard = await standardTestSetup();
 
     const response = await fetch(`${API_URL}/api/v1/user`, {
       method: 'post',
@@ -98,6 +106,8 @@ describe('createUser api route v1', function() {
   });
 
   it('should not create a new user if the first name field fails validation', async function() {
+    const standard = await standardTestSetup();
+
     const response = await fetch(`${API_URL}/api/v1/user`, {
       method: 'post',
       body: JSON.stringify({
@@ -119,6 +129,8 @@ describe('createUser api route v1', function() {
   });
 
   it('should not create a new user if the email field fails validation', async function() {
+    const standard = await standardTestSetup();
+
     const response = await fetch(`${API_URL}/api/v1/user`, {
       method: 'post',
       body: JSON.stringify({
@@ -140,6 +152,8 @@ describe('createUser api route v1', function() {
   });
 
   it('should not create a new user if the password field fails validation', async function() {
+    const standard = await standardTestSetup();
+
     const response = await fetch(`${API_URL}/api/v1/user`, {
       method: 'post',
       body: JSON.stringify({
@@ -161,6 +175,8 @@ describe('createUser api route v1', function() {
   });
 
   it('should not create a new user if the zip field fails validation', async function() {
+    const standard = await standardTestSetup();
+
     const response = await fetch(`${API_URL}/api/v1/user`, {
       method: 'post',
       body: JSON.stringify({
@@ -182,6 +198,8 @@ describe('createUser api route v1', function() {
   });
 
   it('should not create a new user if the emailFrequency field fails validation', async function() {
+    const standard = await standardTestSetup();
+
     const response = await fetch(`${API_URL}/api/v1/user`, {
       method: 'post',
       body: JSON.stringify({
