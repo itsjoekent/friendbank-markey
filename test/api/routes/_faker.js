@@ -77,7 +77,6 @@ async function fakeCampaign({
   config = {
     media: [
       'default',
-      'hoops',
     ],
   },
   copy = {},
