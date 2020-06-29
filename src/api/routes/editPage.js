@@ -3,6 +3,7 @@ const validateBackgroundField = require('../utils/validateBackgroundField');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 const normalizePageCode = require('../../shared/normalizePageCode');
+const { STAFF_ROLE } = require('../../shared/roles');
 
 module.exports = ({ db }) => {
   async function editPage(req, res) {
@@ -61,7 +62,10 @@ module.exports = ({ db }) => {
         return;
       }
 
-      if (existingPage.createdBy !== token.user._id.toString()) {
+      if (
+        token.user.role !== STAFF_ROLE
+        && existingPage.createdBy !== token.user._id.toString()
+      ) {
         res.status(401).json({ error: 'Not authorized' });
         return;
       }
