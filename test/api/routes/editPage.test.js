@@ -33,7 +33,7 @@ describe('editPage api route v1', function() {
       body: JSON.stringify({
         title: 'Demo page title 2',
         subtitle: 'Demo page subtitle 2',
-        background: 'hoops',
+        background: 'default',
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ describe('editPage api route v1', function() {
     assert.equal(record.code, 'test');
     assert.equal(record.title, 'Demo page title 2');
     assert.equal(record.subtitle, 'Demo page subtitle 2');
-    assert.equal(record.background, 'hoops');
+    assert.equal(record.background, 'default');
   });
 
   it('should not edit a page if the page does not exist', async function() {
@@ -65,7 +65,7 @@ describe('editPage api route v1', function() {
       body: JSON.stringify({
         title: 'Demo page title 2',
         subtitle: 'Demo page subtitle 2',
-        background: 'hoops',
+        background: 'default',
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ describe('editPage api route v1', function() {
       body: JSON.stringify({
         title: 'Demo page title 2',
         subtitle: 'Demo page subtitle 2',
-        background: 'hoops',
+        background: 'default',
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -108,6 +108,46 @@ describe('editPage api route v1', function() {
 
     const { error } = await response.json();
     assert.isString(error);
+  });
+
+  it('should allow staff to edit any page', async function() {
+    const standard = await standardTestSetup();
+
+    const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+    const pages = client.db().collection('pages');
+    const users = client.db().collection('users');
+
+    await pages.insertOne({
+      code: 'test',
+      campaign: standard.campaign._id.toString(),
+      createdBy: 'test',
+    });
+
+    await users.updateOne({ _id: standard.user._id }, { '$set': { role: 'STAFF_ROLE' } });
+
+    const response = await fetch(`${API_URL}/api/v1/page/test`, {
+      method: 'put',
+      body: JSON.stringify({
+        title: 'Demo page title 2',
+        subtitle: 'Demo page subtitle 2',
+        background: 'default',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Relational-Token': standard.token,
+      },
+    });
+
+    assert.equal(response.status, 200);
+
+    const record = await pages.findOne({
+      code: 'test',
+      campaign: standard.campaign._id.toString(),
+    });
+
+    assert.equal(record.title, 'Demo page title 2');
+    assert.equal(record.subtitle, 'Demo page subtitle 2');
+    assert.equal(record.background, 'default');
   });
 
   it ('should return an error if title field validation fails', async function() {
@@ -252,7 +292,7 @@ describe('editPage api route v1', function() {
       body: JSON.stringify({
         title: 'Demo page title 2',
         subtitle: 'Demo page subtitle 2',
-        background: 'hoops',
+        background: 'default',
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -284,7 +324,7 @@ describe('editPage api route v1', function() {
       body: JSON.stringify({
         title: 'Demo page title 2',
         subtitle: 'Demo page subtitle 2',
-        background: 'hoops',
+        background: 'default',
       }),
       headers: {
         'Content-Type': 'application/json',
