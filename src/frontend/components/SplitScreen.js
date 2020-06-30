@@ -11,7 +11,7 @@ const Layout = styled.div`
   margin-bottom: 48px;
 
   @media ${({ theme }) => theme.media.tablet} {
-    height: 80vh;
+    min-height: 80vh;
   }
 
   @media ${({ theme }) => theme.media.desktop} {
