@@ -68,16 +68,35 @@ const NavItem = styled.button`
   }
 `;
 
+const AdminEditorContainer = styled.div`
+  @media ${({ theme }) => theme.media.tablet} {
+    flex-grow: 1;
+  }
+`;
+
 export default function Admin() {
   useAuthGate();
 
-  const role = useGetUserRole();
+  const role = useGetUserRole(true);
+
+  const [AdminCopyEditor, setAdminCopyEditor] = React.useState({ Component: React.Fragment });
 
   React.useEffect(() => {
     if (role && role !== STAFF_ROLE) {
       window.location.href = makeLocaleLink(`${HOMEPAGE_ROUTE}`);
     }
   }, [role]);
+
+  // TEMP: SSR Lazy loading mechanism.
+  React.useEffect(() => {
+    Promise.all([
+      import('../components/AdminCopyEditor.js'),
+    ]).then((modules) => {
+      setAdminCopyEditor({ Component: modules[0].default });
+    });
+  }, [
+    setAdminCopyEditor,
+  ]);
 
   return (
     <Layout>
@@ -89,6 +108,9 @@ export default function Admin() {
         <NavItem>Manage Team</NavItem>
         <NavItem>Billing</NavItem>
       </AdminNav>
+      <AdminEditorContainer>
+        <AdminCopyEditor.Component />
+      </AdminEditorContainer>
     </Layout>
   );
 }
