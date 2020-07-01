@@ -482,6 +482,10 @@ export const GalleryItem = styled.div`
   height: 75px;
 
   @media ${({ theme }) => theme.media.tablet} {
+    width: calc(10% - 16px);
+  }
+
+  @media ${({ theme }) => theme.media.desktop} {
     width: calc(25% - 16px);
   }
 `;

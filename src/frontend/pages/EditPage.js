@@ -107,6 +107,12 @@ export default function EditPage() {
     window.location.href = makeLocaleLink(`/${code}`);
   }
 
+  const mediaOptions = [...campaignMedia];
+
+  if (!mediaOptions.find((compare) => compare._id === media._id)) {
+    mediaOptions.push(media);
+  }
+
   const steps = [
     {
       title: getCopy('homepage.customizeTitle'),
@@ -118,13 +124,14 @@ export default function EditPage() {
           fieldId: 'title',
           fieldType: SINGLE_LINE_TEXT_INPUT,
           label: getCopy('formLabels.title'),
+          defaultValue: title || getCopy('homepage.defaultTitle'),
           validator: validateTitle,
         },
         {
           fieldId: 'subtitle',
           fieldType: MULTI_LINE_TEXT_INPUT,
           label: getCopy('formLabels.subtitle'),
-          defaultValue: getCopy('homepage.defaultSubtitle'),
+          defaultValue: subtitle || getCopy('homepage.defaultSubtitle'),
           validator: validateSubtitle,
         },
         {
@@ -132,7 +139,7 @@ export default function EditPage() {
           fieldType: GALLERY_PICKER,
           label: getCopy('formLabels.background'),
           validator: validateBackground,
-          options: campaignMedia.map((item) => ({
+          options: mediaOptions.map((item) => ({
             name: item._id,
             src: item.source,
             alt: item.alt,
