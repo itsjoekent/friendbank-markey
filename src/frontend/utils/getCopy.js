@@ -284,14 +284,6 @@ export const copy = {
     [ENGLISH]: 'Manual Add',
     [SPANISH]: 'Añadido manualmente',
   },
-  'dashboard.signupTableSupport': {
-    [ENGLISH]: 'Support Level',
-    [SPANISH]: 'Nivel de apoyo',
-  },
-  'dashboard.signupTableVolunteer': {
-    [ENGLISH]: 'Volunteer Level',
-    [SPANISH]: 'Nivel de voluntarios',
-  },
   'dashboard.totalSignups': {
     [ENGLISH]: 'Total signups:',
     [SPANISH]: 'Total de inscripciones:',
@@ -303,6 +295,31 @@ export const copy = {
   'dashboard.editPageButton': {
     [ENGLISH]: 'Edit page',
     [SPANISH]: 'Editar la página',
+  },
+  'dashboard.signupTableName': {
+    [ENGLISH]: 'Name',
+  },
+  'dashboard.signupTableCopyAllEmails': {
+    [ENGLISH]: 'Copy all emails',
+  },
+  'dashboard.signupTableRowAria': {
+    [ENGLISH]: 'View signup for',
+  },
+  'dashboard.signupTablePanelBack': {
+    [ENGLISH]: 'Go back',
+  },
+  'dashboard.signupTablePanelProfile': {
+    [ENGLISH]: 'Profile',
+    [SPANISH]: 'Perfil',
+  },
+  'dashboard.signupTablePanelActions': {
+    [ENGLISH]: 'Actions',
+  },
+  'dashboard.signupTablePanelSaved': {
+    [ENGLISH]: 'Saved!',
+  },
+  'copiedToClipboard': {
+    [ENGLISH]: 'Copied to clipboard!',
   },
   'pageNotFound': {
     [ENGLISH]: 'Page not found',
