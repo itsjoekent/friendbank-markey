@@ -15,6 +15,10 @@ App is available at localhost:5000
 
 You can also run `make unit-test-api` to run the API test suite.
 
+- translation for new fields
+- migration for new copy fields
+  - phonebankPage.successfullySubmitted
+
 ----
 
 * Media endpoint test

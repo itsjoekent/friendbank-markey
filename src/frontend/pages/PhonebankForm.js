@@ -107,7 +107,7 @@ export default function PhonebankForm() {
           />
           {successfullySubmitted && (
             <SuccessMessage>
-              Successfully submitted contact!
+              {getCopy('phonebankPage.successfullySubmitted')}
             </SuccessMessage>
           )}
         </Container>
