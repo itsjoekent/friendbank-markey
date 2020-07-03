@@ -158,6 +158,7 @@ export default function Form(props) {
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [targetStep, setTargetStep] = React.useState(0);
+  const [hasCalledCompletion, setHasCalledCompletion] = React.useState(false);
 
   const [isProcessingSubmit, setIsProcessingSubmit] = React.useState(false);
 
@@ -180,7 +181,12 @@ export default function Form(props) {
     }, FADE_OUT_TIME);
 
     return () => clearTimeout(timeoutId);
-  }, [isFading, setActiveStep, targetStep, scrollHelperRef.current]);
+  }, [
+    isFading,
+    setActiveStep,
+    targetStep,
+    scrollHelperRef.current,
+  ]);
 
   React.useEffect(() => {
     const activeStepData = steps[activeStep];
@@ -197,7 +203,9 @@ export default function Form(props) {
   }, [activeStep, steps]);
 
   React.useEffect(() => {
-    if (activeStep >= steps.length) {
+    if (activeStep >= steps.length && !hasCalledCompletion) {
+      setHasCalledCompletion(true);
+
       if (isHeapReady()) {
         heap.track('completed form', { formId, code: (page || {}).code });
       }
@@ -206,7 +214,25 @@ export default function Form(props) {
         onCompletion(formValues, setTargetStep, setFormValues);
       }
     }
-  }, [steps, onCompletion, activeStep, setTargetStep, setFormValues]);
+  }, [
+    steps,
+    onCompletion,
+    activeStep,
+    setTargetStep,
+    setFormValues,
+    hasCalledCompletion,
+    setHasCalledCompletion,
+  ]);
+
+  React.useEffect(() => {
+    if (activeStep === 0 && hasCalledCompletion) {
+      setHasCalledCompletion(false);
+    }
+  }, [
+    activeStep,
+    hasCalledCompletion,
+    setHasCalledCompletion,
+  ]);
 
   React.useEffect(() => {
     if (onFormValueChange) {
