@@ -3,6 +3,41 @@ const { MongoClient } = require('mongodb');
 const { MONGODB_URL } = process.env;
 const { passwordHash } = require('../../../src/api/utils/auth');
 
+async function fakeSignup({
+  email = '',
+  recruitedBy = '',
+  campaign = '',
+  type = 'contact',
+  firstName = 'First',
+  lastName = 'Last',
+  phone = '',
+  zip = '',
+  supportLevel = '',
+  volunteerLevel = '',
+  note = '',
+}) {
+  const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
+  const db = client.db();
+  const signups = db.collection('signups');
+
+  const result = await signups.insertOne({
+    email,
+    recruitedBy,
+    campaign,
+    type,
+    lastUpdatedAt: Date.now(),
+    firstName,
+    lastName,
+    phone,
+    zip,
+    supportLevel,
+    volunteerLevel,
+    note,
+  });
+
+  return result.ops[0];
+}
+
 async function fakeUser({
   campaign = '',
   email = 'ed@edmarkey.com',
@@ -133,6 +168,7 @@ async function standardTestSetup() {
 }
 
 module.exports = {
+  fakeSignup,
   fakeUser,
   fakeToken,
   fakeMedia,

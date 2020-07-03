@@ -226,6 +226,9 @@ describe('contact api route v1', function() {
     });
 
     assert.include(record.email, 'missing::');
+
+    const payload = await _readServiceOutput('bsd');
+    assert.notInclude(payload.body, 'missing::');
   });
 
   it('should not create a contact if the firstName field fails validation', async function() {
