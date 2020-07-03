@@ -10,7 +10,6 @@ module.exports = ({ db }) => {
         token,
         query: {
           lastId,
-          firstId,
         },
       } = req;
 
