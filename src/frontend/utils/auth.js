@@ -19,6 +19,7 @@ export function removeAuthToken() {
     return null;
   }
 
+  localStorage.removeItem('role');
   return localStorage.removeItem('token');
 }
 

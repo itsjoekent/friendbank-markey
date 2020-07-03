@@ -2,6 +2,14 @@ import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import usePrevious from '../hooks/usePrevious';
 
+const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
 const SpinnerStyles = createGlobalStyle`
   .sk-chase {
     width: 40px;
@@ -95,7 +103,7 @@ export default function LoadingSpinner(props) {
   }
 
   return (
-    <React.Fragment>
+    <SpinnerContainer>
       <SpinnerStyles />
       <div className="sk-chase">
         <div className="sk-chase-dot" />
@@ -105,6 +113,6 @@ export default function LoadingSpinner(props) {
         <div className="sk-chase-dot" />
         <div className="sk-chase-dot" />
       </div>
-    </React.Fragment>
+    </SpinnerContainer>
   );
 }
