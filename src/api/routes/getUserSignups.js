@@ -10,6 +10,7 @@ module.exports = ({ db }) => {
         token,
         query: {
           lastId,
+          firstId,
         },
       } = req;
 
@@ -26,7 +27,10 @@ module.exports = ({ db }) => {
         query._id = { '$lt': ObjectId(lastId) };
       }
 
-      const result = await signups.find(query, { limit: 25 }).sort({ _id: -1 }).toArray();
+      let result = await signups
+        .find(query, { limit: 10 })
+        .sort({ _id: -1 })
+        .toArray();
 
       res.json({
         signups: (result || []).map(transformSignupResponse),

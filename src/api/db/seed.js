@@ -19,7 +19,7 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
   const hashedPassword = await passwordHash('password');
   const users = db.collection('users');
 
-  await users.insertOne({
+  const userInsertResult = await users.insertOne({
     email: 'admin@friendbank.us',
     password: hashedPassword,
     firstName: 'Joe',
@@ -30,6 +30,8 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
     lastAuthenticationUpdate: Date.now(),
     role: STAFF_ROLE,
   });
+
+  const adminUser = userInsertResult.ops[0];
 
   const defaultMediaObjects = [
     {
@@ -254,6 +256,9 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       [ENGLISH]: 'Enter your friends, family, and people in your network. Grow your list of the people you’re personally bringing to this grassroots movement, let Ed know if they support him, and help make sure this campaign reaches its goals.',
       [SPANISH]: 'Añade a tus amigos, familiares y personas de tu red. Crece tu lista de personas que personalmente trajiste a este movimiento impulsado por el pueblo, déjale saber a Ed si lo apoyan y ayuda a la campaña a alcanzar sus metas.',
     },
+    'phonebankPage.successfullySubmitted': {
+      [ENGLISH]: 'Successfully submitted contact!',
+    },
     'privacyPolicy.label': {
       [ENGLISH]: 'Privacy Policy',
       [SPANISH]: 'Política de privacidad',
@@ -277,10 +282,33 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
   });
 
   const campaigns = db.collection('campaigns');
-  await campaigns.insertOne({
+  const campaignResult = await campaigns.insertOne({
     domains: ['localhost:5000'],
     name: 'Friendbank Dev',
     copy,
     config,
   });
+
+  const campaign = campaignResult.ops[0];
+
+  const signups = db.collection('signups');
+  const signupSeed = new Array(50).fill({
+    email: `${Math.round(Math.random() * 10000)}@gmail.com`,
+    recruitedBy: adminUser._id.toString(),
+    campaign: campaign._id.toString(),
+    type: 'contact',
+    lastUpdatedAt: Date.now(),
+    firstName: 'First',
+    phone: '',
+    zip: '',
+    supportLevel: '',
+    volunteerLevel: '',
+  }).map((signup, index) => ({
+    ...signup,
+    _id: new ObjectId(),
+    lastName: `${index}`,
+    note: `This is a note ${Math.random()}`,
+  }));
+
+  await signups.insertMany(signupSeed);
 })();
