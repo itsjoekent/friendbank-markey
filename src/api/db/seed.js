@@ -280,6 +280,7 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
   const users = db.collection('users');
 
   const userInsertResult = await users.insertOne({
+    campaign: campaignId,
     email: 'admin@friendbank.us',
     password: hashedPassword,
     firstName: 'Joe',
