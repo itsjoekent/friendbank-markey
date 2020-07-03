@@ -12,6 +12,7 @@ const createPage = require('./routes/createPage');
 const getPage = require('./routes/getPage');
 const editPage = require('./routes/editPage');
 const signup = require('./routes/signup');
+const editSignup = require('./routes/editSignup');
 const contact = require('./routes/contact');
 const getUser = require('./routes/getUser');
 const createUser = require('./routes/createUser');
@@ -130,6 +131,19 @@ app.post(
   },
   async function(req, res) {
     await signup({ db })(req, res);
+  },
+);
+
+app.put(
+  '/api/v1/signup/:id',
+  async function(req, res, next) {
+    await loadToken({ db })(req, res, next);
+  },
+  async function(req, res, next) {
+    await loadCampaign({ db })(req, res, next);
+  },
+  async function(req, res) {
+    await editSignup({ db })(req, res);
   },
 );
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { HOMEPAGE_ROUTE } from './Homepage';
-import { PHONEBANK_FORM_ROUTE } from './PhonebankForm';
 import { EDIT_PAGE_ROUTE } from './EditPage';
 import StandardHelmet from '../components/StandardHelmet';
 import LoadingSpinner from '../components/LoadingSpinner';
+import SignupsTable from '../components/SignupsTable';
 import { DarkBlueButton } from '../components/Buttons';
 import Form, { FormContainer, FormTitleContainer } from '../components/Form';
 import useAuthGate from '../hooks/useAuthGate';
@@ -79,6 +79,7 @@ const ProfileCard = styled(Card)`
 `;
 
 const SignupsCard = styled(Card)`
+  position: relative;
   margin-top: 24px;
 
   @media ${({ theme }) => theme.media.tablet} {
@@ -188,68 +189,6 @@ const LoadMoreRow = styled.div`
   margin-top: 16px;
 `;
 
-const TableContainer = styled.div`
-  display: block;
-  width: 100%;
-  overflow-x: scroll;
-`;
-
-const Table = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-width: 1024px;
-`;
-
-const TableRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  padding-top: 6px;
-  padding-bottom: 6px;
-`;
-
-const TableColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  width: 200px;
-  min-width: 200px;
-  padding-left: 4px;
-  padding-right: 4px;
-
-  &:first-of-type {
-    justify-content: flex-start;
-  }
-`;
-
-const TableColumnLabel = styled.p`
-  font-family: ${({ theme }) => theme.fonts.mainFamily};
-  font-weight: bold;
-  font-size: 16px;
-  color: ${({ theme }) => theme.colors.black};
-  display: block;
-  width: 100%;
-  text-align: left;
-`;
-
-const TableColumnValue = styled(TableColumnLabel)`
-  font-weight: normal;
-  overflow-x: scroll;
-`;
-
-const TableColumnValueLink = styled(TableColumnValue)`
-  text-decoration: underline;
-  cursor: pointer;
-  color: ${({ theme }) => theme.colors.darkBlue};
-  overflow-x: auto;
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.blue};
-  }
-`;
-
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -335,10 +274,6 @@ export default function Dashboard() {
   const [profile, setProfile] = React.useState(null);
   const [successfullyUpdatedPassword, setSuccessfullyUpdatedPassword] = React.useState(false);
 
-  const [signups, setSignups] = React.useState(null);
-  const [totalSignups, setTotalSignups] = React.useState(0);
-  const [requestedNextSignupsPage, setRequestedNextSignupsPage] = React.useState(true);
-
   const [signupPages, setSignupPages] = React.useState(null);
   const [totalSignupPages, setTotalSignupPages] = React.useState(0);
   const [requestedNextSignupPages, setRequestedNextSignupPages] = React.useState(true);
@@ -368,42 +303,6 @@ export default function Dashboard() {
 
     return () => { cancel = true };
   }, [profile, setProfile]);
-
-  React.useEffect(() => {
-    let cancel = false;
-
-    async function fetchSignups() {
-      const lastId = signups && signups.length ? `?lastId=${[...signups].pop().id}` : '';
-      const url = `/api/v1/user/signups${lastId}`;
-
-      const { response, json } = await makeApiRequest(url, 'get');
-
-      if (!cancel) {
-        setRequestedNextSignupsPage(false);
-
-        if (json.signups) {
-          setSignups((copy) => ([...(copy || []), ...json.signups]));
-        }
-
-        if (json.total !== totalSignups) {
-          setTotalSignups(json.total);
-        }
-      }
-    }
-
-    if (requestedNextSignupsPage) {
-      fetchSignups();
-    }
-
-    return () => { cancel = true };
-  }, [
-    signups,
-    setSignups,
-    totalSignups,
-    setTotalSignups,
-    requestedNextSignupsPage,
-    setRequestedNextSignupsPage,
-  ]);
 
   React.useEffect(() => {
     let cancel = false;
@@ -485,126 +384,7 @@ export default function Dashboard() {
     <Layout>
       <StandardHelmet />
       <SignupsCard>
-        <CardHeader>
-          {getCopy('dashboard.signupsHeader')}
-        </CardHeader>
-        <CardGrid>
-          <LoadingSpinner hasCompletedLoading={!!signups}>
-            <SignupsHeaderRow>
-              <CardSubheader>
-                {getCopy('dashboard.totalSignups')} {totalSignups}
-              </CardSubheader>
-              <DarkBlueButton as="a" href={makeLocaleLink(PHONEBANK_FORM_ROUTE)}>
-                {getCopy('dashboard.phonebankLabel')}
-              </DarkBlueButton>
-            </SignupsHeaderRow>
-            <TableContainer>
-              <Table>
-                <TableRow>
-                  <TableColumn>
-                    <TableColumnLabel>
-                      {getCopy('formLabels.firstName')} / {getCopy('formLabels.lastName')}
-                    </TableColumnLabel>
-                  </TableColumn>
-                  <TableColumn>
-                    <TableColumnLabel>
-                      {getCopy('formLabels.email')}
-                    </TableColumnLabel>
-                  </TableColumn>
-                  <TableColumn>
-                    <TableColumnLabel>
-                      {getCopy('formLabels.phone')}
-                    </TableColumnLabel>
-                  </TableColumn>
-                  <TableColumn>
-                    <TableColumnLabel>
-                      {getCopy('formLabels.zip')}
-                    </TableColumnLabel>
-                  </TableColumn>
-                  <TableColumn>
-                    <TableColumnLabel>
-                      {getCopy('dashboard.signupTableSource')}
-                    </TableColumnLabel>
-                  </TableColumn>
-                  <TableColumn>
-                    <TableColumnLabel>
-                      {getCopy('dashboard.signupTableSupport')}
-                    </TableColumnLabel>
-                  </TableColumn>
-                  <TableColumn>
-                    <TableColumnLabel>
-                      {getCopy('dashboard.signupTableVolunteer')}
-                    </TableColumnLabel>
-                  </TableColumn>
-                  <TableColumn>
-                    <TableColumnLabel>
-                      {getCopy('formLabels.note')}
-                    </TableColumnLabel>
-                  </TableColumn>
-                </TableRow>
-                {signups && signups.map((signup) => (
-                  <TableRow key={signup.id}>
-                    <TableColumn>
-                      <TableColumnValue>
-                        {`${signup.firstName} ${signup.lastName}`}
-                      </TableColumnValue>
-                    </TableColumn>
-                    <TableColumn>
-                      <TableColumnValue>
-                        {signup.email && !signup.email.startsWith('missing::') ? signup.email : ''}
-                      </TableColumnValue>
-                    </TableColumn>
-                    <TableColumn>
-                      <TableColumnValue>
-                        {signup.phone}
-                      </TableColumnValue>
-                    </TableColumn>
-                    <TableColumn>
-                      <TableColumnValue>
-                        {signup.zip}
-                      </TableColumnValue>
-                    </TableColumn>
-                    <TableColumn>
-                      {signup.type === 'subscriber'
-                        ? (
-                          <TableColumnValueLink as="a" target="_blank" href={makeLocaleLink(`/${signup.code}`)}>
-                            {signup.code}
-                          </TableColumnValueLink>
-                        ) : (
-                          <TableColumnValue>
-                            {getCopy('dashboard.signupTablePhonebankSource')}
-                          </TableColumnValue>
-                        )
-                      }
-                    </TableColumn>
-                    <TableColumn>
-                      <TableColumnValue>
-                        {signup.supportLevel}
-                      </TableColumnValue>
-                    </TableColumn>
-                    <TableColumn>
-                      <TableColumnValue>
-                        {signup.volunteerLevel}
-                      </TableColumnValue>
-                    </TableColumn>
-                    <TableColumn>
-                      <TableColumnValue>
-                        {signup.note}
-                      </TableColumnValue>
-                    </TableColumn>
-                  </TableRow>
-                ))}
-                {signups && signups.length < totalSignups && (
-                  <LoadMoreRow>
-                    <DarkBlueButton onClick={() => setRequestedNextSignupsPage(true)}>
-                      {getCopy('dashboard.loadMore')}
-                    </DarkBlueButton>
-                  </LoadMoreRow>
-                )}
-              </Table>
-            </TableContainer>
-          </LoadingSpinner>
-        </CardGrid>
+        <SignupsTable />
       </SignupsCard>
       <ProfileCard>
         <CardHeader>
