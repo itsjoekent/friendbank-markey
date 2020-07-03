@@ -315,6 +315,9 @@ export const copy = {
   'dashboard.signupTablePanelSaved': {
     [ENGLISH]: 'Saved!',
   },
+  'copiedToClipboard': {
+    [ENGLISH]: 'Copied to clipboard!',
+  },
   'pageNotFound': {
     [ENGLISH]: 'Page not found',
     [SPANISH]: 'No encontramos la página',

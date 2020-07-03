@@ -294,6 +294,13 @@ export default function SignupsTable() {
         ...data,
       };
     }));
+
+    if (selectedSignup && selectedSignup.id === id) {
+      setSelectedSignup({
+        ...selectedSignup,
+        ...data,
+      });
+    }
   }
 
   const tableIndex = signupsPage * 10;
@@ -338,7 +345,10 @@ export default function SignupsTable() {
                 {getCopy('dashboard.phonebankLabel')}
               </HeaderButton>
               <HeaderButton onClick={copyAllEmails}>
-                {copied ? 'Copied to clipboard!' : getCopy('dashboard.signupTableCopyAllEmails')}
+                {copied
+                  ? getCopy('copiedToClipboard')
+                  : getCopy('dashboard.signupTableCopyAllEmails')
+                }
               </HeaderButton>
             </HeaderActionsColumn>
           </HeaderRow>
@@ -384,7 +394,7 @@ export default function SignupsTable() {
                 </TableColumnDefault>
                 <TableColumnDefault>
                   <TableColumnValue>
-                    {signup.email}
+                    {(signup.email || '').startsWith('missing::') ? '' : signup.email}
                   </TableColumnValue>
                 </TableColumnDefault>
                 <TableColumnTabletOnly>

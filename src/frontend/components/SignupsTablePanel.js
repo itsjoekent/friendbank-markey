@@ -9,6 +9,7 @@ import getCopy from '../utils/getCopy';
 import {
   validateZipNotRequired,
   validatePhoneNotRequired,
+  validateEmailNotRequired,
   validateNote,
 } from '../../shared/fieldValidations';
 
@@ -198,8 +199,19 @@ export default function SignupsTablePanel(props) {
   fieldDump[2].validator = validateZipNotRequired;
   fieldDump[3].validator = validatePhoneNotRequired;
 
+  const hasMissingEmail = selectedSignup.email
+    && selectedSignup.email.startsWith('missing::');
+
+  if (hasMissingEmail) {
+    fieldDump[4].validator = validateEmailNotRequired;
+  }
+
   const fields = fieldDump.map((field) => {
     const value = selectedSignup[field.fieldId];
+
+    if (field.fieldId === 'email' && hasMissingEmail) {
+      return field;
+    }
 
     if (typeof value !== 'undefined') {
       return { ...field, defaultValue: value };
