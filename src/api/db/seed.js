@@ -258,6 +258,7 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
     },
     'phonebankPage.successfullySubmitted': {
       [ENGLISH]: 'Successfully submitted contact!',
+      [SPANISH]: '¡Contacto creado con éxito!',
     },
     'privacyPolicy.label': {
       [ENGLISH]: 'Privacy Policy',
