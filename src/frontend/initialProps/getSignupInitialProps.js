@@ -1,3 +1,5 @@
+import normalizePageCode from '../../shared/normalizePageCode';
+
 export default async function getSignupInitialProps({
   routeMatch,
   db,
