@@ -1,16 +1,29 @@
 import React from 'react';
+import loadable from '@loadable/component';
 import UrlPattern from 'url-pattern';
 import _404 from './pages/_404';
-import Homepage, { getHomepageInitialProps, HOMEPAGE_ROUTE } from './pages/Homepage';
-import Signup, { getSignupInitialProps, SIGNUP_ROUTE } from './pages/Signup';
-import EditPage, { getEditPageInitialProps, EDIT_PAGE_ROUTE } from './pages/EditPage';
-import Login, { LOGIN_ROUTE } from './pages/Login';
-import CreateAccount, { CREATE_ACCOUNT_ROUTE } from './pages/CreateAccount';
-import ForgotPassword, { FORGOT_PASSWORD_ROUTE } from './pages/ForgotPassword';
-import ResetPassword, { RESET_PASSWORD_ROUTE } from './pages/ResetPassword';
-import Dashboard, { DASHBOARD_ROUTE } from './pages/Dashboard';
-import PhonebankForm, { PHONEBANK_FORM_ROUTE } from './pages/PhonebankForm';
+import {
+  HOMEPAGE_ROUTE,
+  SIGNUP_ROUTE,
+  EDIT_PAGE_ROUTE,
+  LOGIN_ROUTE,
+  CREATE_ACCOUNT_ROUTE,
+  FORGOT_PASSWORD_ROUTE,
+  RESET_PASSWORD_ROUTE,
+  DASHBOARD_ROUTE,
+  PHONEBANK_FORM_ROUTE,
+} from './routes';
 import { SPANISH_PREFIX } from '../shared/lang';
+
+const Homepage = loadable(() => import('./pages/Homepage'));
+const Login = loadable(() => import('./pages/Login'));
+const CreateAccount = loadable(() => import('./pages/CreateAccount'));
+const ForgotPassword = loadable(() => import('./pages/ForgotPassword'));
+const ResetPassword = loadable(() => import('./pages/ResetPassword'));
+const Dashboard = loadable(() => import('./pages/Dashboard'));
+const PhonebankForm = loadable(() => import('./pages/PhonebankForm'));
+const EditPage = loadable(() => import('./pages/EditPage'));
+const Signup = loadable(() => import('./pages/Signup'));
 
 function removeTrailingSlash(from) {
   return from.replace(/^(.+?)\/*?$/, '$1');
@@ -19,47 +32,38 @@ function removeTrailingSlash(from) {
 const PAGE_MAP = [
   [
     HOMEPAGE_ROUTE,
-    getHomepageInitialProps,
     Homepage,
   ],
   [
     LOGIN_ROUTE,
-    null,
     Login,
   ],
   [
     CREATE_ACCOUNT_ROUTE,
-    null,
     CreateAccount,
   ],
   [
     FORGOT_PASSWORD_ROUTE,
-    null,
     ForgotPassword,
   ],
   [
     RESET_PASSWORD_ROUTE,
-    null,
     ResetPassword,
   ],
   [
     DASHBOARD_ROUTE,
-    null,
     Dashboard,
   ],
   [
     PHONEBANK_FORM_ROUTE,
-    null,
     PhonebankForm,
   ],
   [
     EDIT_PAGE_ROUTE,
-    getEditPageInitialProps,
     EditPage,
   ],
   [
     SIGNUP_ROUTE,
-    getSignupInitialProps,
     Signup,
   ],
 ];
@@ -68,25 +72,25 @@ export default function router(path) {
   const match = PAGE_MAP.reduce((match, page) => {
     if (match) return match;
 
-    const [route, getProps, Component] = page;
+    const [route, Component] = page;
 
     const pattern = new UrlPattern(removeTrailingSlash(route));
     const patternMatch = pattern.match(removeTrailingSlash(path));
 
     if (!!patternMatch) {
-      return [patternMatch, getProps, Component];
+      return [patternMatch, route, Component];
     }
 
     const spanishPattern = new UrlPattern(removeTrailingSlash(`${SPANISH_PREFIX}${route}`));
     const spanishPatternMatch = spanishPattern.match(removeTrailingSlash(path));
 
     if (!!spanishPatternMatch) {
-      return [spanishPatternMatch, getProps, Component];
+      return [spanishPatternMatch, route, Component];
     }
 
     return null;
   }, null);
 
   // TODO: Return 404 page
-  return match || [null, () => {}, _404];
+  return match || [null, null, _404];
 }

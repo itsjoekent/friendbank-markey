@@ -16,8 +16,6 @@ import {
   validateNote,
 } from '../../shared/fieldValidations';
 
-export const PHONEBANK_FORM_ROUTE = '/friendbank/phonebank';
-
 const Layout = styled.div`
   display: flex;
   flex-direction: column;
