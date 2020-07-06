@@ -61,7 +61,7 @@ const MediaPanel = styled.div`
 
   @media ${({ theme }) => theme.media.desktop} {
     width: 60%;
-    height: 100%;
+    height: auto;
   }
 `;
 
