@@ -1,22 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DASHBOARD_ROUTE } from './Dashboard';
-import { LOGIN_ROUTE } from './Login';
-import { CREATE_ACCOUNT_ROUTE } from './CreateAccount';
 import getCopy from '../utils/getCopy';
 import Form from '../components/Form';
 import Gateway from '../components/Gateway';
+import { SINGLE_LINE_TEXT_INPUT } from '../components/FormFields';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import { isAuthenticated } from '../utils/auth';
 import {
-  SINGLE_LINE_TEXT_INPUT,
-} from '../components/FormFields';
+  DASHBOARD_ROUTE,
+  LOGIN_ROUTE,
+  CREATE_ACCOUNT_ROUTE,
+} from '../routes';
 import {
   validateEmail,
 } from '../../shared/fieldValidations';
-
-export const FORGOT_PASSWORD_ROUTE = '/friendbank/forgot-password';
 
 const Banner = styled.p`
   display: block;
