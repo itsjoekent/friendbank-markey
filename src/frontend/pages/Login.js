@@ -1,8 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DASHBOARD_ROUTE } from './Dashboard';
-import { CREATE_ACCOUNT_ROUTE } from './CreateAccount';
-import { FORGOT_PASSWORD_ROUTE } from './ForgotPassword';
 import getCopy from '../utils/getCopy';
 import Form from '../components/Form';
 import Gateway from '../components/Gateway';
@@ -14,13 +11,15 @@ import {
   PASSWORD_INPUT,
 } from '../components/FormFields';
 import {
+  NOT_AUTHORIZED_QUERY,
+  DASHBOARD_ROUTE,
+  CREATE_ACCOUNT_ROUTE,
+  FORGOT_PASSWORD_ROUTE,
+} from '../routes';
+import {
   validateEmail,
   validatePassword,
 } from '../../shared/fieldValidations';
-
-export const LOGIN_ROUTE = '/friendbank/login';
-
-export const NOT_AUTHORIZED_QUERY = 'not_authorized=1';
 
 const NotAuthorizedBanner = styled.p`
   display: block;

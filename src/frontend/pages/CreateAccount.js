@@ -1,17 +1,19 @@
 import React from 'react';
-import { DASHBOARD_ROUTE } from './Dashboard';
-import { LOGIN_ROUTE } from './Login';
-import { FORGOT_PASSWORD_ROUTE } from './ForgotPassword';
 import Form from '../components/Form';
 import Gateway from '../components/Gateway';
+import {
+  SINGLE_LINE_TEXT_INPUT,
+  PASSWORD_INPUT,
+} from '../components/FormFields';
 import getCopy from '../utils/getCopy';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import { isAuthenticated } from '../utils/auth';
 import {
-  SINGLE_LINE_TEXT_INPUT,
-  PASSWORD_INPUT,
-} from '../components/FormFields';
+  DASHBOARD_ROUTE,
+  LOGIN_ROUTE,
+  FORGOT_PASSWORD_ROUTE,
+} from '../routes';
 import {
   validateEmail,
   validatePassword,
