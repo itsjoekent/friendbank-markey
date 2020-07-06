@@ -3,10 +3,10 @@ import styled, { css } from 'styled-components';
 import copyToClipboard from 'copy-to-clipboard';
 import LoadingSpinner from './LoadingSpinner';
 import SignupsTablePanel from './SignupsTablePanel';
-import { PHONEBANK_FORM_ROUTE } from '../pages/PhonebankForm';
 import makeApiRequest from '../utils/makeApiRequest';
 import getCopy from '../utils/getCopy';
 import makeLocaleLink from '../utils/makeLocaleLink';
+import { PHONEBANK_FORM_ROUTE } from '../routes';
 
 const Container = styled.div`
   padding: 16px;

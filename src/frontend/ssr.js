@@ -6,11 +6,26 @@ import { Helmet } from 'react-helmet';
 import { ServerStyleSheet } from 'styled-components';
 import Application from './Application';
 import router from './router';
+import {
+  HOMEPAGE_ROUTE,
+  SIGNUP_ROUTE,
+  EDIT_PAGE_ROUTE,
+} from './routes';
+import getHomepageInitialProps from './initialProps/getHomepageInitialProps';
+import getSignupInitialProps from './initialProps/getSignupInitialProps';
+import getEditPageInitialProps from './initialProps/getEditPageInitialProps';
+
+const getInitialPropsMap = {
+  [HOMEPAGE_ROUTE]: getHomepageInitialProps,
+  [SIGNUP_ROUTE]: getSignupInitialProps,
+  [EDIT_PAGE_ROUTE]: getEditPageInitialProps,
+};
 
 export default async function ssr(path, ssrHelpers) {
-  const [routeMatch, getProps, PageComponent] = router(path);
+  const [routeMatch, route, PageComponent] = router(path);
 
   let initialProps = {};
+  const getProps = getInitialPropsMap[route];
 
   if (typeof getProps === 'function') {
     try {

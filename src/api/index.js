@@ -27,7 +27,7 @@ const uploadMedia = require('./routes/uploadMedia');
 const setupDb = require('./db/setup');
 const getCampaignForDomain = require('./db/getCampaignForDomain');
 
-const ssr = require('./ssr').default;
+const ssr = require('./ssr/ssr').default;
 
 const { SPANISH_PREFIX } = require('../shared/lang');
 const backgrounds = require('../shared/backgrounds');
@@ -290,7 +290,8 @@ app.get('*', async function (req, res) {
       .replace(/{{HEAP_TAG}}/g, IS_PROD ? PROD_HEAP : DEV_HEAP)
       .replace(/{{HEAD}}/g, headElements)
       .replace(/{{HTML}}/g, html)
-      .replace(/{{STYLE_TAGS}}/g, styleElements);
+      .replace(/{{STYLE_TAGS}}/g, styleElements)
+      .replace(/{{SCRIPT_TAGS}}/g, scriptElements);
 
     res.set('Content-Type', 'text/html');
     res.send(page);
