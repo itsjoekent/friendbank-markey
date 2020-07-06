@@ -1,7 +1,7 @@
 import getCopy from './getCopy';
 import { getAuthToken, setAuthToken, removeAuthToken } from './auth';
 import makeLocaleLink from './makeLocaleLink';
-import { LOGIN_ROUTE, NOT_AUTHORIZED_QUERY } from '../pages/Login';
+import { LOGIN_ROUTE, NOT_AUTHORIZED_QUERY } from '../routes';
 
 export default async function makeApiRequest(path, method, data, enableAuthorizationRedirect = true) {
   try {

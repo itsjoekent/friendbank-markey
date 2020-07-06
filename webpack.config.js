@@ -21,6 +21,7 @@ module.exports = [
     output: {
       filename: '[name].js',
       path: path.join(__dirname, 'public/dist'),
+      publicPath: '/dist/',
     },
     plugins: [
       new LoadablePlugin(),
@@ -32,8 +33,9 @@ module.exports = [
     target: 'node',
     output: {
       filename: 'ssr.js',
-      path: path.join(__dirname, 'src/api'),
+      path: path.join(__dirname, 'src/api/ssr'),
       libraryTarget: 'commonjs2',
+      publicPath: '/dist/',
     },
     ...sharedConfig,
   },
