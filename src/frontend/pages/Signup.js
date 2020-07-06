@@ -14,7 +14,6 @@ import signupIdFields from '../forms/signupIdFields';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import getCopy from '../utils/getCopy';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
-import normalizePageCode from '../../shared/normalizePageCode';
 
 const PostSignupContainer = styled.div`
   display: flex;
