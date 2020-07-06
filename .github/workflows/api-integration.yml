@@ -8,4 +8,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Test
-        run: docker-compose -f api-test.docker-compose.yml up --exit-code-from tests
+        run: docker-compose -f ci-api-test.docker-compose.yml up --exit-code-from tests
