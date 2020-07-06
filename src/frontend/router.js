@@ -1,16 +1,27 @@
 import React from 'react';
+import loadable from '@loadable/component';
 import UrlPattern from 'url-pattern';
 import _404 from './pages/_404';
-import Homepage, { getHomepageInitialProps, HOMEPAGE_ROUTE } from './pages/Homepage';
-import Signup, { getSignupInitialProps, SIGNUP_ROUTE } from './pages/Signup';
-import EditPage, { getEditPageInitialProps, EDIT_PAGE_ROUTE } from './pages/EditPage';
-import Login, { LOGIN_ROUTE } from './pages/Login';
-import CreateAccount, { CREATE_ACCOUNT_ROUTE } from './pages/CreateAccount';
-import ForgotPassword, { FORGOT_PASSWORD_ROUTE } from './pages/ForgotPassword';
-import ResetPassword, { RESET_PASSWORD_ROUTE } from './pages/ResetPassword';
-import Dashboard, { DASHBOARD_ROUTE } from './pages/Dashboard';
-import PhonebankForm, { PHONEBANK_FORM_ROUTE } from './pages/PhonebankForm';
+import { HOMEPAGE_ROUTE, getHomepageInitialProps } from './pages/Homepage';
+import { SIGNUP_ROUTE, getSignupInitialProps } from './pages/Signup';
+import { EDIT_PAGE_ROUTE, getEditPageInitialProps } from './pages/EditPage';
+import { LOGIN_ROUTE } from './pages/Login';
+import { CREATE_ACCOUNT_ROUTE } from './pages/CreateAccount';
+import { FORGOT_PASSWORD_ROUTE } from './pages/ForgotPassword';
+import { RESET_PASSWORD_ROUTE } from './pages/ResetPassword';
+import { DASHBOARD_ROUTE } from './pages/Dashboard';
+import { PHONEBANK_FORM_ROUTE } from './pages/PhonebankForm';
 import { SPANISH_PREFIX } from '../shared/lang';
+
+const Homepage = loadable(() => import('./pages/Homepage'));
+const Login = loadable(() => import('./pages/Login'));
+const CreateAccount = loadable(() => import('./pages/CreateAccount'));
+const ForgotPassword = loadable(() => import('./pages/ForgotPassword'));
+const ResetPassword = loadable(() => import('./pages/ResetPassword'));
+const Dashboard = loadable(() => import('./pages/Dashboard'));
+const PhonebankForm = loadable(() => import('./pages/PhonebankForm'));
+const EditPage = loadable(() => import('./pages/EditPage'));
+const Signup = loadable(() => import('./pages/Signup'));
 
 function removeTrailingSlash(from) {
   return from.replace(/^(.+?)\/*?$/, '$1');

@@ -4,8 +4,6 @@ import { ApplicationContext } from './ApplicationContext';
 import GlobalStyle from './GlobalStyle';
 import Nav from './components/Nav';
 import CommitteeDisclaimer from './components/CommitteeDisclaimer';
-import Homepage from './pages/Homepage';
-import SignupPage from './pages/Signup';
 import theme from './theme';
 import router from './router';
 
