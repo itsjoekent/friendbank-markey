@@ -300,7 +300,7 @@ export default function Dashboard() {
       fetchProfile();
     }
 
-    return () => { cancel = true };
+    return () => { cancel = true; };
   }, [profile, setProfile]);
 
   React.useEffect(() => {

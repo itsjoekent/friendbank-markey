@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { RedButton } from './Buttons';
+import useRole from '../hooks/useRole';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import isSpanishPath from '../utils/isSpanishPath';
 import getCopy from '../utils/getCopy';
 import getConfig from '../utils/getConfig';
-import { isAuthenticated, getRole } from '../utils/auth';
+import { isAuthenticated } from '../utils/auth';
 import {
   LOGIN_ROUTE,
   HOMEPAGE_ROUTE,
@@ -167,6 +168,8 @@ export default function Nav(props) {
 
   const isSpanish = isSpanishPath(location.pathname);
 
+  const role = useRole();
+
   const languageLink = isSpanish
     ? location.pathname.replace(SPANISH_PREFIX, '')
     : `${SPANISH_PREFIX}${location.pathname}`;
@@ -181,8 +184,6 @@ export default function Nav(props) {
       isAuthenticated() ? getCopy('nav.dashboard') : getCopy('nav.login'),
     ]);
   }, []);
-
-  const role = getRole();
 
   return (
     <NavStack>
