@@ -3,13 +3,15 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    # env:
+    #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #   SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
     timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@master
       - name: Test
-        run: docker-compose -e SENDGRID_API_KEY="${{ secrets.SENDGRID_API_KEY }}" -f ci-api-test.docker-compose.yml up --exit-code-from tests
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+        run: |
+          SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }} \
+          docker-compose -f ci-api-test.docker-compose.yml up --exit-code-from tests
