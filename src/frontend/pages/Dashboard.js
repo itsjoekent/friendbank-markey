@@ -1,12 +1,15 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { HOMEPAGE_ROUTE } from './Homepage';
-import { EDIT_PAGE_ROUTE } from './EditPage';
 import StandardHelmet from '../components/StandardHelmet';
 import LoadingSpinner from '../components/LoadingSpinner';
 import SignupsTable from '../components/SignupsTable';
 import { DarkBlueButton } from '../components/Buttons';
 import Form, { FormContainer, FormTitleContainer } from '../components/Form';
+import {
+  SINGLE_LINE_TEXT_INPUT,
+  PASSWORD_INPUT,
+  RADIO_FIELD,
+} from '../components/FormFields';
 import useAuthGate from '../hooks/useAuthGate';
 import getCopy from '../utils/getCopy';
 import share from '../utils/share';
@@ -14,11 +17,7 @@ import makeLocaleLink from '../utils/makeLocaleLink';
 import makeApiRequest from '../utils/makeApiRequest';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
 import { removeAuthToken } from '../utils/auth';
-import {
-  SINGLE_LINE_TEXT_INPUT,
-  PASSWORD_INPUT,
-  RADIO_FIELD,
-} from '../components/FormFields';
+import { HOMEPAGE_ROUTE, EDIT_PAGE_ROUTE } from '../routes';
 import {
   validateName,
   validateZip,

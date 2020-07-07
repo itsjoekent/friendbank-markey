@@ -1,15 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DASHBOARD_ROUTE } from './Dashboard';
 import getCopy from '../utils/getCopy';
 import Form from '../components/Form';
 import Gateway from '../components/Gateway';
+import { PASSWORD_INPUT } from '../components/FormFields';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import { isAuthenticated, setAuthToken } from '../utils/auth';
-import {
-  PASSWORD_INPUT,
-} from '../components/FormFields';
+import { DASHBOARD_ROUTE } from '../routes';
 import {
   validatePassword,
 } from '../../shared/fieldValidations';
