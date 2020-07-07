@@ -37,6 +37,7 @@ services:
     environment:
       - PORT=5000
       - MONGODB_URL=mongodb://admin:secret@mongo:27017
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
     volumes:
       - type: volume
         source: servicesTest
