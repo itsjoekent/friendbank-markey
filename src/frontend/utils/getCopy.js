@@ -318,6 +318,15 @@ export const copy = {
   'dashboard.signupTablePanelSaved': {
     [ENGLISH]: 'Saved!',
   },
+  'admin.editCopy': {
+    [ENGLISH]: 'Edit Copy',
+  },
+  'admin.editConfig': {
+    [ENGLISH]: 'Edit Config',
+  },
+  'admin.toggleSpanish': {
+    [ENGLISH]: 'Toggle Spanish Fields',
+  },
   'copiedToClipboard': {
     [ENGLISH]: 'Copied to clipboard!',
   },
