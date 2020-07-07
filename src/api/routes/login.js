@@ -57,7 +57,7 @@ module.exports = ({ db }) => {
         throw token;
       }
 
-      res.json({ token });
+      res.json({ token, role: user.role });
     } catch (error) {
       apiErrorHandler(res, error);
     }

@@ -5,12 +5,11 @@ import StandardHelmet from '../components/StandardHelmet';
 import SplitScreen from '../components/SplitScreen';
 import Form from '../components/Form';
 import signupIdFields from '../forms/signupIdFields';
-import useGetUserRole from '../hooks/useGetUserRole';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
 import getCopy from '../utils/getCopy';
 import getConfig from '../utils/getConfig';
-import { isAuthenticated } from '../utils/auth';
+import { isAuthenticated, getRole } from '../utils/auth';
 import {
   SINGLE_LINE_TEXT_INPUT,
   PASSWORD_INPUT,
@@ -35,7 +34,7 @@ import {
 
 export default function Homepage(props) {
   const { campaignMedia } = useApplicationContext();
-  const role = useGetUserRole();
+  const role = getRole();
 
   const [normalizedCode, setNormalizedCode] = React.useState(null);
 
