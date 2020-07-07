@@ -1,16 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 import { RedButton } from './Buttons';
-import { LOGIN_ROUTE } from '../pages/Login';
-import { HOMEPAGE_ROUTE } from '../pages/Homepage';
-import { DASHBOARD_ROUTE } from '../pages/Dashboard';
-import { ADMIN_ROUTE } from '../pages/Admin';
 import useGetUserRole from '../hooks/useGetUserRole';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import isSpanishPath from '../utils/isSpanishPath';
 import getCopy from '../utils/getCopy';
 import getConfig from '../utils/getConfig';
 import { isAuthenticated } from '../utils/auth';
+import {
+  LOGIN_ROUTE,
+  HOMEPAGE_ROUTE,
+  DASHBOARD_ROUTE,
+  ADMIN_ROUTE,
+} from '../routes';
 import { ENGLISH, SPANISH, SPANISH_PREFIX } from '../../shared/lang';
 import { STAFF_ROLE } from '../../shared/roles';
 

@@ -88,15 +88,15 @@ export default function Admin() {
   }, [role]);
 
   // TEMP: SSR Lazy loading mechanism.
-  React.useEffect(() => {
-    Promise.all([
-      import('../components/AdminCopyEditor.js'),
-    ]).then((modules) => {
-      setAdminCopyEditor({ Component: modules[0].default });
-    });
-  }, [
-    setAdminCopyEditor,
-  ]);
+  // React.useEffect(() => {
+  //   Promise.all([
+  //     import('../components/AdminCopyEditor.js'),
+  //   ]).then((modules) => {
+  //     setAdminCopyEditor({ Component: modules[0].default });
+  //   });
+  // }, [
+  //   setAdminCopyEditor,
+  // ]);
 
   return (
     <Layout>

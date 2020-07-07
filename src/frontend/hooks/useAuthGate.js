@@ -1,7 +1,7 @@
 import React from 'react';
 import { isAuthenticated } from '../utils/auth';
 import makeLocaleLink from '../utils/makeLocaleLink';
-import { LOGIN_ROUTE, NOT_AUTHORIZED_QUERY } from '../pages/Login';
+import { LOGIN_ROUTE, NOT_AUTHORIZED_QUERY } from '../routes';
 
 export default function useAuthGate() {
   React.useEffect(() => {
