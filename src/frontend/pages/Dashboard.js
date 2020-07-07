@@ -16,7 +16,7 @@ import share from '../utils/share';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import makeApiRequest from '../utils/makeApiRequest';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
-import { removeAuthToken } from '../utils/auth';
+import { removeAuthToken, removeRole } from '../utils/auth';
 import { HOMEPAGE_ROUTE, EDIT_PAGE_ROUTE } from '../routes';
 import {
   validateName,
@@ -375,6 +375,7 @@ export default function Dashboard() {
   function logout() {
     makeApiRequest('/api/v1/logout', 'post').then(() => {
       removeAuthToken();
+      removeRole();
       window.location.href = makeLocaleLink(`${HOMEPAGE_ROUTE}`);
     });
   }

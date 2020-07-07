@@ -1,8 +1,8 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import makeLocaleLink from '../utils/makeLocaleLink';
+import { getRole } from '../utils/auth';
 import useAuthGate from '../hooks/useAuthGate';
-import useGetUserRole from '../hooks/useGetUserRole';
 import { HOMEPAGE_ROUTE } from '../routes';
 import { STAFF_ROLE } from '../../shared/roles';
 
@@ -75,7 +75,7 @@ const AdminEditorContainer = styled.div`
 export default function Admin() {
   useAuthGate();
 
-  const role = useGetUserRole(true);
+  const role = getRole();
 
   const [AdminCopyEditor, setAdminCopyEditor] = React.useState({ Component: React.Fragment });
 

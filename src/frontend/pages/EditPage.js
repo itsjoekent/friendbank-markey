@@ -6,17 +6,17 @@ import getCopy from '../utils/getCopy';
 import StandardHelmet from '../components/StandardHelmet';
 import SplitScreen from '../components/SplitScreen';
 import Form from '../components/Form';
-import useAuthGate from '../hooks/useAuthGate';
-import useGetUserRole from '../hooks/useGetUserRole';
-import makeFormApiRequest from '../utils/makeFormApiRequest';
-import makeLocaleLink from '../utils/makeLocaleLink';
-import normalizePageCode from '../../shared/normalizePageCode';
 import {
   SINGLE_LINE_TEXT_INPUT,
   MULTI_LINE_TEXT_INPUT,
   GALLERY_PICKER,
   MEDIA_UPLOAD,
 } from '../components/FormFields';
+import useAuthGate from '../hooks/useAuthGate';
+import makeFormApiRequest from '../utils/makeFormApiRequest';
+import makeLocaleLink from '../utils/makeLocaleLink';
+import { getRole } from '../utils/auth';
+import normalizePageCode from '../../shared/normalizePageCode';
 import { STAFF_ROLE } from '../../shared/roles';
 import {
   validateTitle,
@@ -28,7 +28,7 @@ export default function EditPage() {
   useAuthGate();
 
   const context = useApplicationContext();
-  const role = useGetUserRole();
+  const role = getRole();
 
   if (!context.page) {
     return <_404 />;

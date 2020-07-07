@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { RedButton } from './Buttons';
-import useGetUserRole from '../hooks/useGetUserRole';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import isSpanishPath from '../utils/isSpanishPath';
 import getCopy from '../utils/getCopy';
 import getConfig from '../utils/getConfig';
-import { isAuthenticated } from '../utils/auth';
+import { isAuthenticated, getRole } from '../utils/auth';
 import {
   LOGIN_ROUTE,
   HOMEPAGE_ROUTE,
@@ -183,7 +182,7 @@ export default function Nav(props) {
     ]);
   }, []);
 
-  const role = useGetUserRole();
+  const role = getRole();
 
   return (
     <NavStack>
