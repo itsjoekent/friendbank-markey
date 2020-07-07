@@ -27,7 +27,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: api-test.dockerfile
+      dockerfile: ci-api-test.dockerfile
     depends_on:
       - mongo
     links:
