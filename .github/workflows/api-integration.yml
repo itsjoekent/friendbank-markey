@@ -1,5 +1,5 @@
 name: API Integration Tests
-on: [push, pull_request]
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,3 +9,7 @@ jobs:
         uses: actions/checkout@master
       - name: Test
         run: docker-compose -f ci-api-test.docker-compose.yml up --exit-code-from tests
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
