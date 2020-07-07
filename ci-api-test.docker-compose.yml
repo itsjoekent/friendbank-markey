@@ -1,0 +1,64 @@
+version: '3.3'
+
+services:
+  tests:
+    build:
+      context: .
+      dockerfile: api-test.dockerfile
+    command: npm run test:api
+    depends_on:
+      - api
+      - mongo
+    links:
+      - mongo
+      - api
+    env_file:
+      - .env.ci
+    environment:
+      - API_URL=http://api:5000
+      - MONGODB_URL=mongodb://admin:secret@mongo:27017
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    volumes:
+      - type: volume
+        source: servicesTest
+        target: /usr/src/app/src/api/services/__test
+        volume:
+          nocopy: true
+
+  api:
+    build:
+      context: .
+      dockerfile: ci-api-test.dockerfile
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    env_file:
+      - .env.ci
+    environment:
+      - PORT=5000
+      - MONGODB_URL=mongodb://admin:secret@mongo:27017
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    volumes:
+      - type: volume
+        source: servicesTest
+        target: /usr/src/app/src/api/services/__test
+        volume:
+          nocopy: true
+
+  mongo:
+    image: mongo:4
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    logging:
+        driver: none
+
+volumes:
+  servicesTest:
