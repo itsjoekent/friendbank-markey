@@ -1,12 +1,10 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { HOMEPAGE_ROUTE } from './Homepage';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import useAuthGate from '../hooks/useAuthGate';
 import useGetUserRole from '../hooks/useGetUserRole';
+import { HOMEPAGE_ROUTE } from '../routes';
 import { STAFF_ROLE } from '../../shared/roles';
-
-export const ADMIN_ROUTE = '/friendbank/admin';
 
 const Layout = styled.div`
   display: flex;
