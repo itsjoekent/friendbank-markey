@@ -208,7 +208,27 @@ export default function Homepage(props) {
       subtitle: getCopy('homepage.formSubtitle'),
       buttonCopy: getCopy('homepage.createButtonLabel'),
       onStepSubmit: onSignup,
-      fields: [...signupIdFields()],
+      fields: [
+        ...signupIdFields()
+      ],
+    },
+    {
+      title: getCopy('homepage.formTitle'),
+      subtitle: getCopy('homepage.formSubtitle'),
+      buttonCopy: getCopy('homepage.formButtonLabel'),
+      fields: [
+        {
+          fieldId: 'votePlan',
+          fieldType: 'RADIO_FIELD',
+          label: 'Are you planning to vote by absentee?',
+          options: [
+            'Yes and already submitted my ballot',
+            'Yes and I need a ballot',
+            'No I\'m not sure',
+            'I\'d like to learn more',
+          ],
+        }
+      ],
     },
   ];
 
