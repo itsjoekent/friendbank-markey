@@ -2,21 +2,21 @@ import React from 'react';
 import styled from 'styled-components';
 import _404 from './_404';
 import { useApplicationContext } from '../ApplicationContext';
-import getCopy from '../utils/getCopy';
 import StandardHelmet from '../components/StandardHelmet';
 import SplitScreen from '../components/SplitScreen';
 import Form from '../components/Form';
-import useAuthGate from '../hooks/useAuthGate';
-import useGetUserRole from '../hooks/useGetUserRole';
-import makeFormApiRequest from '../utils/makeFormApiRequest';
-import makeLocaleLink from '../utils/makeLocaleLink';
-import normalizePageCode from '../../shared/normalizePageCode';
 import {
   SINGLE_LINE_TEXT_INPUT,
   MULTI_LINE_TEXT_INPUT,
   GALLERY_PICKER,
   MEDIA_UPLOAD,
 } from '../components/FormFields';
+import useAuthGate from '../hooks/useAuthGate';
+import useRole from '../hooks/useRole';
+import getCopy from '../utils/getCopy';
+import makeFormApiRequest from '../utils/makeFormApiRequest';
+import makeLocaleLink from '../utils/makeLocaleLink';
+import normalizePageCode from '../../shared/normalizePageCode';
 import { STAFF_ROLE } from '../../shared/roles';
 import {
   validateTitle,
@@ -28,7 +28,7 @@ export default function EditPage() {
   useAuthGate();
 
   const context = useApplicationContext();
-  const role = useGetUserRole();
+  const role = useRole();
 
   if (!context.page) {
     return <_404 />;

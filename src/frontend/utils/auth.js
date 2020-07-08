@@ -20,7 +20,7 @@ export function removeAuthToken() {
   }
 
   localStorage.removeItem('role');
-  return localStorage.removeItem('token');
+  localStorage.removeItem('token');
 }
 
 export function isAuthenticated() {
@@ -29,4 +29,28 @@ export function isAuthenticated() {
   }
 
   return !!getAuthToken() && !!getAuthToken().length;
+}
+
+export function getRole() {
+  if (typeof localStorage === 'undefined') {
+    return null;
+  }
+
+  return localStorage.getItem('role');
+}
+
+export function setRole(role) {
+  if (typeof localStorage === 'undefined') {
+    return;
+  }
+
+  localStorage.setItem('role', role);
+}
+
+export function removeRole(role) {
+  if (typeof localStorage === 'undefined') {
+    return;
+  }
+
+  localStorage.removeItem('role', role);
 }

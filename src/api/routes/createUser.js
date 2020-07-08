@@ -9,6 +9,7 @@ module.exports = ({ db }) => {
   async function createUser(req, res) {
     try {
       const {
+        campaign,
         body: {
           email,
           password,
@@ -35,7 +36,7 @@ module.exports = ({ db }) => {
         return;
       }
 
-      const existingUser = await findUser(db, validationResult.email);
+      const existingUser = await findUser(db, validationResult.email, campaign);
 
       if (existingUser instanceof Error) {
         throw existingUser;
@@ -62,6 +63,7 @@ module.exports = ({ db }) => {
         lastUpdatedAt: Date.now(),
         lastAuthenticationUpdate: Date.now(),
         role: USER_ROLE,
+        campaign: campaign._id.toString(),
       };
 
       const userInsertResult = await db.collection('users').insertOne(userData);

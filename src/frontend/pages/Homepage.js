@@ -4,8 +4,8 @@ import { useApplicationContext } from '../ApplicationContext';
 import StandardHelmet from '../components/StandardHelmet';
 import SplitScreen from '../components/SplitScreen';
 import Form from '../components/Form';
+import useRole from '../hooks/useRole';
 import signupIdFields from '../forms/signupIdFields';
-import useGetUserRole from '../hooks/useGetUserRole';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
 import getCopy from '../utils/getCopy';
@@ -35,7 +35,7 @@ import {
 
 export default function Homepage(props) {
   const { campaignMedia } = useApplicationContext();
-  const role = useGetUserRole();
+  const role = useRole();
 
   const [normalizedCode, setNormalizedCode] = React.useState(null);
 

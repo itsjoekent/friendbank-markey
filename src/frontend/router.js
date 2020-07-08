@@ -12,6 +12,7 @@ import {
   RESET_PASSWORD_ROUTE,
   DASHBOARD_ROUTE,
   PHONEBANK_FORM_ROUTE,
+  ADMIN_ROUTE,
 } from './routes';
 import { SPANISH_PREFIX } from '../shared/lang';
 
@@ -22,6 +23,7 @@ const ForgotPassword = loadable(() => import('./pages/ForgotPassword'));
 const ResetPassword = loadable(() => import('./pages/ResetPassword'));
 const Dashboard = loadable(() => import('./pages/Dashboard'));
 const PhonebankForm = loadable(() => import('./pages/PhonebankForm'));
+const Admin = loadable(() => import('./pages/Admin'));
 const EditPage = loadable(() => import('./pages/EditPage'));
 const Signup = loadable(() => import('./pages/Signup'));
 
@@ -53,6 +55,10 @@ const PAGE_MAP = [
   [
     DASHBOARD_ROUTE,
     Dashboard,
+  ],
+  [
+    ADMIN_ROUTE,
+    Admin,
   ],
   [
     PHONEBANK_FORM_ROUTE,

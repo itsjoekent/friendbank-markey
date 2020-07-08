@@ -1,4 +1,3 @@
-const backgrounds = require('./backgrounds');
 const emailFrequency = require('./emailFrequency');
 
 function validateName(value) {
