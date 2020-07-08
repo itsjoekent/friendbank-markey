@@ -7,5 +7,6 @@ export const FORGOT_PASSWORD_ROUTE = '/friendbank/forgot-password';
 export const RESET_PASSWORD_ROUTE = '/friendbank/reset-password';
 export const DASHBOARD_ROUTE = '/friendbank/dashboard';
 export const PHONEBANK_FORM_ROUTE = '/friendbank/phonebank';
+export const ADMIN_ROUTE = '/friendbank/admin';
 
 export const NOT_AUTHORIZED_QUERY = 'not_authorized=1';

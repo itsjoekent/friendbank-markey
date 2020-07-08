@@ -26,7 +26,7 @@ module.exports = ({ db }) => {
         return;
       }
 
-      const user = await findUser(db, validationResult.email);
+      const user = await findUser(db, validationResult.email, campaign);
 
       if (user instanceof Error) {
         throw user;

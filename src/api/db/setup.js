@@ -14,7 +14,7 @@ module.exports = async function setupDb(db) {
     await signups.createIndex({ campaign: 1 });
 
     const users = db.collection('users');
-    await users.createIndex({ email: 1 });
+    await users.createIndex({ email: 1, campaign: 1 });
 
     return true;
   } catch (error) {

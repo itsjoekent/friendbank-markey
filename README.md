@@ -11,20 +11,11 @@ $ cp .env.example .env
 $ make start
 ```
 
-App is available at localhost:5000
+App is available at `localhost:5000`
 
 You can also run `make unit-test-api` to run the API test suite.
 
 - translation for new fields
-- migration for new copy fields
-  - phonebankPage.successfullySubmitted
-
-----
-
-* Media endpoint test
-* Finish migration script
-
-----
 
 - Migration script for Markey
  - Attach users to Markey campaign

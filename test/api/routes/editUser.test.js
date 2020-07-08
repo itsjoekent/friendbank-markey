@@ -167,6 +167,7 @@ describe('editUser api route v1', function() {
 
     await fakeUser({
       email: 'test@edmarkey.com',
+      campaign: standard.campaign._id.toString(),
     });
 
     const response = await fetch(`${API_URL}/api/v1/user`, {
