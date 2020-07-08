@@ -8,6 +8,7 @@ module.exports = ({ db }) => {
   async function login(req, res) {
     try {
       const {
+        campaign,
         body: {
           email,
           password,
@@ -28,7 +29,7 @@ module.exports = ({ db }) => {
         return;
       }
 
-      const user = await findUser(db, validationResult.email);
+      const user = await findUser(db, validationResult.email, campaign);
 
       if (user instanceof Error) {
         throw user;
@@ -56,7 +57,7 @@ module.exports = ({ db }) => {
         throw token;
       }
 
-      res.json({ token });
+      res.json({ token, role: user.role });
     } catch (error) {
       apiErrorHandler(res, error);
     }

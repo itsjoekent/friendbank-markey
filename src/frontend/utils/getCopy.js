@@ -179,6 +179,9 @@ export const copy = {
     [ENGLISH]: 'Dashboard',
     [SPANISH]: 'Página de inicio',
   },
+  'nav.admin': {
+    [ENGLISH]: 'Admin',
+  },
   'share.facebook': {
     [ENGLISH]: 'Share on Facebook',
     [SPANISH]: 'Compartir en Facebook',
@@ -314,6 +317,15 @@ export const copy = {
   },
   'dashboard.signupTablePanelSaved': {
     [ENGLISH]: 'Saved!',
+  },
+  'admin.editCopy': {
+    [ENGLISH]: 'Edit Copy',
+  },
+  'admin.editConfig': {
+    [ENGLISH]: 'Edit Config',
+  },
+  'admin.toggleSpanish': {
+    [ENGLISH]: 'Toggle Spanish Fields',
   },
   'copiedToClipboard': {
     [ENGLISH]: 'Copied to clipboard!',

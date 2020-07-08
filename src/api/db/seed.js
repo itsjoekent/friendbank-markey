@@ -16,23 +16,6 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
 
   await db.dropDatabase();
 
-  const hashedPassword = await passwordHash('password');
-  const users = db.collection('users');
-
-  const userInsertResult = await users.insertOne({
-    email: 'admin@friendbank.us',
-    password: hashedPassword,
-    firstName: 'Joe',
-    zip: '00000',
-    emailFrequency: TRANSACTIONAL_EMAIL,
-    createdAt: Date.now(),
-    lastUpdatedAt: Date.now(),
-    lastAuthenticationUpdate: Date.now(),
-    role: STAFF_ROLE,
-  });
-
-  const adminUser = userInsertResult.ops[0];
-
   const defaultMediaObjects = [
     {
       _id: 'default',
@@ -291,6 +274,25 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
   });
 
   const campaign = campaignResult.ops[0];
+  const campaignId = campaign._id.toString();
+
+  const hashedPassword = await passwordHash('password');
+  const users = db.collection('users');
+
+  const userInsertResult = await users.insertOne({
+    campaign: campaignId,
+    email: 'admin@friendbank.us',
+    password: hashedPassword,
+    firstName: 'Joe',
+    zip: '00000',
+    emailFrequency: TRANSACTIONAL_EMAIL,
+    createdAt: Date.now(),
+    lastUpdatedAt: Date.now(),
+    lastAuthenticationUpdate: Date.now(),
+    role: STAFF_ROLE,
+  });
+
+  const adminUser = userInsertResult.ops[0];
 
   const signups = db.collection('signups');
   const signupSeed = new Array(50).fill({

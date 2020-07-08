@@ -2,7 +2,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import getCopy from '../utils/getCopy';
 import getConfig from '../utils/getConfig';
-import backgrounds from '../../shared/backgrounds';
 
 export default function StandardHelmet() {
   return (

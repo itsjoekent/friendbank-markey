@@ -2,6 +2,8 @@ const ms = require('ms');
 const { MongoClient } = require('mongodb');
 const { MONGODB_URL } = process.env;
 const { passwordHash } = require('../../../src/api/utils/auth');
+const { USER_ROLE } = require('../../../src/shared/roles');
+const { WEEKLY_EMAIL } = require('../../../src/shared/emailFrequency');
 
 async function fakeSignup({
   email = '',
@@ -44,7 +46,8 @@ async function fakeUser({
   password = 'password',
   firstName = 'Ed',
   zip = '00000',
-  emailFrequency = 'WEEKLY_EMAIL',
+  emailFrequency = WEEKLY_EMAIL,
+  role = USER_ROLE,
 }) {
   const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
   const db = client.db();
@@ -59,6 +62,7 @@ async function fakeUser({
     firstName,
     zip,
     emailFrequency,
+    role,
     createdAt: Date.now(),
     lastUpdatedAt: Date.now(),
     lastAuthenticationUpdate: '1',
@@ -125,6 +129,8 @@ async function fakeCampaign({
     name,
     copy: JSON.stringify(copy),
     config: JSON.stringify(config),
+    lastUpdatedAt: Date.now(),
+    updateLog: [],
   });
 
   return result.ops[0];
