@@ -1,8 +1,16 @@
 const { ObjectId } = require('mongodb');
+const submitBsdForm = require('../services/submitBsdForm');
+const constructBsdSignupPayload = require('../utils/constructBsdSignupPayload');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 const fieldValidations = require('../../shared/fieldValidations');
 const { STAFF_ROLE } = require('../../shared/roles');
+
+const {
+  BSD_CONTACT_FRIEND_ID,
+  BSD_CONTACT_FORM_SLUG,
+  BSD_SIGNUP_FORM_SLUG,
+} = process.env;
 
 module.exports = ({ db }) => {
   async function editSignup(req, res) {
@@ -21,6 +29,8 @@ module.exports = ({ db }) => {
           zip,
           supportLevel,
           volunteerLevel,
+          ballotStatus,
+          actions,
           note,
         },
       } = req;
@@ -33,6 +43,8 @@ module.exports = ({ db }) => {
         zip,
         supportLevel,
         volunteerLevel,
+        ballotStatus,
+        actions,
         note,
       };
 
@@ -78,6 +90,27 @@ module.exports = ({ db }) => {
       if (signup.campaign !== campaign._id.toString()) {
         res.status(401).json({ error: 'You do not have permissions to edit this signup' });
         return;
+      }
+
+      let bsdPayload = null;
+      let targetFormSlug = null;
+
+      if (signup.type === 'contact') {
+        targetFormSlug = BSD_CONTACT_FORM_SLUG;
+
+        bsdPayload = constructBsdSignupPayload(signup, targetFormSlug);
+        bsdPayload[BSD_CONTACT_FRIEND_ID] = token.user.email;
+      } else if (signup.type === 'subscriber') {
+        targetFormSlug = BSD_SIGNUP_FORM_SLUG;
+        bsdPayload = constructBsdSignupPayload(signup, targetFormSlug);
+      }
+
+      if (bsdPayload && targetFormSlug) {
+        const bsdResult = await submitBsdForm(targetFormSlug, bsdPayload);
+
+        if (bsdResult instanceof Error) {
+          throw bsdResult;
+        }
       }
 
       const update = {

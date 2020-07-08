@@ -1,18 +1,14 @@
 const { ObjectId } = require('mongodb');
 const getPageForCode = require('../db/getPageForCode');
 const submitBsdForm = require('../services/submitBsdForm');
+const constructBsdSignupPayload = require('../utils/constructBsdSignupPayload');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 const { randomToken } = require('../utils/auth');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 const fieldValidations = require('../../shared/fieldValidations');
 
-const BSD_VAN_MAP = require('../utils/markeyVanFields');
-
 const {
   BSD_CONTACT_FRIEND_ID,
-  BSD_CONTACT_SUPPORT_ID,
-  BSD_CONTACT_VOLUNTEER_ID,
-  BSD_CONTACT_NOTE_ID,
   BSD_CONTACT_FORM_SLUG,
 } = process.env;
 
@@ -30,6 +26,8 @@ module.exports = ({ db }) => {
           zip,
           supportLevel,
           volunteerLevel,
+          ballotStatus,
+          actions,
           note,
         },
       } = req;
@@ -42,6 +40,8 @@ module.exports = ({ db }) => {
         zip,
         supportLevel,
         volunteerLevel,
+        ballotStatus,
+        actions,
         note,
       };
 
@@ -76,26 +76,8 @@ module.exports = ({ db }) => {
         lastUpdatedAt: Date.now(),
       };
 
-      const bsdPayload = {
-        email: signup.email || '',
-        firstname: signup.firstName,
-        lastname: signup.lastName,
-        phone: signup.phone,
-        zip: signup.zip,
-        [BSD_CONTACT_FRIEND_ID]: token.user.email,
-      };
-
-      if (signup.supportLevel) {
-        bsdPayload[BSD_CONTACT_SUPPORT_ID] = BSD_VAN_MAP.support[signup.supportLevel];
-      }
-
-      if (signup.volunteerLevel) {
-        bsdPayload[BSD_CONTACT_VOLUNTEER_ID] = BSD_VAN_MAP.volunteer[signup.volunteerLevel];
-      }
-
-      if (signup.note) {
-        bsdPayload[BSD_CONTACT_NOTE_ID] = signup.note;
-      }
+      const bsdPayload = constructBsdSignupPayload(signup, BSD_CONTACT_FORM_SLUG);
+      bsdPayload[BSD_CONTACT_FRIEND_ID] = token.user.email;
 
       const bsdResult = await submitBsdForm(BSD_CONTACT_FORM_SLUG, bsdPayload);
 
