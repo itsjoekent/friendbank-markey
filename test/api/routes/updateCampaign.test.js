@@ -61,7 +61,7 @@ describe('updateCampaign api route v1', function() {
     assert.equal(campaign.updateLog[0].note, 'test');
     assert.isUndefined(campaign.updateLog[0].snapshot);
     assert.equal(campaign.copy, JSON.stringify({ test: 1 }));
-    assert.equal(campaign.config, JSON.stringify({ media: ['default', 'hoops'], test: 2 }));
+    assert.equal(campaign.config, JSON.stringify({ media: ['default'], test: 2 }));
     assert.isNumber(campaign.lastUpdatedAt);
 
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
@@ -72,7 +72,7 @@ describe('updateCampaign api route v1', function() {
     });
 
     assert.equal(record.copy, JSON.stringify({ test: 1 }));
-    assert.equal(record.config, JSON.stringify({ media: ['default', 'hoops'], test: 2 }));
+    assert.equal(record.config, JSON.stringify({ media: ['default'], test: 2 }));
     assert.isAbove(record.lastUpdatedAt, standard.campaign.lastUpdatedAt);
     assert.lengthOf(record.updateLog, 1);
     assert.equal(record.updateLog[0].snapshot.copy, standard.campaign.copy);
