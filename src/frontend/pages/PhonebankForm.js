@@ -77,6 +77,17 @@ export default function PhonebankForm() {
     ...signupContactFields(),
     ...signupIdFields(),
     {
+      fieldId: 'votePlan',
+      fieldType: 'RADIO_FIELD',
+      label: 'Are you planning to vote by absentee?',
+      options: [
+        'Yes and already submitted my ballot',
+        'Yes and I need a ballot',
+        'No I\'m not sure',
+        'I\'d like to learn more',
+      ],
+    },
+    {
       fieldId: 'note',
       fieldType: MULTI_LINE_TEXT_INPUT,
       label: getCopy('formLabels.note'),
