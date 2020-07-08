@@ -18,13 +18,33 @@ module.exports = ({ db }) => {
       } = req;
 
       if (token.user.role !== STAFF_ROLE) {
-        res.status(401).json({ error: 'Only staff can do this, sorry!' });
+        res.status(401).json({ error: 'Only staff can upload custom media' });
         return;
       }
 
       if (!alt || typeof alt !== 'string') {
         res.status(400).json({
           field: 'alt',
+          error: 'validations.required',
+        });
+
+        return;
+      }
+
+      if (!fileType || typeof fileType !== 'string') {
+        res.status(400).json({
+          field: 'background',
+          error: 'validations.required',
+        });
+
+        return;
+      }
+
+      const contentType = mime.lookup(fileType);
+
+      if (!contentType || !contentType.startsWith('image/')) {
+        res.status(400).json({
+          field: 'background',
           error: 'validations.required',
         });
 
@@ -49,7 +69,7 @@ module.exports = ({ db }) => {
         Bucket: S3_BUCKET,
         Key: fileName,
         Expires: 60,
-        ContentType: mime.lookup(fileType),
+        ContentType: contentType,
         ACL: 'public-read'
       };
 

@@ -28,10 +28,11 @@ describe('login api route v1', function() {
 
     assert.equal(response.status, 200);
 
-    const { token } = await response.json();
+    const { token, role } = await response.json();
 
     assert.isString(token);
     assert.lengthOf(token, 128);
+    assert.equal(role, 'USER_ROLE');
 
     const client = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
     const tokens = client.db().collection('tokens');

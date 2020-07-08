@@ -23,6 +23,8 @@ const login = require('./routes/login');
 const logout = require('./routes/logout');
 const forgotPassword = require('./routes/forgotPassword');
 const uploadMedia = require('./routes/uploadMedia');
+const getCampaign = require('./routes/getCampaign');
+const updateCampaign = require('./routes/updateCampaign');
 
 const setupDb = require('./db/setup');
 const getCampaignForDomain = require('./db/getCampaignForDomain');
@@ -30,7 +32,6 @@ const getCampaignForDomain = require('./db/getCampaignForDomain');
 const ssr = require('./ssr/ssr').default;
 
 const { SPANISH_PREFIX } = require('../shared/lang');
-const backgrounds = require('../shared/backgrounds');
 
 const DEV_HEAP = `
 <script type="text/javascript">
@@ -161,6 +162,9 @@ app.post(
 
 app.post(
   '/api/v1/user',
+  async function(req, res, next) {
+    await loadCampaign({ db })(req, res, next);
+  },
   async function(req, res) {
     await createUser({ db })(req, res);
   },
@@ -214,6 +218,9 @@ app.get(
 
 app.post(
   '/api/v1/login',
+  async function(req, res, next) {
+    await loadCampaign({ db })(req, res, next);
+  },
   async function(req, res) {
     await login({ db })(req, res);
   },
@@ -246,6 +253,32 @@ app.post(
   },
   async function(req, res) {
     await uploadMedia({ db })(req, res);
+  },
+);
+
+app.get(
+  '/api/v1/campaign',
+  async function(req, res, next) {
+    await loadToken({ db})(req, res, next);
+  },
+  async function(req, res, next) {
+    await loadCampaign({ db })(req, res, next);
+  },
+  async function(req, res) {
+    await getCampaign({ db })(req, res);
+  },
+);
+
+app.post(
+  '/api/v1/campaign',
+  async function(req, res, next) {
+    await loadToken({ db})(req, res, next);
+  },
+  async function(req, res, next) {
+    await loadCampaign({ db })(req, res, next);
+  },
+  async function(req, res) {
+    await updateCampaign({ db })(req, res);
   },
 );
 

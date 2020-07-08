@@ -34,7 +34,6 @@ services:
       - MONGODB_URL=mongodb://admin:secret@mongo:27017
       - SEED_LOCALHOST_CAMPAIGN=true
       - DEBUG_CRM_SIGNUP=true
-      - S3_BUCKET=ed-markey-supporter-photos
     env_file:
       - .env
     volumes:

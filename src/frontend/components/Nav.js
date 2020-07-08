@@ -1,13 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 import { RedButton } from './Buttons';
+import useRole from '../hooks/useRole';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import isSpanishPath from '../utils/isSpanishPath';
 import getCopy from '../utils/getCopy';
 import getConfig from '../utils/getConfig';
 import { isAuthenticated } from '../utils/auth';
-import { LOGIN_ROUTE, HOMEPAGE_ROUTE, DASHBOARD_ROUTE } from '../routes';
+import {
+  LOGIN_ROUTE,
+  HOMEPAGE_ROUTE,
+  DASHBOARD_ROUTE,
+  ADMIN_ROUTE,
+} from '../routes';
 import { ENGLISH, SPANISH, SPANISH_PREFIX } from '../../shared/lang';
+import { STAFF_ROLE } from '../../shared/roles';
 
 const NavStack = styled.div`
   display: flex;
@@ -86,9 +93,13 @@ const LeftLink = styled(NavItem)`
 `;
 
 const RightLink = styled(NavItem)`
-  @media ${({ theme, disableNavDonate }) => theme.media.tablet} {
-    margin-right: ${({ disableNavDonate }) => disableNavDonate ? '0' : '24px'};
+  @media ${({ theme, disableRightIndex }) => theme.media.tablet} {
+    margin-right: ${({ disableRightIndex }) => disableRightIndex ? '0' : '24px'};
   }
+`;
+
+const AdminLink = styled(NavItem)`
+  margin-right: 12px;
 `;
 
 const RedirectRow = styled.div`
@@ -157,6 +168,8 @@ export default function Nav(props) {
 
   const isSpanish = isSpanishPath(location.pathname);
 
+  const role = useRole();
+
   const languageLink = isSpanish
     ? location.pathname.replace(SPANISH_PREFIX, '')
     : `${SPANISH_PREFIX}${location.pathname}`;
@@ -193,7 +206,12 @@ export default function Nav(props) {
             {getCopy('nav.language')}
           </LeftLink>
           <RightNavItemsRow>
-            <RightLink href={rightLink[0]} disableNavDonate={disableNavDonate}>
+            {role === STAFF_ROLE && (
+              <AdminLink href={ADMIN_ROUTE}>
+                {getCopy('nav.admin')}
+              </AdminLink>
+            )}
+            <RightLink href={rightLink[0]} disableRightIndex={disableNavDonate}>
               {rightLink[1]}
             </RightLink>
             {!disableNavDonate && (
