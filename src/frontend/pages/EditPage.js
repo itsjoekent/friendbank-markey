@@ -24,7 +24,7 @@ import {
   validateBackground,
 } from '../../shared/fieldValidations';
 
-export default function EditPage() {
+export default function EditPage(props) {
   useAuthGate();
 
   const context = useApplicationContext();
