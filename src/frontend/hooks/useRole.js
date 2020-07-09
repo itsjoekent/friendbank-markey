@@ -5,8 +5,14 @@ export default function useRole() {
   const [role, setRole] = React.useState(null);
 
   React.useEffect(() => {
-    setTimeout(() => setRole(getRole() || null));
-  }, [setRole]);
+    const timeoutId = setTimeout(() => {
+      if (role !== getRole()) {
+        setRole(getRole());
+      }
+    }, 0);
+
+    return () => clearTimeout(timeoutId);
+  }, [role, setRole]);
 
   return role;
 }
