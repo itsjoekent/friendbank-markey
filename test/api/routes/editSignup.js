@@ -17,6 +17,8 @@ const {
   fakeSignup,
 } = require('./_faker');
 
+const _readServiceOutput = require('../__services/_readServiceOutput');
+
 describe('editSignup api route v1', function() {
   it('should edit a signup', async function() {
     const standard = await standardTestSetup();
@@ -37,6 +39,8 @@ describe('editSignup api route v1', function() {
         zip: '00000',
         supportLevel: 'Definitely',
         volunteerLevel: 'Yes',
+        ballotStatus: 'Submitted',
+        actions: '1,2,3',
         note: 'This is a note',
       }),
       headers: {
@@ -69,6 +73,41 @@ describe('editSignup api route v1', function() {
     assert.equal(record.supportLevel, 'Definitely');
     assert.equal(record.volunteerLevel, 'Yes');
     assert.equal(record.note, 'This is a note');
+    assert.equal(record.ballotStatus, 'Submitted');
+    assert.equal(record.actions, '1,2,3');
+  });
+
+  it('should edit a contact and send the data to bsd', async function() {
+    const standard = await standardTestSetup();
+
+    const signup = await fakeSignup({
+      campaign: standard.campaign._id.toString(),
+      recruitedBy: standard.user._id.toString(),
+      email: 'test@gmail.com',
+    });
+
+    const response = await fetch(`${API_URL}/api/v1/signup/${signup._id.toString()}`, {
+      method: 'put',
+      body: JSON.stringify({
+        email: 'supporter@gmail.com',
+        firstName: 'First',
+        lastName: 'Last',
+        note: 'Test',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Relational-Token': standard.token,
+      },
+    });
+
+    assert.equal(response.status, 200);
+
+    const payload = await _readServiceOutput('bsd');
+    assert.include(payload.url, process.env.BSD_CONTACT_FORM_SLUG);
+    assert.include(payload.body, 'email=supporter%40gmail.com');
+    assert.include(payload.body, 'firstname=First');
+    assert.include(payload.body, `${process.env.BSD_CONTACT_FRIEND_ID}=${encodeURIComponent('ed@edmarkey.com')}`);
+    assert.include(payload.body, `${process.env.BSD_CONTACT_NOTE_ID}=Test`);
   });
 
   it('should not edit a signup if it does not exist', async function() {

@@ -92,17 +92,22 @@ module.exports = ({ db }) => {
         return;
       }
 
+      const update = {
+        ...validationResult,
+        lastUpdatedAt: Date.now(),
+      };
+
       let bsdPayload = null;
       let targetFormSlug = null;
 
       if (signup.type === 'contact') {
         targetFormSlug = BSD_CONTACT_FORM_SLUG;
 
-        bsdPayload = constructBsdSignupPayload(signup, targetFormSlug);
+        bsdPayload = constructBsdSignupPayload({ ...signup, ...update }, targetFormSlug);
         bsdPayload[BSD_CONTACT_FRIEND_ID] = token.user.email;
       } else if (signup.type === 'subscriber') {
         targetFormSlug = BSD_SIGNUP_FORM_SLUG;
-        bsdPayload = constructBsdSignupPayload(signup, targetFormSlug);
+        bsdPayload = constructBsdSignupPayload({ ...signup, ...update }, targetFormSlug);
       }
 
       if (bsdPayload && targetFormSlug) {
@@ -112,11 +117,6 @@ module.exports = ({ db }) => {
           throw bsdResult;
         }
       }
-
-      const update = {
-        ...validationResult,
-        lastUpdatedAt: Date.now(),
-      };
 
       await signups.updateOne(
         { _id: ObjectId(id) },
