@@ -18,6 +18,7 @@ import {
   CODE_INPUT_FIELD,
   GALLERY_PICKER,
   MEDIA_UPLOAD,
+  RADIO_FIELD,
 } from '../components/FormFields';
 import { TRANSACTIONAL_EMAIL } from '../../shared/emailFrequency';
 import { STAFF_ROLE } from '../../shared/roles';
@@ -38,6 +39,11 @@ export default function Homepage(props) {
   const role = useRole();
 
   const [normalizedCode, setNormalizedCode] = React.useState(null);
+
+  function hasBallotStep(formValues) {
+    const { supportLevel } = formValues;
+    return getCopy('idQuestions.support.options').indexOf(supportLevel) <= 1;
+  }
 
   async function onUserSubmit(formValues) {
     const {
@@ -89,7 +95,12 @@ export default function Homepage(props) {
       zip,
       supportLevel,
       volunteerLevel,
+      ballotStatus,
     } = formValues;
+
+    if (hasBallotStep(formValues) && !ballotStatus) {
+      return;
+    }
 
     const payload = {
       code,
@@ -213,21 +224,18 @@ export default function Homepage(props) {
       ],
     },
     {
-      title: getCopy('homepage.formTitle'),
-      subtitle: getCopy('homepage.formSubtitle'),
-      buttonCopy: getCopy('homepage.formButtonLabel'),
+      title: getCopy('idQuestions.vote.label'),
+      subtitle: getCopy('idQuestions.vote.subtitle'),
+      buttonCopy: getCopy('homepage.createButtonLabel'),
+      condition: hasBallotStep,
+      onStepSubmit: onSignup,
       fields: [
         {
-          fieldId: 'votePlan',
-          fieldType: 'RADIO_FIELD',
-          label: 'Are you planning to vote by absentee?',
-          options: [
-            'Yes and already submitted my ballot',
-            'Yes and I need a ballot',
-            'No I\'m not sure',
-            'I\'d like to learn more',
-          ],
-        }
+          fieldId: 'ballotStatus',
+          fieldType: RADIO_FIELD,
+          label: getCopy('idQuestions.vote.label'),
+          options: getCopy('idQuestions.vote.options'),
+        },
       ],
     },
   ];

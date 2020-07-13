@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import Form from './Form';
-import { MULTI_LINE_TEXT_INPUT } from './FormFields';
+import { MULTI_LINE_TEXT_INPUT, RADIO_FIELD } from './FormFields';
 import signupContactFields from '../forms/signupContactFields';
 import signupIdFields from '../forms/signupIdFields';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
@@ -188,6 +188,12 @@ export default function SignupsTablePanel(props) {
   const fieldDump = [
     ...signupContactFields(),
     ...signupIdFields(),
+    {
+      fieldId: 'ballotStatus',
+      fieldType: RADIO_FIELD,
+      label: getCopy('idQuestions.vote.label'),
+      options: getCopy('idQuestions.vote.options'),
+    },
     {
       fieldId: 'note',
       fieldType: MULTI_LINE_TEXT_INPUT,

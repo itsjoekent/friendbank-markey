@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import getCopy from '../utils/getCopy';
 import StandardHelmet from '../components/StandardHelmet';
 import Form, { FormTitleContainer } from '../components/Form';
-import { MULTI_LINE_TEXT_INPUT } from '../components/FormFields';
+import { MULTI_LINE_TEXT_INPUT, RADIO_FIELD } from '../components/FormFields';
 import signupContactFields from '../forms/signupContactFields';
 import signupIdFields from '../forms/signupIdFields';
 import useAuthGate from '../hooks/useAuthGate';
@@ -77,15 +77,10 @@ export default function PhonebankForm() {
     ...signupContactFields(),
     ...signupIdFields(),
     {
-      fieldId: 'votePlan',
-      fieldType: 'RADIO_FIELD',
-      label: 'Are you planning to vote by absentee?',
-      options: [
-        'Yes and already submitted my ballot',
-        'Yes and I need a ballot',
-        'No I\'m not sure',
-        'I\'d like to learn more',
-      ],
+      fieldId: 'ballotStatus',
+      fieldType: RADIO_FIELD,
+      label: getCopy('idQuestions.vote.label'),
+      options: getCopy('idQuestions.vote.options'),
     },
     {
       fieldId: 'note',
