@@ -312,6 +312,104 @@ export function RadioField(props) {
   );
 }
 
+export const CHECKBOX_FIELD = 'CHECKBOX_FIELD';
+
+export const CheckboxElementToggle = styled(RadioElementToggle)`
+  border-radius: 0;
+
+  &:before {
+    border-radius: 0;
+    width: 8px;
+    background: none;
+    border-bottom: 4px solid ${({ theme }) => theme.colors.blue};
+    border-right: 4px solid ${({ theme }) => theme.colors.blue};
+    transform: rotate(45deg);
+    top: 0px;
+    left: 6px;
+  }
+
+  &:after {
+    border-radius: 0;
+  }
+`;
+
+export function CheckboxField(props) {
+  const {
+    formId,
+    fieldId,
+    label,
+    help,
+    validationMessage,
+    hasTouchedSubmit,
+    options,
+    value,
+    setFormValues,
+    delimiter,
+  } = props;
+
+  const joinedId = `${formId}-${fieldId}`;
+
+  const [focusState, setFocusState] = React.useState({});
+
+  function valueToArray() {
+    return (value || '').split(delimiter);
+  }
+
+  function arrayToValue(checked) {
+    return (checked || []).filter((value) => !!value).join(delimiter);
+  }
+
+  function setOptionAsValue(option) {
+    const selected = valueToArray();
+
+    if (selected.includes(option)) {
+      setFormValues((copy) => ({
+        ...copy,
+        [fieldId]: arrayToValue(selected.filter((compare) => compare !== option)),
+      }));
+    } else {
+      setFormValues((copy) => ({
+        ...copy,
+        [fieldId]: arrayToValue([...selected, option]),
+      }));
+    }
+  }
+
+  return (
+    <FormFieldColumn>
+      <LabelRow>
+        <RadioElementQuestion as="p">{label}</RadioElementQuestion>
+        {hasTouchedSubmit && validationMessage && (
+          <HelpText as="p" isValidation>{validationMessage}</HelpText>
+        )}
+      </LabelRow>
+      {help && <HelpText as="p">{help}</HelpText>}
+      <RadioElementList>
+        {options.map((option) => (
+          <RadioElementRow key={option}>
+            <RealRadioInput
+              id={`${joinedId}-${option}`}
+              type="checkbox"
+              checked={valueToArray().includes(option)}
+              onChange={() => setOptionAsValue(option)}
+              onFocus={() => setFocusState((copy) => ({ ...copy, [option]: true }))}
+              onBlur={() => setFocusState((copy) => ({ ...copy, [option]: false }))}
+            />
+            <CheckboxElementToggle
+              onClick={() => setOptionAsValue(option)}
+              isChecked={valueToArray().includes(option)}
+              isFocused={!!focusState[option]}
+            />
+            <RadioElementLabel htmlFor={`${joinedId}-${option}`}>
+              {option}
+            </RadioElementLabel>
+          </RadioElementRow>
+        ))}
+      </RadioElementList>
+    </FormFieldColumn>
+  );
+}
+
 export const CODE_INPUT_FIELD = 'CODE_INPUT_FIELD';
 
 const CodeInputFieldWrapper = styled.div`

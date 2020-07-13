@@ -13,6 +13,8 @@ import {
   CODE_INPUT_FIELD,
   RadioField,
   RADIO_FIELD,
+  CheckboxField,
+  CHECKBOX_FIELD,
   MultiLineTextInput,
   MULTI_LINE_TEXT_INPUT,
   GalleryPickerField,
@@ -467,6 +469,26 @@ export default function Form(props) {
                   setFormValues={setFormValues}
                   value={value || ""}
                   options={options || []}
+                />
+              );
+            }
+
+            case CHECKBOX_FIELD: {
+              const { delimiter, options } = field;
+
+              return (
+                <CheckboxField
+                  key={fieldId}
+                  formId={formId}
+                  fieldId={fieldId}
+                  label={label}
+                  help={help}
+                  validationMessage={validationMessage}
+                  hasTouchedSubmit={hasTouchedSubmit}
+                  setFormValues={setFormValues}
+                  value={value || ""}
+                  options={options || []}
+                  delimiter={delimiter || ','}
                 />
               );
             }
