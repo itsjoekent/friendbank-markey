@@ -246,15 +246,10 @@ export default function SignupsTablePanel(props) {
     {
       fieldId: 'actions',
       fieldType: CHECKBOX_FIELD,
-      label: 'GOTV Actions',
+      label: getCopy('actions.gotv.label'),
       delimiter: '::',
       defaultValue: selectedSignup.actions || '',
-      options: [
-        'Received Ballot Application',
-        'Mailed in Ballot Application',
-        'Received Ballot',
-        'Voted for Ed! (Mailed in completed ballot)',
-      ],
+      options: getCopy('actions.gotv.options'),
     },
   ];
 

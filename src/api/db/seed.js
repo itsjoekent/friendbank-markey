@@ -148,6 +148,17 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
         'I’d like to learn more about voting by mail',
       ],
     },
+    'actions.gotv.label': {
+      [ENGLISH]: 'GOTV Actions',
+    },
+    'actions.gotv.options': {
+      [ENGLISH]: [
+        'Received Ballot Application',
+        'Mailed in Ballot Application',
+        'Received Ballot',
+        'Voted for Ed! (Mailed in completed ballot)',
+      ],
+    },
     'homepage.formTitle': {
       [ENGLISH]: 'Create your own Ed Markey supporter page',
       [SPANISH]: 'Crea tu propia página de apoyo para Ed Markey',
