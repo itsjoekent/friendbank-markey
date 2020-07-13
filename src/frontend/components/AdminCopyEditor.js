@@ -52,6 +52,21 @@ const COPY_FIELDS = {
       },
     ],
   },
+  'actions': {
+    name: 'Actions',
+    fields: [
+      {
+        name: 'GOTV Actions Label',
+        key: 'actions.gotv.label',
+      },
+      {
+        name: 'GOTV Action Options',
+        key: 'actions.gotv.options',
+        help: 'Double-Comma separated values',
+        splitOn: ',,',
+      },
+    ],
+  },
   'signupFlow': {
     name: 'Signup Flow',
     fields: [
