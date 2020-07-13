@@ -31,6 +31,8 @@ describe('signup api route v1', function() {
         zip: '00000',
         supportLevel: 'Definitely',
         volunteerLevel: 'Yes',
+        ballotStatus: 'Submitted',
+        actions: '1,2,3',
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -59,6 +61,8 @@ describe('signup api route v1', function() {
     assert.equal(record.zip, '00000');
     assert.equal(record.supportLevel, 'Definitely');
     assert.equal(record.volunteerLevel, 'Yes');
+    assert.equal(record.ballotStatus, 'Submitted');
+    assert.equal(record.actions, '1,2,3');
   });
 
   it('should create a signup associated with a page', async function() {
