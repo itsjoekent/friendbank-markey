@@ -16,18 +16,3 @@ App is available at `localhost:5000`
 You can also run `make unit-test-api` to run the API test suite.
 
 - translation for new fields
-
-- Add new question ballot
-  - BSD
-  - Signup variables
-  - Add to manual contact form and signup flow (_conditional in signup form_)
-  - Add question/options to copy configuration
-  - Update seed, tests
-  - env
-- Add actions field
-  - BSD
-  - Signup variables
-  - Add to dashboard
-  - Update tests
-  - env
-- Feature flag in the Admin config for GOTV mode?
