@@ -98,10 +98,6 @@ export default function Homepage(props) {
       ballotStatus,
     } = formValues;
 
-    if (hasBallotStep(formValues) && !ballotStatus) {
-      return;
-    }
-
     const payload = {
       code,
       firstName,
@@ -111,6 +107,7 @@ export default function Homepage(props) {
       zip,
       supportLevel,
       volunteerLevel,
+      ballotStatus,
     };
 
     return await makeFormApiRequest('/api/v1/signup', 'post', payload);
