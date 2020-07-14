@@ -21,7 +21,7 @@ const getInitialPropsMap = {
   [EDIT_PAGE_ROUTE]: getEditPageInitialProps,
 };
 
-export default async function ssr(path, ssrHelpers) {
+export default async function ssr(path, ssrHelpers, preRender, cleanup) {
   const [routeMatch, route, PageComponent] = router(path);
 
   let initialProps = {};
@@ -59,11 +59,15 @@ export default async function ssr(path, ssrHelpers) {
   let scriptElements = null;
 
   try {
+    preRender();
+
     html = ReactDOMServer.renderToString(
       extractor.collectChunks(
         sheet.collectStyles(<Application {...data} />)
       )
     );
+
+    cleanup();
 
     styleElements = sheet.getStyleTags();
 

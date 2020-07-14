@@ -32,6 +32,8 @@ describe('contact api route v1', function() {
         zip: '00000',
         supportLevel: 'Definitely',
         volunteerLevel: 'Yes',
+        ballotStatus: 'Submitted',
+        actions: '1,2,3',
         note: 'This is a note',
       }),
       headers: {
@@ -64,6 +66,8 @@ describe('contact api route v1', function() {
     assert.equal(record.supportLevel, 'Definitely');
     assert.equal(record.volunteerLevel, 'Yes');
     assert.equal(record.note, 'This is a note');
+    assert.equal(record.ballotStatus, 'Submitted');
+    assert.equal(record.actions, '1,2,3');
   });
 
   it('should create a contact and send the data to bsd', async function() {

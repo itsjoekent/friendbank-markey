@@ -2,6 +2,7 @@ const { ObjectId } = require('mongodb');
 const getPageForCode = require('../db/getPageForCode');
 const sendMail = require('../services/sendMail');
 const submitBsdForm = require('../services/submitBsdForm');
+const constructBsdSignupPayload = require('../utils/constructBsdSignupPayload');
 const apiErrorHandler = require('../utils/apiErrorHandler');
 const validateAndNormalizeApiRequestFields = require('../utils/validateAndNormalizeApiRequestFields');
 
@@ -10,8 +11,6 @@ const BSD_VAN_MAP = require('../utils/markeyVanFields');
 
 const {
   BSD_SIGNUP_CODE_ID,
-  BSD_SIGNUP_SUPPORT_ID,
-  BSD_SIGNUP_VOLUNTEER_ID,
   BSD_SIGNUP_FORM_SLUG,
 } = process.env;
 
@@ -29,6 +28,8 @@ module.exports = ({ db }) => {
           zip,
           supportLevel,
           volunteerLevel,
+          ballotStatus,
+          actions,
         },
       } = req;
 
@@ -40,6 +41,8 @@ module.exports = ({ db }) => {
         zip,
         supportLevel,
         volunteerLevel,
+        ballotStatus,
+        actions,
       };
 
       const validationRequirements = {
@@ -122,24 +125,10 @@ module.exports = ({ db }) => {
         }
       }
 
-      const bsdPayload = {
-        email: signup.email,
-        firstname: signup.firstName,
-        lastname: signup.lastName,
-        phone: signup.phone,
-        zip: signup.zip,
-      };
+      const bsdPayload = constructBsdSignupPayload(signup, BSD_SIGNUP_FORM_SLUG);
 
       if (signup.code) {
         bsdPayload[BSD_SIGNUP_CODE_ID] = signup.code;
-      }
-
-      if (signup.supportLevel) {
-        bsdPayload[BSD_SIGNUP_SUPPORT_ID] = BSD_VAN_MAP.support[signup.supportLevel];
-      }
-
-      if (signup.volunteerLevel) {
-        bsdPayload[BSD_SIGNUP_VOLUNTEER_ID] = BSD_VAN_MAP.volunteer[signup.volunteerLevel];
       }
 
       const bsdResult = await submitBsdForm(BSD_SIGNUP_FORM_SLUG, bsdPayload);

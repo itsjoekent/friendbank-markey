@@ -8,6 +8,7 @@ import { DefaultTitle, DefaultParagraph } from '../components/Typography';
 import SplitScreen from '../components/SplitScreen';
 import Modal from '../components/Modal';
 import Form from '../components/Form';
+import { RADIO_FIELD } from '../components/FormFields';
 import ShareWidget, { DARK_THEME, ShareContainer } from '../components/ShareWidget';
 import signupContactFields from '../forms/signupContactFields';
 import signupIdFields from '../forms/signupIdFields';
@@ -56,6 +57,11 @@ export default function Signup() {
 
   const [hasReachedEnd, setHasReachedEnd] = React.useState(false);
 
+  function hasBallotStep(formValues) {
+    const { supportLevel } = formValues;
+    return getCopy('idQuestions.support.options').indexOf(supportLevel) <= 1;
+  }
+
   async function onStepSubmit(formValues) {
     return await makeFormApiRequest('/api/v1/signup', 'post', { ...formValues, code });
   }
@@ -79,6 +85,21 @@ export default function Signup() {
       buttonCopy: getCopy('signupPage.stepTwoButtonLabel'),
       fields: [...signupIdFields()],
       onStepSubmit: onStepSubmit,
+    },
+    {
+      title: getCopy('idQuestions.vote.label'),
+      subtitle: getCopy('idQuestions.vote.subtitle'),
+      buttonCopy: getCopy('signupPage.stepTwoButtonLabel'),
+      condition: hasBallotStep,
+      onStepSubmit: onStepSubmit,
+      fields: [
+        {
+          fieldId: 'ballotStatus',
+          fieldType: RADIO_FIELD,
+          label: getCopy('idQuestions.vote.label'),
+          options: getCopy('idQuestions.vote.options'),
+        },
+      ],
     },
   ];
 

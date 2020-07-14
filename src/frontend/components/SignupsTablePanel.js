@@ -1,7 +1,11 @@
 import React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import Form from './Form';
-import { MULTI_LINE_TEXT_INPUT } from './FormFields';
+import {
+  MULTI_LINE_TEXT_INPUT,
+  RADIO_FIELD,
+  CHECKBOX_FIELD,
+} from './FormFields';
 import signupContactFields from '../forms/signupContactFields';
 import signupIdFields from '../forms/signupIdFields';
 import makeFormApiRequest from '../utils/makeFormApiRequest';
@@ -185,9 +189,15 @@ export default function SignupsTablePanel(props) {
     }
   }
 
-  const fieldDump = [
+  const signupFieldDump = [
     ...signupContactFields(),
     ...signupIdFields(),
+    {
+      fieldId: 'ballotStatus',
+      fieldType: RADIO_FIELD,
+      label: getCopy('idQuestions.vote.label'),
+      options: getCopy('idQuestions.vote.options'),
+    },
     {
       fieldId: 'note',
       fieldType: MULTI_LINE_TEXT_INPUT,
@@ -196,17 +206,17 @@ export default function SignupsTablePanel(props) {
     },
   ];
 
-  fieldDump[2].validator = validateZipNotRequired;
-  fieldDump[3].validator = validatePhoneNotRequired;
+  signupFieldDump[2].validator = validateZipNotRequired;
+  signupFieldDump[3].validator = validatePhoneNotRequired;
 
   const hasMissingEmail = selectedSignup.email
     && selectedSignup.email.startsWith('missing::');
 
   if (hasMissingEmail) {
-    fieldDump[4].validator = validateEmailNotRequired;
+    signupFieldDump[4].validator = validateEmailNotRequired;
   }
 
-  const fields = fieldDump.map((field) => {
+  const signupFields = signupFieldDump.map((field) => {
     const value = selectedSignup[field.fieldId];
 
     if (field.fieldId === 'email' && hasMissingEmail) {
@@ -228,7 +238,22 @@ export default function SignupsTablePanel(props) {
     setSuccessfullySubmitted(true);
   }
 
-  async function onSubmit(formValues) {
+  async function onSignupSubmit(formValues) {
+    return await makeFormApiRequest(`/api/v1/signup/${selectedSignup.id}`, 'put', { ...formValues });
+  }
+
+  const actionFields = [
+    {
+      fieldId: 'actions',
+      fieldType: CHECKBOX_FIELD,
+      label: getCopy('actions.gotv.label'),
+      delimiter: '::',
+      defaultValue: selectedSignup.actions || '',
+      options: getCopy('actions.gotv.options'),
+    },
+  ];
+
+  async function onActionSubmit(formValues) {
     return await makeFormApiRequest(`/api/v1/signup/${selectedSignup.id}`, 'put', { ...formValues });
   }
 
@@ -265,13 +290,20 @@ export default function SignupsTablePanel(props) {
             onCompletion={onCompletion}
             steps={[{
               buttonCopy: getCopy('formLabels.submit'),
-              onStepSubmit: onSubmit,
-              fields,
+              onStepSubmit: onSignupSubmit,
+              fields: signupFields,
             }]}
           />
         )}
         {panelMenu === ACTIONS_PANEL && (
-          <p>Coming soon!</p>
+          <Form
+            onCompletion={onCompletion}
+            steps={[{
+              buttonCopy: getCopy('formLabels.submit'),
+              onStepSubmit: onActionSubmit,
+              fields: actionFields,
+            }]}
+          />
         )}
       </Panel>
     </PanelBackdrop>
