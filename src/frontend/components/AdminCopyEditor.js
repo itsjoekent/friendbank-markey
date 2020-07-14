@@ -36,6 +36,35 @@ const COPY_FIELDS = {
         name: 'SMS Disclaimer',
         key: 'smsDisclaimer',
       },
+      {
+        name: 'Ballot Question Label',
+        key: 'idQuestions.vote.label'
+      },
+      {
+        name: 'Ballot Question Subtitle',
+        key: 'idQuestions.vote.subtitle',
+      },
+      {
+        name: 'Ballot Question Options',
+        key: 'idQuestions.vote.options',
+        help: 'Double-Comma separated values',
+        splitOn: ',,',
+      },
+    ],
+  },
+  'actions': {
+    name: 'Actions',
+    fields: [
+      {
+        name: 'GOTV Actions Label',
+        key: 'actions.gotv.label',
+      },
+      {
+        name: 'GOTV Action Options',
+        key: 'actions.gotv.options',
+        help: 'Double-Comma separated values',
+        splitOn: ',,',
+      },
     ],
   },
   'signupFlow': {
@@ -265,7 +294,13 @@ export default function AdminCopyEditor(props) {
       return '';
     }
 
-    const value = campaignCopy[field.key][language];
+    const container = campaignCopy[field.key];
+
+    if (!container) {
+      return '';
+    }
+
+    const value = container[language];
 
     if (field.splitOn) {
       return (value || ['']).join(field.splitOn);

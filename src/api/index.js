@@ -293,16 +293,25 @@ app.get('*', async function (req, res) {
       throw campaign;
     }
 
-    global.location = { pathname: path };
-    global.window = {
-      __CAMPAIGN_COPY: JSON.parse(campaign.copy),
-      __CAMPAIGN_CONFIG: JSON.parse(campaign.config),
-    };
+    const ssrResult = await ssr(
+      path,
+      { db, campaign, ObjectId },
+      function preRender() {
+        global.location = {
+          pathname: path,
+        };
 
-    const ssrResult = await ssr(path, { db, campaign, ObjectId });
-
-    global.location = undefined;
-    global.window = undefined;
+        global.window = {
+          __CAMPAIGN_COPY: JSON.parse(campaign.copy),
+          __CAMPAIGN_CONFIG: JSON.parse(campaign.config),
+        };
+      },
+      function cleanup() {
+        global.location = {
+          pathname: '',
+        };
+      },
+    );
 
     if (ssrResult instanceof Error) {
       console.error(ssrResult);

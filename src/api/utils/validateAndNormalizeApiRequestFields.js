@@ -56,6 +56,12 @@ module.exports = function validateAndNormalizeApiRequestFields(fields, customVal
     volunteerLevel: [
       fieldValidations.validateRequired,
     ],
+    ballotStatus: [
+      fieldValidations.validateRequired,
+    ],
+    actions: [
+      fieldValidations.validateRequired,
+    ],
     background: [
       fieldValidations.validateBackground,
     ],

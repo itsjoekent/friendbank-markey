@@ -13,6 +13,8 @@ import {
   CODE_INPUT_FIELD,
   RadioField,
   RADIO_FIELD,
+  CheckboxField,
+  CHECKBOX_FIELD,
   MultiLineTextInput,
   MULTI_LINE_TEXT_INPUT,
   GalleryPickerField,
@@ -166,6 +168,16 @@ export default function Form(props) {
 
   const isFading = activeStep !== targetStep;
 
+  function getFlow() {
+    return steps.filter((step) => {
+      if (step.condition) {
+        return step.condition(formValues);
+      }
+
+      return true;
+    });
+  }
+
   React.useEffect(() => {
     if (targetStep === activeStep) {
       return () => {};
@@ -189,7 +201,7 @@ export default function Form(props) {
   ]);
 
   React.useEffect(() => {
-    const activeStepData = steps[activeStep];
+    const activeStepData = getFlow()[activeStep];
 
     if (!activeStepData) {
       return;
@@ -203,7 +215,9 @@ export default function Form(props) {
   }, [activeStep, steps]);
 
   React.useEffect(() => {
-    if (activeStep >= steps.length && !hasCalledCompletion) {
+    const flow = getFlow();
+
+    if (activeStep >= flow.length && !hasCalledCompletion) {
       setHasCalledCompletion(true);
 
       if (isHeapReady()) {
@@ -267,7 +281,7 @@ export default function Form(props) {
       setHasTouchedSubmit(true);
     }
 
-    const step = steps[activeStep];
+    const step = getFlow()[activeStep];
 
     if (!step) {
       return;
@@ -325,7 +339,7 @@ export default function Form(props) {
     }
   }
 
-  const activeStepData = steps[activeStep];
+  const activeStepData = getFlow()[activeStep];
 
   if (!activeStepData) {
     return null;
@@ -455,6 +469,26 @@ export default function Form(props) {
                   setFormValues={setFormValues}
                   value={value || ""}
                   options={options || []}
+                />
+              );
+            }
+
+            case CHECKBOX_FIELD: {
+              const { delimiter, options } = field;
+
+              return (
+                <CheckboxField
+                  key={fieldId}
+                  formId={formId}
+                  fieldId={fieldId}
+                  label={label}
+                  help={help}
+                  validationMessage={validationMessage}
+                  hasTouchedSubmit={hasTouchedSubmit}
+                  setFormValues={setFormValues}
+                  value={value || ""}
+                  options={options || []}
+                  delimiter={delimiter || ','}
                 />
               );
             }

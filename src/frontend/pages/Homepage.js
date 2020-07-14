@@ -18,6 +18,7 @@ import {
   CODE_INPUT_FIELD,
   GALLERY_PICKER,
   MEDIA_UPLOAD,
+  RADIO_FIELD,
 } from '../components/FormFields';
 import { TRANSACTIONAL_EMAIL } from '../../shared/emailFrequency';
 import { STAFF_ROLE } from '../../shared/roles';
@@ -38,6 +39,11 @@ export default function Homepage(props) {
   const role = useRole();
 
   const [normalizedCode, setNormalizedCode] = React.useState(null);
+
+  function hasBallotStep(formValues) {
+    const { supportLevel } = formValues;
+    return getCopy('idQuestions.support.options').indexOf(supportLevel) <= 1;
+  }
 
   async function onUserSubmit(formValues) {
     const {
@@ -89,6 +95,7 @@ export default function Homepage(props) {
       zip,
       supportLevel,
       volunteerLevel,
+      ballotStatus,
     } = formValues;
 
     const payload = {
@@ -100,6 +107,7 @@ export default function Homepage(props) {
       zip,
       supportLevel,
       volunteerLevel,
+      ballotStatus,
     };
 
     return await makeFormApiRequest('/api/v1/signup', 'post', payload);
@@ -208,7 +216,24 @@ export default function Homepage(props) {
       subtitle: getCopy('homepage.formSubtitle'),
       buttonCopy: getCopy('homepage.createButtonLabel'),
       onStepSubmit: onSignup,
-      fields: [...signupIdFields()],
+      fields: [
+        ...signupIdFields()
+      ],
+    },
+    {
+      title: getCopy('idQuestions.vote.label'),
+      subtitle: getCopy('idQuestions.vote.subtitle'),
+      buttonCopy: getCopy('homepage.createButtonLabel'),
+      condition: hasBallotStep,
+      onStepSubmit: onSignup,
+      fields: [
+        {
+          fieldId: 'ballotStatus',
+          fieldType: RADIO_FIELD,
+          label: getCopy('idQuestions.vote.label'),
+          options: getCopy('idQuestions.vote.options'),
+        },
+      ],
     },
   ];
 
