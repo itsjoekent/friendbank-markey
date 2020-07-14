@@ -33,7 +33,7 @@ services:
       - PORT=5000
       - MONGODB_URL=mongodb://admin:secret@mongo:27017
       - SEED_LOCALHOST_CAMPAIGN=true
-      # - DEBUG_CRM_SIGNUP=true
+      - DEBUG_CRM_SIGNUP=true
     env_file:
       - .env
     volumes:
