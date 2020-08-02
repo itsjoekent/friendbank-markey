@@ -371,6 +371,7 @@ export default function Form(props) {
             label = null,
             help = null,
             validator = () => false,
+            passthrough,
           } = field;
 
           const value = formValues[fieldId];
@@ -509,6 +510,7 @@ export default function Form(props) {
                   onChange={onTextInputChange}
                   value={value || ""}
                   type="password"
+                  {...(passthrough || {})}
                 />
               );
             }
@@ -529,6 +531,7 @@ export default function Form(props) {
                   hasTouchedSubmit={hasTouchedSubmit}
                   onChange={onTextInputChange}
                   value={value || ""}
+                  {...(passthrough || {})}
                 />
               );
             }

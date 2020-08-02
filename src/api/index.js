@@ -25,6 +25,9 @@ const forgotPassword = require('./routes/forgotPassword');
 const uploadMedia = require('./routes/uploadMedia');
 const getCampaign = require('./routes/getCampaign');
 const updateCampaign = require('./routes/updateCampaign');
+const adminGetPage = require('./routes/adminGetPage');
+const adminGetUserByEmail = require('./routes/adminGetUserByEmail');
+const adminEditUser = require('./routes/adminEditUser');
 
 const setupDb = require('./db/setup');
 const getCampaignForDomain = require('./db/getCampaignForDomain');
@@ -279,6 +282,45 @@ app.post(
   },
   async function(req, res) {
     await updateCampaign({ db })(req, res);
+  },
+);
+
+app.get(
+  '/api/v1/admin/page/:code',
+  async function(req, res, next) {
+    await loadToken({ db})(req, res, next);
+  },
+  async function(req, res, next) {
+    await loadCampaign({ db })(req, res, next);
+  },
+  async function(req, res) {
+    await adminGetPage({ db })(req, res);
+  },
+);
+
+app.get(
+  '/api/v1/admin/user/email/:email',
+  async function(req, res, next) {
+    await loadToken({ db})(req, res, next);
+  },
+  async function(req, res, next) {
+    await loadCampaign({ db })(req, res, next);
+  },
+  async function(req, res) {
+    await adminGetUserByEmail({ db })(req, res);
+  },
+);
+
+app.post(
+  '/api/v1/admin/user/:userId',
+  async function(req, res, next) {
+    await loadToken({ db})(req, res, next);
+  },
+  async function(req, res, next) {
+    await loadCampaign({ db })(req, res, next);
+  },
+  async function(req, res) {
+    await adminEditUser({ db })(req, res);
   },
 );
 
