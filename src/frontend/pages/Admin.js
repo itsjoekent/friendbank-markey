@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import StandardHelmet from '../components/StandardHelmet';
 import AdminCopyEditor from '../components/AdminCopyEditor';
+import AdminFixAccount from '../components/AdminFixAccount';
 import makeLocaleLink from '../utils/makeLocaleLink';
 import useRole from '../hooks/useRole';
 import useAuthGate from '../hooks/useAuthGate';
@@ -10,7 +11,7 @@ import { HOMEPAGE_ROUTE } from '../routes';
 import { STAFF_ROLE } from '../../shared/roles';
 
 const COPY_EDITOR = 'COPY_EDITOR';
-const CONFIG_EDITOR = 'CONFIG_EDITOR';
+const FIX_ACCOUNT = 'FIX_ACCOUNT';
 
 const Layout = styled.div`
   display: flex;
@@ -90,7 +91,7 @@ const AdminEditorContainer = styled.div`
 
 const menus = [
   [COPY_EDITOR, 'admin.editCopy', AdminCopyEditor],
-  [CONFIG_EDITOR, 'admin.editConfig', React.Fragment],
+  [FIX_ACCOUNT, 'admin.fixAccount', AdminFixAccount],
 ];
 
 export default function Admin() {

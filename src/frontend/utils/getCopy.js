@@ -321,8 +321,8 @@ export const copy = {
   'admin.editCopy': {
     [ENGLISH]: 'Edit Copy',
   },
-  'admin.editConfig': {
-    [ENGLISH]: 'Edit Config',
+  'admin.fixAccount': {
+    [ENGLISH]: 'Fix Account',
   },
   'admin.toggleSpanish': {
     [ENGLISH]: 'Toggle Spanish Fields',
