@@ -11,7 +11,6 @@ module.exports = ({ db }) => {
       const {
         token,
         body: {
-          id,
           email,
           password,
         },
