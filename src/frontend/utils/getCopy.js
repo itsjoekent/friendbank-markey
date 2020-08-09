@@ -318,6 +318,9 @@ export const copy = {
   'dashboard.signupTablePanelSaved': {
     [ENGLISH]: 'Saved!',
   },
+  'dashboard.signupTableDownload': {
+    [ENGLISH]: 'Download all signups',
+  },
   'admin.editCopy': {
     [ENGLISH]: 'Edit Copy',
   },
