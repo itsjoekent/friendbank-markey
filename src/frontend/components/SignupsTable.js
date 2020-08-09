@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { saveAs } from 'file-saver';
 import copyToClipboard from 'copy-to-clipboard';
 import LoadingSpinner from './LoadingSpinner';
 import SignupsTablePanel from './SignupsTablePanel';
@@ -228,37 +229,61 @@ export default function SignupsTable() {
 
   const [copied, setCopied] = React.useState(false);
 
+  // React.useEffect(() => {
+  //   let cancel = false;
+  //
+  //   async function fetchSignups() {
+  //     const url = `/api/v1/user/signups?${signupsQuery}`;
+  //
+  //     const { response, json } = await makeApiRequest(url, 'get');
+  //
+  //     if (!cancel) {
+  //       setSignupsQuery(null);
+  //
+  //       if (json.signups) {
+  //         setSignups([...(signups || []), ...json.signups]);
+  //       }
+  //
+  //       if (json.total !== totalSignups) {
+  //         setTotalSignups(json.total);
+  //       }
+  //     }
+  //   }
+  //
+  //   if (typeof signupsQuery === 'string') {
+  //     fetchSignups();
+  //   }
+  //
+  //   return () => { cancel = true };
+  // }, [
+  //   signupsQuery,
+  //   setSignupsQuery,
+  //   signups,
+  //   setSignups,
+  //   setTotalSignups,
+  // ]);
+
   React.useEffect(() => {
     let cancel = false;
 
     async function fetchSignups() {
-      const url = `/api/v1/user/signups?${signupsQuery}`;
-
-      const { response, json } = await makeApiRequest(url, 'get');
+      const { json } = await makeApiRequest('/api/v1/user/signups/all', 'get');
 
       if (!cancel) {
-        setSignupsQuery(null);
-
-        if (json.signups) {
-          setSignups([...(signups || []), ...json.signups]);
-        }
-
-        if (json.total !== totalSignups) {
-          setTotalSignups(json.total);
-        }
+        setSignups(json.signups);
+        setTotalSignups(json.signups.length);
       }
     }
 
-    if (typeof signupsQuery === 'string') {
+    if (!signups) {
       fetchSignups();
     }
 
-    return () => { cancel = true };
+    return () => cancel = true;
   }, [
-    signupsQuery,
-    setSignupsQuery,
     signups,
     setSignups,
+    totalSignups,
     setTotalSignups,
   ]);
 
@@ -308,13 +333,25 @@ export default function SignupsTable() {
 
   function copyAllEmails() {
     copyToClipboard(
-      tableData
+      signups
         .filter((signup) => signup.email && !signup.email.startsWith('missing::'))
         .map((signup) => `${signup.firstName} ${signup.lastName} <${signup.email}>`)
         .join(', ')
     );
 
     setCopied(true);
+  }
+
+  function downloadSignups() {
+    const replacer = (key, value) => value === null ? '' : value;
+    const headers = Object.keys(signups[0]);
+
+    let csv = signups.map((row) => headers.map((fieldName) => JSON.stringify(row[fieldName], replacer)).join(','));
+    csv.unshift(headers.join(','));
+    csv = csv.join('\r\n');
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    saveAs(blob, 'friendbank.csv');
   }
 
   const showPreviousButton = tableIndex > 0;
@@ -349,6 +386,9 @@ export default function SignupsTable() {
                   ? getCopy('copiedToClipboard')
                   : getCopy('dashboard.signupTableCopyAllEmails')
                 }
+              </HeaderButton>
+              <HeaderButton onClick={downloadSignups}>
+                {getCopy('dashboard.signupTableDownload')}
               </HeaderButton>
             </HeaderActionsColumn>
           </HeaderRow>
