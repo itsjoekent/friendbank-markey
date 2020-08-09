@@ -29,6 +29,7 @@
     "copy-to-clipboard": "^3.3.1",
     "express": "^4.17.1",
     "express-force-https": "^1.0.0",
+    "file-saver": "^2.0.2",
     "marked": "^1.0.0",
     "mime-types": "^2.1.27",
     "mongodb": "^3.5.6",

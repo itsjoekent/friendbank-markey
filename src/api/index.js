@@ -19,6 +19,7 @@ const createUser = require('./routes/createUser');
 const editUser = require('./routes/editUser');
 const getUserPages = require('./routes/getUserPages');
 const getUserSignups = require('./routes/getUserSignups');
+const getAllUserSignups = require('./routes/getAllUserSignups');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
 const forgotPassword = require('./routes/forgotPassword');
@@ -216,6 +217,19 @@ app.get(
   },
   async function(req, res) {
     await getUserSignups({ db })(req, res);
+  },
+);
+
+app.get(
+  '/api/v1/user/signups/all',
+  async function(req, res, next) {
+    await loadToken({ db })(req, res, next);
+  },
+  async function(req, res, next) {
+    await loadCampaign({ db })(req, res, next);
+  },
+  async function(req, res) {
+    await getAllUserSignups({ db })(req, res);
   },
 );
 
