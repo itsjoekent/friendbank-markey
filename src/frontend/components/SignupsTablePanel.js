@@ -103,34 +103,6 @@ const PanelBackButton = styled.button`
   cursor: pointer;
 `;
 
-const PanelNavRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 24px;
-`;
-
-const PanelNavItem = styled.button`
-  font-family: ${({ theme }) => theme.fonts.mainFamily};
-  font-weight: bold;
-  font-size: 18px;
-  text-align: left;
-  width: fit-content;
-
-  margin-right: 24px;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-
-  ${({ isActive }) => isActive
-    ? css`
-      color: ${({ theme }) => theme.colors.blue};
-      text-decoration: underline;
-    `
-    : css`color: ${({ theme }) => theme.colors.grey};`
-  }
-`;
-
 const SuccessMessage = styled.p`
   font-family: ${({ theme }) => theme.fonts.mainFamily};
   font-weight: bold;
@@ -193,18 +165,28 @@ export default function SignupsTablePanel(props) {
     ...signupContactFields(),
     ...signupIdFields(),
     {
+      fieldId: 'voteStatus',
+      fieldType: RADIO_FIELD,
+      label: getCopy('voteStatus.label'),
+      options: getCopy('voteStatus.options'),
+    },
+  ];
+
+  if (selectedSignup.ballotStatus) {
+    signupFieldDump.push({
       fieldId: 'ballotStatus',
       fieldType: RADIO_FIELD,
       label: getCopy('idQuestions.vote.label'),
       options: getCopy('idQuestions.vote.options'),
-    },
-    {
-      fieldId: 'note',
-      fieldType: MULTI_LINE_TEXT_INPUT,
-      label: getCopy('formLabels.note'),
-      validator: validateNote,
-    },
-  ];
+    });
+  }
+
+  signupFieldDump.push({
+    fieldId: 'note',
+    fieldType: MULTI_LINE_TEXT_INPUT,
+    label: getCopy('formLabels.note'),
+    validator: validateNote,
+  });
 
   signupFieldDump[2].validator = validateZipNotRequired;
   signupFieldDump[3].validator = validatePhoneNotRequired;
@@ -242,21 +224,6 @@ export default function SignupsTablePanel(props) {
     return await makeFormApiRequest(`/api/v1/signup/${selectedSignup.id}`, 'put', { ...formValues });
   }
 
-  const actionFields = [
-    {
-      fieldId: 'actions',
-      fieldType: CHECKBOX_FIELD,
-      label: getCopy('actions.gotv.label'),
-      delimiter: '::',
-      defaultValue: selectedSignup.actions || '',
-      options: getCopy('actions.gotv.options'),
-    },
-  ];
-
-  async function onActionSubmit(formValues) {
-    return await makeFormApiRequest(`/api/v1/signup/${selectedSignup.id}`, 'put', { ...formValues });
-  }
-
   return (
     <PanelBackdrop onClick={onPanelBackdropClick} out={fadeOut}>
       <Panel
@@ -266,45 +233,19 @@ export default function SignupsTablePanel(props) {
         <PanelBackButton onClick={() => setFadeOut(true)}>
           {getCopy('dashboard.signupTablePanelBack')}
         </PanelBackButton>
-        <PanelNavRow>
-          <PanelNavItem
-            onClick={() => setPanelMenu(PROFILE_PANEL)}
-            isActive={panelMenu === PROFILE_PANEL}
-          >
-            {getCopy('dashboard.signupTablePanelProfile')}
-          </PanelNavItem>
-          <PanelNavItem
-            onClick={() => setPanelMenu(ACTIONS_PANEL)}
-            isActive={panelMenu === ACTIONS_PANEL}
-          >
-            {getCopy('dashboard.signupTablePanelActions')}
-          </PanelNavItem>
-        </PanelNavRow>
         {successfullySubmitted && (
           <SuccessMessage>
             {getCopy('dashboard.signupTablePanelSaved')}
           </SuccessMessage>
         )}
-        {panelMenu === PROFILE_PANEL && (
-          <Form
-            onCompletion={onCompletion}
-            steps={[{
-              buttonCopy: getCopy('formLabels.submit'),
-              onStepSubmit: onSignupSubmit,
-              fields: signupFields,
-            }]}
-          />
-        )}
-        {panelMenu === ACTIONS_PANEL && (
-          <Form
-            onCompletion={onCompletion}
-            steps={[{
-              buttonCopy: getCopy('formLabels.submit'),
-              onStepSubmit: onActionSubmit,
-              fields: actionFields,
-            }]}
-          />
-        )}
+        <Form
+          onCompletion={onCompletion}
+          steps={[{
+            buttonCopy: getCopy('formLabels.submit'),
+            onStepSubmit: onSignupSubmit,
+            fields: signupFields,
+          }]}
+        />
       </Panel>
     </PanelBackdrop>
   );

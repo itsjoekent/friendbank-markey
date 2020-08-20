@@ -67,7 +67,7 @@ module.exports = function constructBsdSignupPayload(signup, formSlug) {
   }
 
   if (signup.voteStatus) {
-    bsdPayload[FIELD_MAP[formSlug][VOTE_ID]] = BSD_VAN_MAP.volunteer[signup.voteStatus];
+    bsdPayload[FIELD_MAP[formSlug][VOTE_ID]] = BSD_VAN_MAP.vote[signup.voteStatus];
   }
 
   if (signup.actions) {
