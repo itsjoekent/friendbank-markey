@@ -40,7 +40,7 @@ export default function Homepage(props) {
 
   const [normalizedCode, setNormalizedCode] = React.useState(null);
 
-  function hasBallotStep(formValues) {
+  function hasVoteStep(formValues) {
     const { supportLevel } = formValues;
     return getCopy('idQuestions.support.options').indexOf(supportLevel) <= 1;
   }
@@ -95,7 +95,7 @@ export default function Homepage(props) {
       zip,
       supportLevel,
       volunteerLevel,
-      ballotStatus,
+      voteStatus,
     } = formValues;
 
     const payload = {
@@ -107,7 +107,7 @@ export default function Homepage(props) {
       zip,
       supportLevel,
       volunteerLevel,
-      ballotStatus,
+      voteStatus,
     };
 
     return await makeFormApiRequest('/api/v1/signup', 'post', payload);
@@ -221,17 +221,17 @@ export default function Homepage(props) {
       ],
     },
     {
-      title: getCopy('idQuestions.vote.label'),
-      subtitle: getCopy('idQuestions.vote.subtitle'),
+      title: getCopy('voteStatus.label'),
+      subtitle: getCopy('voteStatus.subtitle'),
       buttonCopy: getCopy('homepage.createButtonLabel'),
-      condition: hasBallotStep,
+      condition: hasVoteStep,
       onStepSubmit: onSignup,
       fields: [
         {
-          fieldId: 'ballotStatus',
+          fieldId: 'voteStatus',
           fieldType: RADIO_FIELD,
-          label: getCopy('idQuestions.vote.label'),
-          options: getCopy('idQuestions.vote.options'),
+          label: getCopy('voteStatus.label'),
+          options: getCopy('voteStatus.options'),
         },
       ],
     },

@@ -57,7 +57,7 @@ export default function Signup() {
 
   const [hasReachedEnd, setHasReachedEnd] = React.useState(false);
 
-  function hasBallotStep(formValues) {
+  function hasVoteStep(formValues) {
     const { supportLevel } = formValues;
     return getCopy('idQuestions.support.options').indexOf(supportLevel) <= 1;
   }
@@ -87,17 +87,17 @@ export default function Signup() {
       onStepSubmit: onStepSubmit,
     },
     {
-      title: getCopy('idQuestions.vote.label'),
-      subtitle: getCopy('idQuestions.vote.subtitle'),
+      title: getCopy('voteStatus.label'),
+      subtitle: getCopy('voteStatus.subtitle'),
       buttonCopy: getCopy('signupPage.stepTwoButtonLabel'),
-      condition: hasBallotStep,
+      condition: hasVoteStep,
       onStepSubmit: onStepSubmit,
       fields: [
         {
-          fieldId: 'ballotStatus',
+          fieldId: 'voteStatus',
           fieldType: RADIO_FIELD,
-          label: getCopy('idQuestions.vote.label'),
-          options: getCopy('idQuestions.vote.options'),
+          label: getCopy('voteStatus.label'),
+          options: getCopy('voteStatus.options'),
         },
       ],
     },

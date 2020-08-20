@@ -29,6 +29,7 @@ module.exports = ({ db }) => {
           supportLevel,
           volunteerLevel,
           ballotStatus,
+          voteStatus,
           actions,
         },
       } = req;
@@ -42,6 +43,7 @@ module.exports = ({ db }) => {
         supportLevel,
         volunteerLevel,
         ballotStatus,
+        voteStatus,
         actions,
       };
 
