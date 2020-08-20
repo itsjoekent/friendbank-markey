@@ -30,6 +30,7 @@ module.exports = ({ db }) => {
           supportLevel,
           volunteerLevel,
           ballotStatus,
+          voteStatus,
           actions,
           note,
         },
@@ -44,6 +45,7 @@ module.exports = ({ db }) => {
         supportLevel,
         volunteerLevel,
         ballotStatus,
+        voteStatus,
         actions,
         note,
       };

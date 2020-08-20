@@ -77,10 +77,10 @@ export default function PhonebankForm() {
     ...signupContactFields(),
     ...signupIdFields(),
     {
-      fieldId: 'ballotStatus',
+      fieldId: 'voteStatus',
       fieldType: RADIO_FIELD,
-      label: getCopy('idQuestions.vote.label'),
-      options: getCopy('idQuestions.vote.options'),
+      label: getCopy('voteStatus.label'),
+      options: getCopy('voteStatus.options'),
     },
     {
       fieldId: 'note',
