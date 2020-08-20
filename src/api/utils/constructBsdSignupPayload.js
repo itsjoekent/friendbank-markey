@@ -4,12 +4,14 @@ const {
   BSD_SIGNUP_SUPPORT_ID,
   BSD_SIGNUP_VOLUNTEER_ID,
   BSD_SIGNUP_BALLOT_ID,
+  BSD_SIGNUP_VOTE_ID,
   BSD_SIGNUP_ACTIONS_ID,
   BSD_SIGNUP_NOTE_ID,
 
   BSD_CONTACT_SUPPORT_ID,
   BSD_CONTACT_VOLUNTEER_ID,
   BSD_CONTACT_BALLOT_ID,
+  BSD_CONTACT_VOTE_ID,
   BSD_CONTACT_ACTIONS_ID,
   BSD_CONTACT_NOTE_ID,
 
@@ -20,6 +22,7 @@ const {
 const SUPPORT_ID = 'SUPPORT_ID';
 const VOLUNTEER_ID = 'VOLUNTEER_ID';
 const BALLOT_ID = 'BALLOT_ID';
+const VOTE_ID = 'VOTE_ID';
 const ACTIONS_ID = 'ACTIONS_ID';
 const NOTE_ID = 'NOTE_ID';
 
@@ -28,6 +31,7 @@ const FIELD_MAP = {
     [SUPPORT_ID]: BSD_SIGNUP_SUPPORT_ID,
     [VOLUNTEER_ID]: BSD_SIGNUP_VOLUNTEER_ID,
     [BALLOT_ID]: BSD_SIGNUP_BALLOT_ID,
+    [VOTE_ID]: BSD_SIGNUP_VOTE_ID,
     [ACTIONS_ID]: BSD_SIGNUP_ACTIONS_ID,
     [NOTE_ID]: BSD_SIGNUP_NOTE_ID,
   },
@@ -35,6 +39,7 @@ const FIELD_MAP = {
     [SUPPORT_ID]: BSD_CONTACT_SUPPORT_ID,
     [VOLUNTEER_ID]: BSD_CONTACT_VOLUNTEER_ID,
     [BALLOT_ID]: BSD_CONTACT_BALLOT_ID,
+    [VOTE_ID]: BSD_CONTACT_VOTE_ID,
     [ACTIONS_ID]: BSD_CONTACT_ACTIONS_ID,
     [NOTE_ID]: BSD_CONTACT_NOTE_ID,
   },
@@ -59,6 +64,10 @@ module.exports = function constructBsdSignupPayload(signup, formSlug) {
 
   if (signup.ballotStatus) {
     bsdPayload[FIELD_MAP[formSlug][BALLOT_ID]] = signup.ballotStatus;
+  }
+
+  if (signup.voteStatus) {
+    bsdPayload[FIELD_MAP[formSlug][VOTE_ID]] = BSD_VAN_MAP.volunteer[signup.voteStatus];
   }
 
   if (signup.actions) {
