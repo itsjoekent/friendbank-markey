@@ -129,7 +129,7 @@ const TableColumnDefault = styled.div`
   }
 
   @media ${({ theme }) => theme.media.desktop} {
-    width: calc(20% - 12px);
+    width: calc(16.66% - 12px);
     padding-right: 12px;
   }
 `;
@@ -144,7 +144,7 @@ const TableColumnTabletOnly = styled.div`
   }
 
   @media ${({ theme }) => theme.media.desktop} {
-    width: calc(20% - 12px);
+    width: calc(16.66% - 12px);
     padding-right: 12px;
   }
 `;
@@ -154,7 +154,7 @@ const TableColumnDesktopOnly = styled.div`
 
   @media ${({ theme }) => theme.media.desktop} {
     display: block;
-    width: calc(20% - 12px);
+    width: calc(16.66% - 12px);
     padding-right: 12px;
   }
 `;
@@ -419,6 +419,11 @@ export default function SignupsTable() {
                   {getCopy('dashboard.signupTableSource')}
                 </TableColumnName>
               </TableColumnDesktopOnly>
+              <TableColumnDesktopOnly>
+                <TableColumnName>
+                  {getCopy('dashboard.signupTableVoteStatus')}
+                </TableColumnName>
+              </TableColumnDesktopOnly>
             </TableRow>
             {tableData && tableData.map((signup) => (
               <TableRow
@@ -463,6 +468,11 @@ export default function SignupsTable() {
                       </TableColumnValue>
                     )
                   }
+                </TableColumnDesktopOnly>
+                <TableColumnDesktopOnly>
+                  <TableColumnValue>
+                    {signup.voteStatus || ''}
+                  </TableColumnValue>
                 </TableColumnDesktopOnly>
               </TableRow>
             ))}

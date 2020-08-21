@@ -284,6 +284,9 @@ export const copy = {
     [ENGLISH]: 'Manual Add',
     [SPANISH]: 'Añadido manualmente',
   },
+  'dashboard.signupTableVoteStatus': {
+    [ENGLISH]: 'Vote Status',
+  },
   'dashboard.totalSignups': {
     [ENGLISH]: 'Total signups:',
     [SPANISH]: 'Total de inscripciones:',
