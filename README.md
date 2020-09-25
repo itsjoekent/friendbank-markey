@@ -28,14 +28,17 @@ Once your app is deployed, make sure to seed the production database (`MONGODB_U
 Friendbank requires a MongoDB deployment, we recommend [MongoDB Atlas](https://www.mongodb.com/cloud/atlas), along with a [SendGrid](https://sendgrid.com/) account for transactional email, and an [AWS account](https://aws.amazon.com/) with an S3 bucket to host images.
 
 **Note on Heroku deployment**:
+
 By default, Heroku does not detect a Docker stack. Run `heroku stack:set container` in the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) and re-deploy the application.
 
 **Note on Sengrid:**
+
 For setting up the dynamic email templates, I've copied the two templates we used on the Markey campaign.
 - [Transaction Signup Notification](https://github.com/itsjoekent/friendbank/blob/master/Transactional-Signup-Notification-Template.html)
 - [Forgot Password](https://github.com/itsjoekent/friendbank/blob/master/Forgot-Password-Template.html)
 
 **Note on production environment variables:**
+
 When deploying Friendbank, if your campaign does not use the Blue State Digital Tools, ignore the `BSD_` environment variables and set `DEBUG_CRM_SIGNUP=true`.
 
 ## Customization
