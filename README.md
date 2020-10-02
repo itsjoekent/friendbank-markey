@@ -5,7 +5,7 @@ A relational organizing tool developed for Ed Markey's 2020 senate re-elect. [Re
 **In The Wild!!**
 
 - [Tedra Cobb, NY-21](https://tedra-friendbank.herokuapp.com/)
-- [Patricia Timmons-Goodson, NYC-08](https://support.timmonsgoodsonforcongress.com/)
+- [Patricia Timmons-Goodson, NC-08](https://support.timmonsgoodsonforcongress.com/)
 
 ## Local Development
 
