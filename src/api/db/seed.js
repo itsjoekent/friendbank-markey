@@ -42,16 +42,16 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       alt: 'Jonathan and team',
     },
     {
-      _id: 'ed-climate-march',
+      _id: 'jonathan-with-supporters',
       type: 'image',
-      source: 'https://ed-markey-supporter-photos.s3.amazonaws.com/Taylor+St.+Germain+-+P2+Markey+(52+of+70).jpg',
-      alt: 'Ed at a climate march with young students',
+      source: 'https://friendbank.s3.amazonaws.com/jonathan-supporters.jpeg',
+      alt: 'Jonathan with supporters',
     },
     {
-      _id: 'ed-serving',
+      _id: 'jonathan-with-doctors',
       type: 'image',
-      source: 'https://ed-markey-supporter-photos.s3.amazonaws.com/Ed+Serving.JPG',
-      alt: 'Ed serving food',
+      source: 'https://friendbank.s3.amazonaws.com/jonathan-doctors.jpg',
+      alt: 'Jonathan with Doctors',
     },
     {
       _id: 'jonathan-campaign-staff-and-volunteers',
@@ -86,10 +86,10 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
     disableNavDonate: true,
     media: defaultMediaObjects.map((object) => object._id),
     defaultMedia: {
-      _id: 'ed-climate-march',
+      _id: 'jonathan-with-supporters',
       type: 'image',
-      source: 'https://ed-markey-supporter-photos.s3.amazonaws.com/Taylor+St.+Germain+-+P2+Markey+(52+of+70).jpg',
-      alt: 'Ed at a climate march with young students',
+      source: 'https://friendbank.s3.amazonaws.com/jonathan-supporters.jpeg',
+      alt: 'Jonathan with supporters',
     },
   });
 
@@ -306,7 +306,7 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
 
   const campaigns = db.collection('campaigns');
   const campaignResult = await campaigns.insertOne({
-    domains: ['localhost:5000'],
+    domains: ['localhost:5000', 'friendbank-wallacefor119.herokuapp.com', 'support.wallacefor119.com'],
     name: 'Friendbank Dev',
     copy,
     config,
