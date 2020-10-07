@@ -117,8 +117,8 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       ],
     },
     'idQuestions.volunteer.label': {
-      [ENGLISH]: 'Will you volunteer with Team Markey?',
-      [SPANISH]: '¿Quiéres ser voluntario con el Equipo Markey?',
+      [ENGLISH]: 'Will you volunteer with Team Wallace?',
+      [SPANISH]: '¿Quiéres ser voluntario con el Equipo Wallace?',
     },
     'idQuestions.volunteer.options': {
       [ENGLISH]: [
@@ -178,8 +178,8 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       [SPANISH]: 'Crea tu propia página de apoyo para Jonathan Wallace',
     },
     'homepage.formSubtitle': {
-      [ENGLISH]: 'Our grassroots campaign is powered by people like you who are connecting with family, friends, and neighbors about this important election. Complete the sections below to create your own personal supporter page and reach out to your network about why you’re a member of Team Markey!',
-      [SPANISH]: 'Nuestra campaña está impulsada por gente como tú que se está conectando con familia, amigos y vecinos sobre esta elección importante. Completa las siguientes secciones para crear tu propia página de apoyo personal y hablarle a tus redes de por qué eres miembro del Equipo Markey!',
+      [ENGLISH]: 'Our grassroots campaign is powered by people like you who are connecting with family, friends, and neighbors about this important election. Complete the sections below to create your own personal supporter page and reach out to your network about why you’re a member of Team Wallace!',
+      [SPANISH]: 'Nuestra campaña está impulsada por gente como tú que se está conectando con familia, amigos y vecinos sobre esta elección importante. Completa las siguientes secciones para crear tu propia página de apoyo personal y hablarle a tus redes de por qué eres miembro del Equipo Wallace!',
     },
     'homepage.customizeTitle': {
       [ENGLISH]: 'Customize your page',
@@ -228,26 +228,26 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
     'signupPage.modalCopy': {
       [ENGLISH]: [
         `### Send your link far and wide`,
-        `Share this page with your network to help us grow Team Markey! Your friends, family, neighbors, colleagues, roommates, classmates, Facebook friends, Twitter peeps, your Zoom hangout friends -- the sky's the limit, and we need to reach everyone.`,
+        `Share this page with your network to help us grow Team Wallace! Your friends, family, neighbors, colleagues, roommates, classmates, Facebook friends, Twitter peeps, your Zoom hangout friends -- the sky's the limit, and we need to reach everyone.`,
         `### Relational organizing tips`,
         ` - Call 5 friends and ask them to fill out your link`,
         ` - Email your link to 50 people`,
         ` - Share it on your Facebook and other social media`,
         ` - Go through your contact list in your phone and text the link to at least 10 people!`,
         ' ',
-        `### Volunteer with Team Markey`,
+        `### Volunteer with Team Wallace`,
         `[Join the movement here](http://edmarkey.com/volunteer).`,
       ],
       [SPANISH]: [
         '### Comparte tu enlace',
-        `¡Comparte esta página con tus redes para ayudarnos a crecer el Equipo Markey! Tus amigos, familia, vecinos, colegas, compañeros de habitación, compañeros de clase, amigos de Facebook, seguidores en Twitter, tus amigos de Zoom...el cielo es el límite y tenemos que llegar a todos.`,
+        `¡Comparte esta página con tus redes para ayudarnos a crecer el Equipo Wallace! Tus amigos, familia, vecinos, colegas, compañeros de habitación, compañeros de clase, amigos de Facebook, seguidores en Twitter, tus amigos de Zoom...el cielo es el límite y tenemos que llegar a todos.`,
         `### Consejos para organizar relacionalmente`,
         ` - Llama a 5 amigos y pídeles que llenen tu enlace`,
         ` - Envía tu enlace a 50 personas`,
         ` - Compártelo en tu Facebook y otras redes sociales`,
         ` - ¡Revisa la lista de contactos de tu teléfono y envía el enlace al menos a 10 personas!`,
         ` `,
-        `### Ser voluntario con el Equipo Markey`,
+        `### Ser voluntario con el Equipo Wallace`,
         `[Únete al movimiento aquí](http://edmarkey.com/volunteer).`,
       ],
     },
@@ -291,12 +291,12 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       [SPANISH]: 'https://www.edmarkey.com/es/privacy-policy/',
     },
     'politicalDiclaimer': {
-      [ENGLISH]: 'PAID FOR BY THE MARKEY COMMITTEE',
-      [SPANISH]: 'PAGADO POR THE MARKEY COMMITTEE',
+      [ENGLISH]: 'PAID FOR BY THE JONATHAN WALLACE FOR STATE HOUSE COMMITTEE',
+      [SPANISH]: 'PAGADO POR THE JONATHAN WALLACE FOR STATE HOUSE COMMITTEE',
     },
     'smsDisclaimer': {
-      [ENGLISH]: 'By providing your cell phone number you consent to receive periodic campaign updates from the Markey Committee. Text HELP for help, STOP to end. Message & data rates may apply. https://www.edmarkey.com/privacy-policy/',
-      [SPANISH]: 'Al proporcionar su número de teléfono celular usted consiente en recibir actualizaciones periódicas de la campaña de The Markey Committee. Envíe un mensaje de texto que diga HELP para pedir ayuda o STOP para descontinuar los mensajes. Pueden aplicar tarifas de mensajes y data. https://www.edmarkey.com/privacy-policy/',
+      [ENGLISH]: 'By providing your cell phone number you consent to receive periodic campaign updates from the Jonathan Wallace for State House Committee. Text HELP for help, STOP to end. Message & data rates may apply. https://www.edmarkey.com/privacy-policy/',
+      [SPANISH]: 'Al proporcionar su número de teléfono celular usted consiente en recibir actualizaciones periódicas de la campaña de The Jonathan Wallace for State House Committee. Envíe un mensaje de texto que diga HELP para pedir ayuda o STOP para descontinuar los mensajes. Pueden aplicar tarifas de mensajes y data. https://www.edmarkey.com/privacy-policy/',
     },
     'genericError': {
       [ENGLISH]: 'Looks like we had an error, try again? If this continues to happen, please contact us https://www.edmarkey.com/contact-us/',
