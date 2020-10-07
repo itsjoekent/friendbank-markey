@@ -135,10 +135,10 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       ],
     },
     'idQuestions.vote.label': {
-      [ENGLISH]: 'Are you planning to vote by mail for Ed in the Massachusetts primary?',
+      [ENGLISH]: 'Are you planning to vote by mail for Jonathan in the Massachusetts primary?',
     },
     'idQuestions.vote.subtitle': {
-      [ENGLISH]: 'Voting by mail is the safest way to make your voice heard in this election, and new laws have expanded access to vote by mail in Massachusetts for every registered voter. An application to vote by mail will be mailed to each registered voter in MA (or you can download one and mail or email it in). Just complete that application, send it back, and you’ll receive a ballot to vote for Ed by mail. Skip the polls, stay safe, and get your vote for Ed in early -- vote by mail!',
+      [ENGLISH]: 'Voting by mail is the safest way to make your voice heard in this election, and new laws have expanded access to vote by mail in Massachusetts for every registered voter. An application to vote by mail will be mailed to each registered voter in MA (or you can download one and mail or email it in). Just complete that application, send it back, and you’ll receive a ballot to vote for Jonathan by mail. Skip the polls, stay safe, and get your vote for Jonathan in early -- vote by mail!',
     },
     'idQuestions.vote.options': {
       [ENGLISH]: [
@@ -149,7 +149,7 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       ],
     },
     'voteStatus.label': {
-      [ENGLISH]: 'Make a plan to vote for Ed in the Massachusetts primary!',
+      [ENGLISH]: 'Make a plan to vote for Jonathan in the Massachusetts primary!',
     },
     'voteStatus.subtitle': {
       [ENGLISH]: 'Our future and our planet are on the line. Make your voice heard by making a plan to vote for Jonathan Wallace in the Massachusetts Senate Primary Election. If you have not already applied to vote by mail, please make a plan to vote early or on Election Day.',
@@ -170,7 +170,7 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
         'Received Ballot Application',
         'Mailed in Ballot Application',
         'Received Ballot',
-        'Voted for Ed! (Mailed in completed ballot)',
+        'Voted for Jonathan! (Mailed in completed ballot)',
       ],
     },
     'homepage.formTitle': {
@@ -214,16 +214,16 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       [SPANISH]: 'Haz tu propia página',
     },
     'signupPage.postSignupCreateSubtitle': {
-      [ENGLISH]: 'Create your own supporter page and become a grassroots organizer for Ed. We’ll show you how!',
-      [SPANISH]: 'Crea tu propia página de apoyo y conviértete en un organizador en tu comunidad para Ed. ¡Te mostraremos cómo!',
+      [ENGLISH]: 'Create your own supporter page and become a grassroots organizer for Jonathan. We’ll show you how!',
+      [SPANISH]: 'Crea tu propia página de apoyo y conviértete en un organizador en tu comunidad para Jonathan. ¡Te mostraremos cómo!',
     },
     'signupPage.postSignupCreateButtonLabel': {
       [ENGLISH]: 'Get started',
       [SPANISH]: 'Comenzar',
     },
     'signupPage.modalTitle': {
-      [ENGLISH]: `Here's how you can join ed's fight`,
-      [SPANISH]: 'Como puedes unirte a la lucha de Ed',
+      [ENGLISH]: `Here's how you can join Jonathan's fight`,
+      [SPANISH]: 'Como puedes unirte a la lucha de Jonathan',
     },
     'signupPage.modalCopy': {
       [ENGLISH]: [
@@ -275,8 +275,8 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       [SPANISH]: 'Añadir un contacto',
     },
     'phonebankPage.subtitle': {
-      [ENGLISH]: 'Enter your friends, family, and people in your network. Grow your list of the people you’re personally bringing to this grassroots movement, let Ed know if they support him, and help make sure this campaign reaches its goals.',
-      [SPANISH]: 'Añade a tus amigos, familiares y personas de tu red. Crece tu lista de personas que personalmente trajiste a este movimiento impulsado por el pueblo, déjale saber a Ed si lo apoyan y ayuda a la campaña a alcanzar sus metas.',
+      [ENGLISH]: 'Enter your friends, family, and people in your network. Grow your list of the people you’re personally bringing to this grassroots movement, let Jonathan know if they support him, and help make sure this campaign reaches its goals.',
+      [SPANISH]: 'Añade a tus amigos, familiares y personas de tu red. Crece tu lista de personas que personalmente trajiste a este movimiento impulsado por el pueblo, déjale saber a Jonathan si lo apoyan y ayuda a la campaña a alcanzar sus metas.',
     },
     'phonebankPage.successfullySubmitted': {
       [ENGLISH]: 'Successfully submitted contact!',
