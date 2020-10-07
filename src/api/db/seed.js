@@ -95,7 +95,7 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
 
   const copy = JSON.stringify({
     'idQuestions.support.label': {
-      [ENGLISH]: 'Will you vote to re-elect Jonathan Wallace to the United States Senate on September 1st?',
+      [ENGLISH]: 'Will you vote to re-elect Jonathan Wallace to the Georgia House on November 3rd?',
       [SPANISH]: '¿Votará para reelegir a Jonathan Wallace al Senado de los Estados Unidos el 1 de septiembre?',
     },
     'idQuestions.support.options': {
@@ -152,14 +152,14 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       [ENGLISH]: 'Make a plan to vote for Jonathan in the Massachusetts primary!',
     },
     'voteStatus.subtitle': {
-      [ENGLISH]: 'Our future and our planet are on the line. Make your voice heard by making a plan to vote for Jonathan Wallace in the Massachusetts Senate Primary Election. If you have not already applied to vote by mail, please make a plan to vote early or on Election Day.',
+      [ENGLISH]: 'Our future and our planet are on the line. Make your voice heard by making a plan to vote for Jonathan Wallace in the Georgia General Election. If you have not already applied to vote by mail, please make a plan to vote early or on Election Day.',
     },
     'voteStatus.options': {
       [ENGLISH]: [
         'I’ve already voted',
         'I’ve received my mail-in ballot and still need to return it',
-        'I’m planning to vote early between August 22-28',
-        'I’m planning to vote on Election Day, September 1',
+        'I’m planning to vote early between October 12-30',
+        'I’m planning to vote on Election Day, November 3',
       ],
     },
     'actions.gotv.label': {
@@ -202,7 +202,7 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       [SPANISH]: '{{FIRST_NAME}} está #ConEd porque...'
     },
     'homepage.defaultSubtitle': {
-      [ENGLISH]: 'Ed comes from a working family, and he’s fighting from the heart for the working class. Ed is running a people-powered campaign, and it’s up to us to help make sure he can keep fighting in the Senate for our shared progressive values. Let me know that you are with me, and help me reach my goal!',
+      [ENGLISH]: 'Ed comes from a working family, and he’s fighting from the heart for the working class. Ed is running a people-powered campaign, and it’s up to us to help make sure he can keep fighting in the State House for our shared progressive values. Let me know that you are with me, and help me reach my goal!',
       [SPANISH]: 'Ed viene de una familia trabajadora y está luchando con todo su corazón por la clase trabajadora. Ed está llevando a cabo una campaña impulsada por la gente y depende de nosotros asegurarnos de que pueda seguir luchando en el Senado por nuestros valores progresistas. ¡Háganme saber que están conmigo y ayúdenme a alcanzar mi meta!',
     },
     'signupPage.postSignupSubtitle': {
@@ -256,8 +256,8 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       [SPANISH]: 'Perfecto, lo tengo.',
     },
     'nav.logoAlt': {
-      [ENGLISH]: 'Jonathan Wallace For Senate Logo',
-      [SPANISH]: 'Logo de Jonathan Wallace para el Senado',
+      [ENGLISH]: 'Jonathan Wallace For 119 Logo',
+      [SPANISH]: 'Logo de Jonathan Wallace para 119',
     },
     'nav.return': {
       [ENGLISH]: '← return to wallacefor119.com',
