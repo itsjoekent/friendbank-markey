@@ -236,7 +236,7 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
         ` - Go through your contact list in your phone and text the link to at least 10 people!`,
         ' ',
         `### Volunteer with Team Wallace`,
-        `[Join the movement here](http://edmarkey.com/volunteer).`,
+        `[Join the movement here](http://www.wallacefor119.com/volunteer).`,
       ],
       [SPANISH]: [
         '### Comparte tu enlace',
@@ -248,7 +248,7 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
         ` - ¡Revisa la lista de contactos de tu teléfono y envía el enlace al menos a 10 personas!`,
         ` `,
         `### Ser voluntario con el Equipo Wallace`,
-        `[Únete al movimiento aquí](http://edmarkey.com/volunteer).`,
+        `[Únete al movimiento aquí](http://www.wallacefor119.com/volunteer).`,
       ],
     },
     'signupPage.modalCloseLabel': {
@@ -260,15 +260,15 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       [SPANISH]: 'Logo de Jonathan Wallace para el Senado',
     },
     'nav.return': {
-      [ENGLISH]: '← return to edmarkey.com',
-      [SPANISH]: '← volver a edmarkey.com',
+      [ENGLISH]: '← return to wallacefor119.com',
+      [SPANISH]: '← volver a wallacefor119.com',
     },
     'nav.returnLink': {
-      [ENGLISH]: 'https://www.edmarkey.com/',
-      [SPANISH]: 'https://www.edmarkey.com/es/',
+      [ENGLISH]: 'https://www.wallacefor119.com/',
+      [SPANISH]: 'https://www.wallacefor119.com/',
     },
     'nav.donateForm': {
-      [ENGLISH]: 'https://secure.actblue.com/donate/ejm2020',
+      [ENGLISH]: 'https://secure.actblue.com/donate/wallaceforga',
     },
     'phonebankPage.title': {
       [ENGLISH]: 'Add a Contact',
@@ -299,8 +299,8 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       [SPANISH]: 'Al proporcionar su número de teléfono celular usted consiente en recibir actualizaciones periódicas de la campaña de The Jonathan Wallace for State House Committee. Envíe un mensaje de texto que diga HELP para pedir ayuda o STOP para descontinuar los mensajes. Pueden aplicar tarifas de mensajes y data. https://www.edmarkey.com/privacy-policy/',
     },
     'genericError': {
-      [ENGLISH]: 'Looks like we had an error, try again? If this continues to happen, please contact us https://www.edmarkey.com/contact-us/',
-      [SPANISH]: 'Parece que tuvimos un error, ¿intentar de nuevo? Si esto continúa sucediendo, por favor contáctenos https://www.edmarkey.com/contact-us/',
+      [ENGLISH]: 'Looks like we had an error, try again? If this continues to happen, please contact us https://www.wallacefor119.com/contact/',
+      [SPANISH]: 'Parece que tuvimos un error, ¿intentar de nuevo? Si esto continúa sucediendo, por favor contáctenos https://www.wallacefor119.com/contact/',
     },
   });
 
