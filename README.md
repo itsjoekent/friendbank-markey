@@ -23,7 +23,17 @@ You can also run `make unit-test-api` to run the API test suite.
 
 Friendbank can run anywhere that supports Docker containers, for the Markey campaign we used [Heroku](http://heroku.com/) for it's simplicity, but all major cloud providers should have no issues hosting Friendbank.
 
-Once your app is deployed, make sure to seed the production database (`MONGODB_URL=... npm run seed`).
+### Configure your hostname 
+
+Once you've confirmed the deployment of your app, it will not successfully launch until you include your hostname. 
+
+You may edit the `campaignResult.domains` array and include your hostname: [src/api/db/seed.js#L309](src/api/db/seed.js#L309)
+
+You must then seed the production database 
+
+    $ MONGODB_URL=mongodb+srv://<...> npm run seed`
+
+with your hostname and any other [customizations](#customization) changes ind the seed.js file.
 
 Friendbank requires a MongoDB deployment, we recommend [MongoDB Atlas](https://www.mongodb.com/cloud/atlas), along with a [SendGrid](https://sendgrid.com/) account for transactional email, and an [AWS account](https://aws.amazon.com/) with an S3 bucket to host images.
 
@@ -53,4 +63,7 @@ src/frontend/theme.js
 
 # Campaign Logo
 src/frontend/components/Nav.js
+
+# Images, select options, web copy
+src/api/db/seed.js
 ```
