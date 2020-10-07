@@ -36,10 +36,10 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       alt: 'Ed wearing his pair of Air Flight ‘89s',
     },
     {
-      _id: 'ed-clapping',
+      _id: 'fierce-v',
       type: 'image',
-      source: 'https://ed-markey-supporter-photos.s3.amazonaws.com/Ed+Clap.jpg',
-      alt: 'Ed clapping at an event',
+      source: 'https://friendbank.s3.amazonaws.com/fierce-v.jpeg',
+      alt: 'Jonathan and team',
     },
     {
       _id: 'ed-climate-march',
@@ -54,22 +54,22 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
       alt: 'Ed serving food',
     },
     {
-      _id: 'ed-seiu',
+      _id: 'jonathan-campaign-staff-and-volunteers',
       type: 'image',
-      source: 'https://ed-markey-supporter-photos.s3.amazonaws.com/Taylor+St.+Germain+-+32BJ8.jpg',
-      alt: 'Ed standing with SEIU supporters',
+      source: 'https://friendbank.s3.amazonaws.com/jonathan-sign-supporters.jpeg',
+      alt: 'Jonathan and Campaign Staff and Volunteers',
     },
     {
-      _id: 'ed-laughing',
+      _id: 'jonathan-laughing',
       type: 'image',
-      source: 'https://ed-markey-supporter-photos.s3.amazonaws.com/IMG_3417.JPG',
-      alt: 'Ed laughing',
+      source: 'https://friendbank.s3.amazonaws.com/jonathan-kristina.jpeg',
+      alt: 'Jonathan and Kristina laughing',
     },
     {
-      _id: 'ed-ew-supporters',
+      _id: 'jonathan-yvonne',
       type: 'image',
-      source: 'https://ed-markey-supporter-photos.s3.amazonaws.com/IMG_7718.JPG',
-      alt: 'Ed standing with supporters'
+      source: 'https://friendbank.s3.amazonaws.com/Wallace+Campaign-20.jpg',
+      alt: 'Jonathan standing with Yvonne'
     },
     {
       _id: 'ed-unite-here',
