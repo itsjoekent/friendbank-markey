@@ -353,5 +353,5 @@ const { TRANSACTIONAL_EMAIL } = require('../../shared/emailFrequency');
   }));
 
   await signups.insertMany(signupSeed);
-  console.log('Seeding complete. You may hit Ctrl + C to quit');
+  process.exit(0);
 })();

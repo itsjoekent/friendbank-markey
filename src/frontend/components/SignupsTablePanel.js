@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import Form from './Form';
+import DownBallotMapLink from './DownBallotMapLink';
 import {
   MULTI_LINE_TEXT_INPUT,
   RADIO_FIELD,
@@ -246,6 +247,7 @@ export default function SignupsTablePanel(props) {
             fields: signupFields,
           }]}
         />
+        <DownBallotMapLink />
       </Panel>
     </PanelBackdrop>
   );

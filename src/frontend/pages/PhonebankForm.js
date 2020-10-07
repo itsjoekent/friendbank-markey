@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import getCopy from '../utils/getCopy';
 import StandardHelmet from '../components/StandardHelmet';
+import DownBallotMapLink from '../components/DownBallotMapLink';
 import Form, { FormTitleContainer } from '../components/Form';
 import { MULTI_LINE_TEXT_INPUT, RADIO_FIELD } from '../components/FormFields';
 import signupContactFields from '../forms/signupContactFields';
@@ -114,6 +115,7 @@ export default function PhonebankForm() {
               {getCopy('phonebankPage.successfullySubmitted')}
             </SuccessMessage>
           )}
+          <DownBallotMapLink />
         </Container>
       </Layout>
     </React.Fragment>
