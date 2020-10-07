@@ -43,8 +43,9 @@ const Logo = styled.a`
   margin-left: 8px;
 
   img {
-    width: 50px;
+    width: 300px;
     margin-bottom: 10px;
+    margin-top: 10px;
   }
 
   @media ${({ theme }) => theme.media.tablet} {
@@ -199,7 +200,7 @@ export default function Nav(props) {
       </RedirectRow>
       <NavContainer>
         <Logo href={makeLocaleLink(HOMEPAGE_ROUTE)}>
-          <img src="https://ed-markey-supporter-photos.s3.amazonaws.com/logo.png" alt={getCopy('nav.logoAlt')} />
+          <img src="https://friendbank.s3.amazonaws.com/LogoBlue-1.png" alt={getCopy('nav.logoAlt')} />
         </Logo>
         <NavItemsContainer>
           <LeftLink href={languageLink}>
