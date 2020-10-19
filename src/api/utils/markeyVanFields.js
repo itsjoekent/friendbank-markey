@@ -26,10 +26,23 @@ const BSD_VAN_MAP = {
     'No': '1411497',
   },
   vote: {
+    // Legacy primary election language support (in-between deployment/migration)
     'I’ve already voted': '1606529',
     'I’ve received my mail-in ballot and still need to return it': '1606507',
     'I’m planning to vote early between August 22-28': '1606515',
     'I’m planning to vote on Election Day, September 1': '1606526',
+
+    'I’ve already voted':'1606529',
+    'Ya vote': '1606529',
+
+    'I’ve received my mail-in ballot and still need to return it': '1606507',
+    'He recibido mi boleta por correo y todavía tengo que devolverla': '1606507',
+
+    'I’m planning to vote early between October 17-30': '1606515',
+    'Votaré anticipadamente entre el 17 y el 30 de octubre': '1606515',
+
+    'I’m planning to vote on Election Day, November 3': '1606526',
+    'Votaré el día de las elecciones, el 3 de noviembre': '1606526',
   },
 };
 
