@@ -41,6 +41,10 @@ const COPY_FIELDS = {
         key: 'idQuestions.vote.label'
       },
       {
+        name: 'Vote Question Label',
+        key: 'voteStatus.label',
+      },
+      {
         name: 'Ballot Question Subtitle',
         key: 'idQuestions.vote.subtitle',
       },
