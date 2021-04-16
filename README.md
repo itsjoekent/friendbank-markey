@@ -1,5 +1,7 @@
 # friendbank
 
+**NOTE**: This project is no longer actively maintained.
+
 A relational organizing tool developed for Ed Markey's 2020 senate re-elect. [Read more about the relational organizing strategy Team Markey employed](https://medium.com/@emma.h.friend/ed-markeys-relational-first-organizing-approach-137bbfc4852).
 
 **In The Wild!!**
